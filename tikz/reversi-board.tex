@@ -1,0 +1,203 @@
+% tikz/reversi-board.tex
+% Reversi board (8x8)
+% Coordinate system: A1 top-left
+% NO tikzpicture environment in this file
+
+% ----------------------------------------------------------
+% Parameters
+% ----------------------------------------------------------
+\newcommand{\rvBoardColor}{green!35}
+\newcommand{\rvStoneSize}{6.25mm}
+\newcommand{\rvMoveRadius}{2mm}
+\newcommand{\rvLastMoveRadius}{0.9mm}
+
+% Flip symbol geometry (CELL FRACTIONS)
+\newcommand{\rvFlipLineLW}{1.3pt}
+\newcommand{\rvFlipYmin}{0.40}
+\newcommand{\rvFlipYmax}{0.60}
+\newcommand{\rvFlipTriH}{0.08}
+\newcommand{\rvFlipTriW}{0.07}
+
+% Value label (scales with field size)
+% Increase/decrease this to tune overall size
+\newcommand{\rvValueScale}{0.75}
+
+% ----------------------------------------------------------
+% Draw empty board (NO coordinates)
+% ----------------------------------------------------------
+\newcommand{\rvBoard}{%
+	\def\N{8}%
+	\fill[\rvBoardColor] (0,0) rectangle (\N,\N);
+	\draw[draw, line width=1.2pt] (0,0) rectangle (\N,\N);
+	
+	\foreach \i in {1,...,7}{%
+		\draw[draw, line width=0.4pt] (\i,0) -- (\i,\N);
+		\draw[draw, line width=0.4pt] (0,\i) -- (\N,\i);
+	}%
+}
+
+% ----------------------------------------------------------
+% Optional coordinate system
+% A–H on top, 1–8 on left, A1 top-left
+% ----------------------------------------------------------
+\newcommand{\rvCoords}{%
+	\def\N{8}%
+	\foreach \x/\lab in {1/A,2/B,3/C,4/D,5/E,6/F,7/G,8/H}{%
+		\node[font=\footnotesize] at (\x-0.5,\N+0.6) {\lab};
+	}%
+	\foreach \r in {1,...,8}{%
+		\node[font=\footnotesize] at (-0.6,\N-\r+0.5) {\r};
+	}%
+}
+
+% ----------------------------------------------------------
+% Stones, moves, frames (internal indices)
+% ----------------------------------------------------------
+\newcommand{\rvStoneWhite}[2]{%
+	\node[circle, draw=black, fill=white, line width=0.5pt, minimum size=\rvStoneSize]
+	at (#1+0.5,#2+0.5) {};
+}
+\newcommand{\rvStoneBlack}[2]{%
+	\node[circle, draw=black, fill=black, line width=0.5pt, minimum size=\rvStoneSize]
+	at (#1+0.5,#2+0.5) {};
+}
+\newcommand{\rvMoveWhite}[2]{%
+	\draw[draw=black, dashed, line width=0.7pt] (#1+0.5,#2+0.5) circle (\rvMoveRadius);
+}
+\newcommand{\rvMoveBlack}[2]{%
+	\draw[draw=black, line width=0.7pt] (#1+0.5,#2+0.5) circle (\rvMoveRadius);
+}
+\newcommand{\rvMarkFrame}[2]{%
+	\draw[draw=red, line width=1.6pt] (#1,#2) rectangle ++(1,1);
+}
+
+% ----------------------------------------------------------
+% Last-move marker (filled dot)
+% ----------------------------------------------------------
+\newcommand{\rvLastMoveDot}[2]{%
+	\draw[draw=yellow!70!orange, fill=yellow!80!orange, line width=0.4pt]
+	(#1+0.5,#2+0.5) circle (\rvLastMoveRadius);
+}
+
+% ----------------------------------------------------------
+% Flip symbol (clean): short thick line + two triangles (up/down)
+% ----------------------------------------------------------
+\newcommand{\rvFlipSymbol}[2]{%
+	\draw[draw=yellow!70!orange, line width=\rvFlipLineLW, line cap=round]
+	(#1+0.5, #2+\rvFlipYmin) -- (#1+0.5, #2+\rvFlipYmax);
+	
+	\path[draw=yellow!70!orange, fill=yellow!70!orange]
+	(#1+0.5, #2+\rvFlipYmax+\rvFlipTriH) --
+	(#1+0.5-\rvFlipTriW, #2+\rvFlipYmax) --
+	(#1+0.5+\rvFlipTriW, #2+\rvFlipYmax) -- cycle;
+	
+	\path[draw=yellow!70!orange, fill=yellow!70!orange]
+	(#1+0.5, #2+\rvFlipYmin-\rvFlipTriH) --
+	(#1+0.5-\rvFlipTriW, #2+\rvFlipYmin) --
+	(#1+0.5+\rvFlipTriW, #2+\rvFlipYmin) -- cycle;
+}
+
+% ----------------------------------------------------------
+% Value label (internal indices): no frame, scales with field size
+% ----------------------------------------------------------
+\newcommand{\rvValueLabel}[3]{%
+	\node[scale=\rvValueScale] at (#1+0.5,#2+0.5) {#3};
+}
+
+% ----------------------------------------------------------
+% Mapping: A–H / 1–8 → internal indices
+% A1 (top-left) → (0,7)
+% ----------------------------------------------------------
+\newcommand{\rvFileToX}[1]{%
+	\ifnum\pdfstrcmp{#1}{A}=0 0\else
+	\ifnum\pdfstrcmp{#1}{B}=0 1\else
+	\ifnum\pdfstrcmp{#1}{C}=0 2\else
+	\ifnum\pdfstrcmp{#1}{D}=0 3\else
+	\ifnum\pdfstrcmp{#1}{E}=0 4\else
+	\ifnum\pdfstrcmp{#1}{F}=0 5\else
+	\ifnum\pdfstrcmp{#1}{G}=0 6\else
+	\ifnum\pdfstrcmp{#1}{H}=0 7\else
+	\ifnum\pdfstrcmp{#1}{a}=0 0\else
+	\ifnum\pdfstrcmp{#1}{b}=0 1\else
+	\ifnum\pdfstrcmp{#1}{c}=0 2\else
+	\ifnum\pdfstrcmp{#1}{d}=0 3\else
+	\ifnum\pdfstrcmp{#1}{e}=0 4\else
+	\ifnum\pdfstrcmp{#1}{f}=0 5\else
+	\ifnum\pdfstrcmp{#1}{g}=0 6\else
+	\ifnum\pdfstrcmp{#1}{h}=0 7\else
+	-1%
+	\fi\fi\fi\fi\fi\fi\fi\fi
+	\fi\fi\fi\fi\fi\fi\fi\fi
+}
+\newcommand{\rvRankToY}[1]{\numexpr8-#1\relax}
+
+% ----------------------------------------------------------
+% User-facing single placements
+% ----------------------------------------------------------
+\newcommand{\rvStoneBlackAt}[2]{\rvStoneBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\newcommand{\rvStoneWhiteAt}[2]{\rvStoneWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\newcommand{\rvMoveBlackAt}[2]{\rvMoveBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\newcommand{\rvMoveWhiteAt}[2]{\rvMoveWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\newcommand{\rvMarkFrameAt}[2]{\rvMarkFrame{\rvFileToX{#1}}{\rvRankToY{#2}}}
+
+% ----------------------------------------------------------
+% List-based APIs
+% ----------------------------------------------------------
+\newcommand{\rvStonesBlack}[1]{%
+	\foreach \p in {#1}{\expandafter\rvStoneBlackAux\p\relax}%
+}
+\newcommand{\rvStonesWhite}[1]{%
+	\foreach \p in {#1}{\expandafter\rvStoneWhiteAux\p\relax}%
+}
+\newcommand{\rvMovesBlack}[1]{%
+	\foreach \p in {#1}{\expandafter\rvMoveBlackAux\p\relax}%
+}
+\newcommand{\rvMovesWhite}[1]{%
+	\foreach \p in {#1}{\expandafter\rvMoveWhiteAux\p\relax}%
+}
+\newcommand{\rvMarkFrames}[1]{%
+	\foreach \p in {#1}{\expandafter\rvMarkFrameAux\p\relax}%
+}
+
+% ----------------------------------------------------------
+% Last move API (single field)
+% ----------------------------------------------------------
+\newcommand{\rvLastMove}[1]{%
+	\expandafter\rvLastMoveAux#1\relax%
+}
+\def\rvLastMoveAux#1#2\relax{%
+	\rvLastMoveDot{\rvFileToX{#1}}{\rvRankToY{#2}}%
+}
+
+% ----------------------------------------------------------
+% Flips API (list)
+% ----------------------------------------------------------
+\newcommand{\rvFlips}[1]{%
+	\foreach \p in {#1}{\expandafter\rvFlipAux\p\relax}%
+}
+\def\rvFlipAux#1#2\relax{%
+	\rvFlipSymbol{\rvFileToX{#1}}{\rvRankToY{#2}}%
+}
+
+% ----------------------------------------------------------
+% Value map API
+% Usage: \rvValueMap{A1:0.15, E5:0.50, D4:-1.00}
+% ----------------------------------------------------------
+\newcommand{\rvValueMap}[1]{%
+	\foreach \pv in {#1}{\expandafter\rvValueMapAux\pv\relax}%
+}
+\def\rvValueMapAux#1:#2\relax{%
+	\expandafter\rvValueMapCoordAux#1\relax{#2}%
+}
+\def\rvValueMapCoordAux#1#2\relax#3{%
+	\rvValueLabel{\rvFileToX{#1}}{\rvRankToY{#2}}{#3}%
+}
+
+% ----------------------------------------------------------
+% Aux macros
+% ----------------------------------------------------------
+\def\rvStoneBlackAux#1#2\relax{\rvStoneBlackAt{#1}{#2}}
+\def\rvStoneWhiteAux#1#2\relax{\rvStoneWhiteAt{#1}{#2}}
+\def\rvMoveBlackAux#1#2\relax{\rvMoveBlackAt{#1}{#2}}
+\def\rvMoveWhiteAux#1#2\relax{\rvMoveWhiteAt{#1}{#2}}
+\def\rvMarkFrameAux#1#2\relax{\rvMarkFrameAt{#1}{#2}}

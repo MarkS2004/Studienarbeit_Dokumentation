@@ -290,3 +290,67 @@ Und abschließend ein Beispiel aus der Physik zum Induktionsgesetz\index{Indukti
 \oint \limits _{\partial {\mathcal {\mathcal {A}}}(t)}{{\vec {E}}\cdot {\text{d}}{\vec {s}}}=-\int \limits _{{\mathcal {A}}(t)}{{\frac {\partial {\vec {B}}}{\partial t}}\cdot {\text{d}}{\vec {A}}}
 \end{equation}
 
+\section{Reversi-Board}
+
+\begin{figure}[hbt]
+	\centering
+	
+	\input{tikz/reversi-board}
+	
+	\subfigure[Vor dem Zug]{%
+		\begin{tikzpicture}[x=8mm,y=8mm]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{D3, D4, D5, E4}
+			\rvStonesWhite{E5}
+			\rvMovesWhite{C3, E3, C5}
+			\rvMarkFrames{C5}
+		\end{tikzpicture}
+	}
+	\hspace{8mm}
+	\subfigure[Nach dem Zug]{%
+		\begin{tikzpicture}[x=8mm,y=8mm]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{D3, D4, E4}
+			\rvStonesWhite{C5, D5, E5}
+			\rvMovesBlack{B6, C6, D6, E6, F6}
+			\rvLastMove{C5}
+			\rvFlips{D5}
+		\end{tikzpicture}
+	}
+	
+	\caption[Reversi-Spielstände]{Reversi-Spielfeld mit zwei Spielständen: links vor dem Zug, rechts nach dem Zug.}
+	\label{fig:beispiel-reversi-two-states}
+\end{figure}
+
+\begin{figure}[hbt]
+	\centering
+	
+	\input{tikz/reversi-board}
+	
+	\begin{tikzpicture}[x=8mm,y=8mm]
+		\rvBoard
+		\rvCoords		
+		\rvValueMap{
+			A1:-0.40, B1:-0.20, C1:0.10, D1:0.20, E1:0.20, F1:0.10, G1:-0.20, H1:-0.40,
+			A2:-0.20, B2:0.00,  C2:0.15, D2:0.25, E2:0.25, F2:0.15, G2:0.00,  H2:-0.20,
+			A3:0.10,  B3:0.15, C3:0.30, D3:0.45, E3:0.45, F3:0.30, G3:0.15, H3:0.10,
+			A4:0.20,  B4:0.25, C4:0.45, D4:0.70, E4:0.70, F4:0.45, G4:0.25, H4:0.20,
+			A5:0.20,  B5:0.25, C5:0.45, D5:0.70, E5:0.70, F5:0.45, G5:0.25, H5:0.20,
+			A6:0.10,  B6:0.15, C6:0.30, D6:0.45, E6:0.45, F6:0.30, G6:0.15, H6:0.10,
+			A7:-0.20, B7:0.00,  C7:0.15, D7:0.25, E7:0.25, F7:0.15, G7:0.00,  H7:-0.20,
+			A8:-0.40, B8:-0.20, C8:0.10, D8:0.20, E8:0.20, F8:0.10, G8:-0.20, H8:-0.40
+		}
+		\rvMarkFrames{
+			A1, A2, B1,
+			H1, H2, G1,
+			A8, A7, B8,
+			H8, H7, G8
+		}
+	\end{tikzpicture}
+	
+	\caption[Reversi-Heatmap]{Beispielhafte Heatmap eines Zustandswerts je Feld.}
+	\label{fig:beispiel-reversi-heatmap}
+\end{figure}
+
