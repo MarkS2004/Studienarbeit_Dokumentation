@@ -1,8 +1,211 @@
 \chapter{Theoretische Grundlagen}
 \label{cha:Grundlagen}
 
-Zielgerichtete theoretische Grundlagen, sowohl fachliche, wie auch methodische.
+% Zielgerichtete theoretische Grundlagen, sowohl fachliche, wie auch methodische.
 
-Zu den Grundlagen gehören \glsentryshort{acr:zb} auch Details zur Problemstellung, der Stand der Technik und weitere Grundlagen, welche zur Konzeptausarbeitung, Umsetzung und Verifikation erforderlich sind.
+%Zu den Grundlagen gehören \glsentryshort{acr:zb} auch Details zur Problemstellung, der Stand der Technik und weitere Grundlagen, welche zur Konzeptausarbeitung, Umsetzung und Verifikation erforderlich sind.
 
-Grundlagen haben immer einen Bezug zu den nachfolgenden Kapiteln. Diesen Bezug sollte man gelegentlich explizit herstellen, damit bereits in diesem Kapitel klar ist, wo und für was die Grundlagen gebraucht und angewandt werden.
+% Grundlagen haben immer einen Bezug zu den nachfolgenden Kapiteln. Diesen Bezug sollte man gelegentlich explizit herstellen, damit bereits in diesem Kapitel klar ist, wo und für was die Grundlagen gebraucht und angewandt werden.
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+\section{Spielaufbau und Regelwerk von Othello}
+\label{sec:othello}
+Bei Othello handelt es sich um ein strategisches Brettspiel für zwei Personen, bei dem die Spielenden abwechselnd schwarze und weiße Spielsteine auf einem schachbrettartigen Spielfeld platzieren. Das Spiel wurde in den 1880er-Jahren entwickelt und unter dem Namen \textit{Reversi} (lat.: \glqq die Umgedrehten\grqq) bekannt. Othello stellt die moderne und heute bedeutendere Variante von Reversi dar, deren Regelwerk standardisiert ist und bei internationalen Turnieren angewendet wird. Othello wurde 1971 in Japan patentiert und unterscheidet sich von Reversi insbesondere durch eine fest definierte Startaufstellung der vier Anfangsspielsteine sowie durch keine Begrenzung der Spielsteinnutzung. \autocite{beppimenozziBriefHistoryOthello2009}
+
+Für die Entwicklung eines Othello spielenden Roboters sowie des zugehörigen, hardwarelimitierten Spielalgorithmus ist ein grundlegendes Verständnis von Spielaufbau, Spielablauf und Regelwerk erforderlich. Im Folgenden werden daher die für diese Arbeit geltenden Spielregeln dargestellt. Die Beschreibung orientiert sich am offiziellen Regelwerk der World Othello Federation \autocite{worldothellofederationOfficialRulesGame}, wobei Detailregeln je nach Herausgeber bzw. Veranstalter variieren können.. Ergänzend wird die in dieser Arbeit verwendete Darstellung des Spielbretts erläutert.
+
+\paragraph{Ziel des Spiels}
+Ziel des Spiels ist es, am Spielende mehr Spielsteine der eigenen Farbe auf dem Spielbrett zu besitzen als der Gegenspieler. Das Spiel endet, sobald keiner der beiden Spieler gemäß den Regeln einen gültigen Zug ausführen kann.
+
+\paragraph{Spielaufbau und Startaufstellung}
+Das Spielbrett besteht aus $8\times 8 = 64$ Feldern. Zu Beginn erhält jeder Spieler 32 Spielsteine und wählt eine der beiden Farben Schwarz oder Weiß. Verfügt ein Spieler im weiteren Spielverlauf vorübergehend über keine eigenen Spielsteine mehr, ist jedoch weiterhin ein regelkonformer Zug möglich, so werden ihm die erforderlichen Spielsteine vom gegnerischen Spieler bereitgestellt; die Anzahl der nutzbaren Spielsteine ist somit faktisch unbegrenzt. Im Folgenden wird der Spieler mit den weißen Spielsteinen als \emph{Weiß} und der Spieler mit den schwarzen Spielsteinen als \emph{Schwarz} bezeichnet. Zur eindeutigen Beschreibung der Platzierung von Spielsteinen wird ein Koordinatensystem eingeführt, das entlang einer Achse die Zahlen 1 bis 8 und entlang der anderen die Buchstaben A bis H verwendet. Abbildung \ref{fig:othello-startaufstellung} zeigt dieses Koordinatensystem einschließlich der initialen Startaufstellung der Spielsteine.
+
+\begin{figure}[hbt]
+	\centering
+	
+	\input{tikz/reversi-board}
+	
+	\subfigure[Startaufstellung bei Othello]{
+		\begin{tikzpicture}[scale=0.6]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{E4, D5}
+			\rvStonesWhite{E5, D4}
+		\end{tikzpicture}
+		\label{fig:othello-startaufstellung-regelkonform}
+	}
+	\hspace{12mm}
+	\subfigure[Nicht zulässige Startaufstellung]{
+		\begin{tikzpicture}[scale=0.6]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{D4, D5}
+			\rvStonesWhite{E4, E5}
+		\end{tikzpicture}
+		\label{fig:othello-startaufstellung-unzulaessig}
+	}
+	
+	\caption[Startaufstellung bei Othello]{Regelkonforme (a) und nicht zulässige (b) Startaufstellungen des Spiels Othello; letztere ist jedoch gemäß den Regeln von Reversi zulässig.}
+	\label{fig:othello-startaufstellung}
+\end{figure}
+
+Zu Beginn werden vier Spielsteine, zwei weiße und zwei schwarze, gemäß Abbildung \ref{fig:othello-startaufstellung-regelkonform} in der Mitte des Spielbretts diagonal angeordnet. Dabei sind die weißen Spielsteine aus Sicht des jeweiligen Spielers auf der rechten Seite zu platzieren. Eine andere initiale Anordnung, wie in Abbildung \ref{fig:othello-startaufstellung-unzulaessig} dargestellt, ist im Spiel Othello im Gegensatz zu Reversi nicht zulässig.
+
+\paragraph{Spielzug}
+Ein Spielzug besteht darin, einen oder mehrere gegnerische Spielsteine zu \textit{überflügeln}, sodass diese in die eigene Farbe umgedreht werden. Überflügeln bedeutet, einen Spielstein so zu platzieren, dass eine oder mehrere zusammenhängende Reihen gegnerischer Spielsteine zwischen zwei eigenen Spielsteinen eingeschlossen werden. Eine solche Reihe kann aus einem oder mehreren Spielsteinen bestehen und vertikal, horizontal oder diagonal auf dem Spielbrett verlaufen, sofern sie eine durchgehende Linie bildet. Zur Verdeutlichung dient das in Abbildung \ref{fig:othello-ueberfluegeln} dargestellte Beispiel, das so im realen Spiel nicht auftritt.
+
+\begin{figure}[hbt]
+	\centering
+	
+	\input{tikz/reversi-board}
+	
+	\subfigure[Spielsituation vor dem Zug]{
+		\begin{tikzpicture}[scale=0.6]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{C4, D4, E4, F4}
+			\rvStonesWhite{B4}
+			\rvMovesWhite{G4}
+		\end{tikzpicture}
+		\label{fig:othello-ueberfluegeln-vor-dem-zug}
+	}
+	\hspace{12mm}
+	\subfigure[Spielsituation nach dem Zug]{
+		\begin{tikzpicture}[scale=0.6]
+			\rvBoard
+			\rvCoords
+			\rvStonesWhite{B4, C4, D4, E4, F4, G4}
+			\rvLastMove{G4}
+			\rvFlips{C4, D4, E4, F4}
+		\end{tikzpicture}
+		\label{fig:othello-ueberfluegeln-nach-dem-zug}
+	}
+	
+	\caption[Darstellung eines Spielzugs \glqq Überflügeln\grqq]{Darstellung eines Spielzugs \glqq Überflügeln\grqq{} vor (a) und nach dem Zug (b).}
+	\label{fig:othello-ueberfluegeln}
+\end{figure}
+
+In Abbildung \ref{fig:othello-ueberfluegeln-vor-dem-zug} ist die Spielsituation vor dem Überflügeln dargestellt. Weiß ist am Zug und verfügt nur über eine regelkonforme Zugmöglichkeit. Diese besteht im Platzieren eines Spielsteins auf dem Feld G4. Die Zugmöglichkeit ist in den Abbildungen durch einen gestrichelten Kreis gekennzeichnet. Ist Schwarz am Zug, wird der Kreis durchgezogen dargestellt.\\
+Abbildung \ref{fig:othello-ueberfluegeln-nach-dem-zug} zeigt die Spielsituation nach dem Platzieren eines weißen Spielsteins auf dem Feld G4. Der zuletzt ausgeführte Spielzug ist durch eine kreisförmige Markierung auf dem entsprechenden Spielstein hervorgehoben. Infolge dieses Zuges werden die dazwischenliegenden gegnerischen Spielsteine auf den Feldern C4, D4, E4 und E5 umgedreht. Dieser Vorgang ist durch Pfeile auf den betroffenen Spielsteinen dargestellt.
+
+\paragraph{Spielregeln}
+Es gelten die folgenden Regeln:
+\vspace{-0.9\baselineskip}
+\begin{enumerate}[
+	leftmargin=*,      % bündig am linken Satzspiegel
+	labelsep=0.6em,    % Abstand Nummer → Text
+	itemsep=0.5em,     % Abstand zwischen Items (sehr kompakt)
+	topsep=0pt,      % Abstand vor/nach der Liste
+	parsep=0pt,
+	partopsep=0pt
+	]
+	
+	\item Schwarz zieht immer zuerst.
+	
+	\item Kann ein Spieler in seinem Zug keinen gegnerischen Spielstein überflügeln und umdrehen, verfällt sein Zug und der Gegenspieler ist erneut am Zug. Steht mindestens eine regelkonforme Zugmöglichkeit zur Verfügung, ist der Zug auszuführen.
+	
+	\item Überflügelte gegnerische Spielsteine können in allen Richtungen umgedreht werden, in denen sie überflügelt werden. Dies umfasst waagerechte, senkrechte und diagonale Richtungen. Ein Spielzug kann dabei mehrere Reihen gleichzeitig betreffen.
+	Ein Beispiel ist in Abbildung \ref{fig:othello-ueberfluegeln-mehrerer-Reihen} dargestellt, wobei durch das Platzieren eines weißen Spielsteins auf dem Feld C7 mehrere gegnerische Reihen gleichzeitig umgedreht werden.
+	\vspace{-0.4\baselineskip}
+	\begin{figure}[!htb]
+		\centering
+		\input{tikz/reversi-board}
+		\subfigure[Spielsituation vor dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{C4, C5, C6, D6, D7, E5, F4}
+				\rvStonesWhite{C3, E7, G3}
+				\rvMovesWhite{C7}
+			\end{tikzpicture}
+		}
+		\hspace{12mm}
+		\subfigure[Spielsituation nach dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesWhite{C7, C3, E7, G3, C4, C5, C6, D6, D7, E5, F4}
+				\rvLastMove{C7}
+				\rvFlips{C4, C5, C6, D6, D7, E5, F4}
+			\end{tikzpicture}
+		}
+		\caption{Spielzug mit Überflügelung mehrerer Spielsteinreihen vor (a) und nach dem Zug (b).}
+		\label{fig:othello-ueberfluegeln-mehrerer-Reihen}
+	\end{figure}
+	\vspace{-0.6\baselineskip}
+	
+	\item Eigene Spielsteine dürfen nicht übersprungen werden, um gegnerische Spielsteine zu überflügeln. Eine Überflügelung ist nur zulässig, wenn sich zwischen dem neu platzierten Spielstein und einem weiteren eigenen Spielstein ausschließlich gegnerische Spielsteine befinden.
+	Ein Beispiel ist in Abbildung \ref{fig:othello-ueberspringen-eigene-reihe} dargestellt, wobei durch das Platzieren eines schwarzen Spielsteins auf dem Feld A7 lediglich der direkt angrenzende gegnerische Spielstein umgedreht wird.
+	\vspace{-0.4\baselineskip}
+	\begin{figure}[!htb]
+		\centering
+		\input{tikz/reversi-board}
+		\subfigure[Spielsituation vor dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{C7, F7}
+				\rvStonesWhite{B7, D7, E7}
+				\rvMovesBlack{A7}
+			\end{tikzpicture}
+		}
+		\hspace{12mm}
+		\subfigure[Spielsituation nach dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{A7, C7, F7, B7}
+				\rvStonesWhite{D7, E7}
+				\rvFlips{B7}
+				\rvLastMove{A7}
+			\end{tikzpicture}
+		}
+		\caption{Spielzug ohne Überflügelung über eigene Spielsteine vor (a) und nach dem Zug (b).}
+		\label{fig:othello-ueberspringen-eigene-reihe}
+	\end{figure}
+	\vspace{-0.6\baselineskip}
+	
+	\item Ein Spielstein darf nur infolge eines Spielzugs überflügelt werden und muss dabei in direkter Linie zum neu platzierten Spielstein liegen. Spielsteine außerhalb dieser Linie bleiben unbeeinflusst.
+	Ein Beispiel ist in Abbildung \ref{fig:othello-ueberfluegeln-in-direkter-linie} dargestellt, wobei durch das Platzieren eines schwarzen Spielsteins auf dem Feld A2 ausschließlich die Spielsteine A3 und A4 umgedreht werden.
+	\vspace{-0.4\baselineskip}
+	\begin{figure}[!htb]
+		\centering
+		\input{tikz/reversi-board}
+		\subfigure[Spielsituation vor dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{A5, D4}
+				\rvStonesWhite{A3, A4, B4, C4}
+				\rvMovesBlack{A2}
+			\end{tikzpicture}
+		}
+		\hspace{12mm}
+		\subfigure[Spielsituation nach dem Zug]{
+			\begin{tikzpicture}[scale=0.6]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{A5, D4, A2, A3, A4}
+				\rvStonesWhite{B4, C4}
+				\rvFlips{A3, A4}
+				\rvLastMove{A2}
+			\end{tikzpicture}
+		}
+		\caption{Spielzug mit Überflügelung nur in direkter Linie vor (a) und nach dem Zug (b).}
+		\label{fig:othello-ueberfluegeln-in-direkter-linie}
+	\end{figure}
+	\vspace{-0.6\baselineskip}
+	
+	\item Alle in einem Zug überflügelten Spielsteine sind vollständig umzudrehen, auch wenn ein Unterlassen für den Spieler vorteilhaft wäre.
+	
+	\item Sobald ein Spielstein auf einem Feld platziert wurde, darf er im weiteren Spielverlauf nicht mehr auf ein anderes Feld bewegt werden.
+	
+	\item Kann keiner der beiden Spieler einen weiteren Zug ausführen, endet das Spiel. Anschließend werden die Spielsteine gezählt, und der Spieler mit der höheren Anzahl an Spielsteinen seiner Farbe gewinnt.
+\end{enumerate}
+
+\section{Lego Spike System}
+\label{sec:lego-spike}
+
+
+

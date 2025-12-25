@@ -22,6 +22,10 @@ ngerman
 \renewcaptionname{ngerman}{\contentsname}{Inhaltsverzeichnis}
 \renewcaptionname{ngerman}{\bibname}{Quellenverzeichnis}
 \setlength{\parindent}{0ex} 	% bei neuem Abschnitt nicht einrücken
+
+\RedeclareSectionCommand[
+beforeskip=0.5ex,   % Abstand vor \paragraph
+]{paragraph}
 %------
 % Folgende Einstellungen entsprechen den Vorgaben der Leitlinien
 \usepackage[onehalfspacing]{setspace}
@@ -38,8 +42,7 @@ ngerman
 	\leavevmode \kern.06em\vbox{\hrule width.5em}}
 	
 % Hier die persönlichen Daten eingeben:
-
-\newcommand{\titel}{Konzeptioneller Entwurf eines Reversi spielenden Roboters auf Basis von LEGO\textsuperscript{\textregistered} SPIKE unter begrenzten Rechenressourcen}
+\newcommand{\titel}{Konzeptioneller Entwurf eines Othello spielenden Roboters auf Basis von LEGO\textsuperscript{\textregistered} SPIKE unter begrenzten Rechenressourcen}
 \newcommand{\untertitel}{}	% ggf. Untertitel mit ergänzenden Hinweisen
 \newcommand{\arbeit}{Studienarbeit T3\lowrule 3100}
 \newcommand{\studiengang}{Elektrotechnik}
@@ -75,7 +78,7 @@ aboveskip=1mm
 ]{caption}
 
 \usepackage[backend=biber, %% Hilfsprogramm "biber" beim Compilieren nutzen (statt "biblatex" oder "bibtex")
-style=numeric, %% Zitierstil (siehe Dokumentation) style=numeric oder style=alphabetic oder authortitle oder authoryear
+style=ieee, %% Zitierstil (siehe Dokumentation) style=numeric oder style=alphabetic oder authortitle oder authoryear
 %verbose-inote,
 natbib=true, %% Bereitstellen von natbib-kompatiblen Zitierkommandos
 hyperref=true, %% hyperref-Paket verwenden, um Links zu erstellen
@@ -83,6 +86,7 @@ hyperref=true, %% hyperref-Paket verwenden, um Links zu erstellen
 ]{biblatex}
 \setcounter{biburllcpenalty}{7000}
 \setcounter{biburlucpenalty}{8000}
+\addbibresource{literature/literatur.bib}
 \addbibresource{literature/literatur1.bib} %% Einbinden der bib-Datei. Endung .bib unbedingt ergänzen
 \addbibresource{literature/literatur2.bib} %% Einbinden mehrerer bib-Dateien mit zusätzlichem \addbibresource - Befehl
 
@@ -208,6 +212,7 @@ acronym,
 \input{pages/abkuerzungen}				% Datei mit Abkürzungsdefinitionen laden
 \makenomenclature				% Abkürzungsverzeichnis erstellen
 
+\usepackage{todonotes}
 
 % -------------------------------------------------------------------------------------------
 %                     Beginn des Dokumenteninhalts
@@ -243,7 +248,7 @@ acronym,
 \include{chapter/einleitung}
 \include{chapter/grundlagen}
 \include{chapter/stand-der-technik}
-\include{chapter/vorgehen}
+\include{chapter/konzeptentwurf}
 \include{chapter/umsetzung}
 \include{chapter/zusammenfassung}
 

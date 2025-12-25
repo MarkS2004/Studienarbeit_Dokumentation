@@ -1,114 +1,151 @@
 % tikz/reversi-board.tex
-% Reversi board (8x8)
-% Coordinate system: A1 top-left
-% NO tikzpicture environment in this file
+% Reversi/Othello board (8x8) as reusable TikZ macros (no tikzpicture).
+% Convention: A1 is top-left. Internal indices: A1 -> (0,7).
 
-% ----------------------------------------------------------
-% Parameters
-% ----------------------------------------------------------
-\newcommand{\rvBoardColor}{green!35}
-\newcommand{\rvStoneSize}{6.25mm}
-\newcommand{\rvMoveRadius}{2mm}
-\newcommand{\rvLastMoveRadius}{0.9mm}
+% ==========================================================
+% Parameters (cell units / cell fractions)
+% - Anything used in "circle(...)" is in cell units (like \rvMoveRad).
+% - Line widths and node sizes need TeX lengths -> derived from cell length.
+% ==========================================================
+\providecommand{\rvBoardColor}{green!35}
 
-% Flip symbol geometry (CELL FRACTIONS)
-\newcommand{\rvFlipLineLW}{1.3pt}
-\newcommand{\rvFlipYmin}{0.40}
-\newcommand{\rvFlipYmax}{0.60}
-\newcommand{\rvFlipTriH}{0.08}
-\newcommand{\rvFlipTriW}{0.07}
+% Geometry (CELL UNITS)
+% Stones are drawn like moves: radius in cell units.
+\providecommand{\rvStoneRad}{0.4}      % 0.50 => diameter exactly 1 cell
+\providecommand{\rvMoveRad}{0.4}       % move marker radius (cell units)
+\providecommand{\rvLastMoveRad}{0.1}   % last-move dot radius (cell units)
 
-% Value label (scales with field size)
-% Increase/decrease this to tune overall size
-\newcommand{\rvValueScale}{0.75}
+% Line widths (CELL FRACTIONS of one cell)
+\providecommand{\rvOuterLWFrac}{0.2}
+\providecommand{\rvGridLWFrac}{0.1}
+\providecommand{\rvStoneLWFrac}{0.4}
+\providecommand{\rvMoveLWFrac}{0.4}
+\providecommand{\rvLastMoveLWFrac}{0.4}
+\providecommand{\rvMarkLWFrac}{1.0}
 
-% ----------------------------------------------------------
-% Draw empty board (NO coordinates)
-% ----------------------------------------------------------
-\newcommand{\rvBoard}{%
+% Flip marker (CELL UNITS + line width as fraction)
+\providecommand{\rvFlipLineLWFrac}{1.0}
+\providecommand{\rvFlipYmin}{0.38}
+\providecommand{\rvFlipYmax}{0.62}
+\providecommand{\rvFlipTriH}{0.13}
+\providecommand{\rvFlipTriW}{0.12}
+
+% Text
+\providecommand{\rvCoordFont}{\small}
+\providecommand{\rvValueScale}{0.95}
+
+% ==========================================================
+% Internal lengths (defined once even if file is input multiple times)
+% ==========================================================
+\makeatletter
+\@ifundefined{rvCellLen}{\newlength{\rvCellLen}}{}
+\@ifundefined{rvOuterLW}{\newlength{\rvOuterLW}}{}
+\@ifundefined{rvGridLW}{\newlength{\rvGridLW}}{}
+\@ifundefined{rvStoneLW}{\newlength{\rvStoneLW}}{}
+\@ifundefined{rvMoveLW}{\newlength{\rvMoveLW}}{}
+\@ifundefined{rvLastMoveLW}{\newlength{\rvLastMoveLW}}{}
+\@ifundefined{rvMarkLW}{\newlength{\rvMarkLW}}{}
+\@ifundefined{rvFlipLineLW}{\newlength{\rvFlipLineLW}}{}
+\makeatother
+
+% ==========================================================
+% Scale derivation (recomputed when drawing a board)
+% ==========================================================
+\providecommand{\rvSetupScale}{%
+	\pgfextractx{\rvCellLen}{\pgfpoint{1}{0}}%
+	\pgfmathsetlength{\rvOuterLW}{\rvOuterLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvGridLW}{\rvGridLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvStoneLW}{\rvStoneLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvMoveLW}{\rvMoveLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvLastMoveLW}{\rvLastMoveLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvMarkLW}{\rvMarkLWFrac*\rvCellLen}%
+	\pgfmathsetlength{\rvFlipLineLW}{\rvFlipLineLWFrac*\rvCellLen}%
+}
+
+% ==========================================================
+% Board
+% ==========================================================
+\providecommand{\rvBoard}{%
+	\rvSetupScale%
 	\def\N{8}%
 	\fill[\rvBoardColor] (0,0) rectangle (\N,\N);
-	\draw[draw, line width=1.2pt] (0,0) rectangle (\N,\N);
-	
+	\draw[line width=\rvOuterLW] (0,0) rectangle (\N,\N);
 	\foreach \i in {1,...,7}{%
-		\draw[draw, line width=0.4pt] (\i,0) -- (\i,\N);
-		\draw[draw, line width=0.4pt] (0,\i) -- (\N,\i);
+		\draw[line width=\rvGridLW] (\i,0) -- (\i,\N);
+		\draw[line width=\rvGridLW] (0,\i) -- (\N,\i);
 	}%
 }
 
-% ----------------------------------------------------------
-% Optional coordinate system
-% A–H on top, 1–8 on left, A1 top-left
-% ----------------------------------------------------------
-\newcommand{\rvCoords}{%
+\providecommand{\rvCoords}{%
 	\def\N{8}%
 	\foreach \x/\lab in {1/A,2/B,3/C,4/D,5/E,6/F,7/G,8/H}{%
-		\node[font=\footnotesize] at (\x-0.5,\N+0.6) {\lab};
+		\node[font=\rvCoordFont] at (\x-0.5,\N+0.65) {\lab};
 	}%
 	\foreach \r in {1,...,8}{%
-		\node[font=\footnotesize] at (-0.6,\N-\r+0.5) {\r};
+		\node[font=\rvCoordFont] at (-0.65,\N-\r+0.5) {\r};
 	}%
 }
 
-% ----------------------------------------------------------
-% Stones, moves, frames (internal indices)
-% ----------------------------------------------------------
-\newcommand{\rvStoneWhite}[2]{%
-	\node[circle, draw=black, fill=white, line width=0.5pt, minimum size=\rvStoneSize]
-	at (#1+0.5,#2+0.5) {};
+% ==========================================================
+% Internal primitives (indices 0..7)
+% Stones are drawn in cell units (like \rvMoveRad).
+% ==========================================================
+\providecommand{\rvStoneWhite}[2]{%
+	\rvSetupScale%
+	\path[draw=black, fill=white, line width=\rvStoneLW]
+	(#1+0.5,#2+0.5) circle (\rvStoneRad);
 }
-\newcommand{\rvStoneBlack}[2]{%
-	\node[circle, draw=black, fill=black, line width=0.5pt, minimum size=\rvStoneSize]
-	at (#1+0.5,#2+0.5) {};
-}
-\newcommand{\rvMoveWhite}[2]{%
-	\draw[draw=black, dashed, line width=0.7pt] (#1+0.5,#2+0.5) circle (\rvMoveRadius);
-}
-\newcommand{\rvMoveBlack}[2]{%
-	\draw[draw=black, line width=0.7pt] (#1+0.5,#2+0.5) circle (\rvMoveRadius);
-}
-\newcommand{\rvMarkFrame}[2]{%
-	\draw[draw=red, line width=1.6pt] (#1,#2) rectangle ++(1,1);
+\providecommand{\rvStoneBlack}[2]{%
+	\rvSetupScale%
+	\path[draw=black, fill=black, line width=\rvStoneLW]
+	(#1+0.5,#2+0.5) circle (\rvStoneRad);
 }
 
-% ----------------------------------------------------------
-% Last-move marker (filled dot)
-% ----------------------------------------------------------
-\newcommand{\rvLastMoveDot}[2]{%
-	\draw[draw=yellow!70!orange, fill=yellow!80!orange, line width=0.4pt]
-	(#1+0.5,#2+0.5) circle (\rvLastMoveRadius);
+\providecommand{\rvMoveWhite}[2]{%
+	\rvSetupScale%
+	\draw[dashed, draw=black, line width=\rvMoveLW]
+	(#1+0.5,#2+0.5) circle (\rvMoveRad);
+}
+\providecommand{\rvMoveBlack}[2]{%
+	\rvSetupScale%
+	\draw[draw=black, line width=\rvMoveLW]
+	(#1+0.5,#2+0.5) circle (\rvMoveRad);
 }
 
-% ----------------------------------------------------------
-% Flip symbol (clean): short thick line + two triangles (up/down)
-% ----------------------------------------------------------
-\newcommand{\rvFlipSymbol}[2]{%
+\providecommand{\rvMarkFrame}[2]{%
+	\rvSetupScale%
+	\draw[draw=red, line width=\rvMarkLW]
+	(#1,#2) rectangle ++(1,1);
+}
+
+\providecommand{\rvLastMoveDot}[2]{%
+	\rvSetupScale%
+	\draw[draw=yellow!70!orange, fill=yellow!80!orange, line width=\rvLastMoveLW]
+	(#1+0.5,#2+0.5) circle (\rvLastMoveRad);
+}
+
+\providecommand{\rvFlipSymbol}[2]{%
+	\rvSetupScale%
 	\draw[draw=yellow!70!orange, line width=\rvFlipLineLW, line cap=round]
 	(#1+0.5, #2+\rvFlipYmin) -- (#1+0.5, #2+\rvFlipYmax);
-	
 	\path[draw=yellow!70!orange, fill=yellow!70!orange]
 	(#1+0.5, #2+\rvFlipYmax+\rvFlipTriH) --
 	(#1+0.5-\rvFlipTriW, #2+\rvFlipYmax) --
 	(#1+0.5+\rvFlipTriW, #2+\rvFlipYmax) -- cycle;
-	
 	\path[draw=yellow!70!orange, fill=yellow!70!orange]
 	(#1+0.5, #2+\rvFlipYmin-\rvFlipTriH) --
 	(#1+0.5-\rvFlipTriW, #2+\rvFlipYmin) --
 	(#1+0.5+\rvFlipTriW, #2+\rvFlipYmin) -- cycle;
 }
 
-% ----------------------------------------------------------
-% Value label (internal indices): no frame, scales with field size
-% ----------------------------------------------------------
-\newcommand{\rvValueLabel}[3]{%
+\providecommand{\rvValueLabel}[3]{%
 	\node[scale=\rvValueScale] at (#1+0.5,#2+0.5) {#3};
 }
 
-% ----------------------------------------------------------
-% Mapping: A–H / 1–8 → internal indices
-% A1 (top-left) → (0,7)
-% ----------------------------------------------------------
-\newcommand{\rvFileToX}[1]{%
+% ==========================================================
+% Mapping: file/rank -> internal indices
+% ==========================================================
+\providecommand{\rvFileToX}[1]{%
 	\ifnum\pdfstrcmp{#1}{A}=0 0\else
 	\ifnum\pdfstrcmp{#1}{B}=0 1\else
 	\ifnum\pdfstrcmp{#1}{C}=0 2\else
@@ -129,63 +166,30 @@
 	\fi\fi\fi\fi\fi\fi\fi\fi
 	\fi\fi\fi\fi\fi\fi\fi\fi
 }
-\newcommand{\rvRankToY}[1]{\numexpr8-#1\relax}
+\providecommand{\rvRankToY}[1]{\numexpr8-#1\relax}
 
-% ----------------------------------------------------------
-% User-facing single placements
-% ----------------------------------------------------------
-\newcommand{\rvStoneBlackAt}[2]{\rvStoneBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
-\newcommand{\rvStoneWhiteAt}[2]{\rvStoneWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
-\newcommand{\rvMoveBlackAt}[2]{\rvMoveBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
-\newcommand{\rvMoveWhiteAt}[2]{\rvMoveWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
-\newcommand{\rvMarkFrameAt}[2]{\rvMarkFrame{\rvFileToX{#1}}{\rvRankToY{#2}}}
+% ==========================================================
+% User-facing API
+% ==========================================================
+\providecommand{\rvStoneBlackAt}[2]{\rvStoneBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\providecommand{\rvStoneWhiteAt}[2]{\rvStoneWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\providecommand{\rvMoveBlackAt}[2]{\rvMoveBlack{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\providecommand{\rvMoveWhiteAt}[2]{\rvMoveWhite{\rvFileToX{#1}}{\rvRankToY{#2}}}
+\providecommand{\rvMarkFrameAt}[2]{\rvMarkFrame{\rvFileToX{#1}}{\rvRankToY{#2}}}
 
-% ----------------------------------------------------------
-% List-based APIs
-% ----------------------------------------------------------
-\newcommand{\rvStonesBlack}[1]{%
-	\foreach \p in {#1}{\expandafter\rvStoneBlackAux\p\relax}%
-}
-\newcommand{\rvStonesWhite}[1]{%
-	\foreach \p in {#1}{\expandafter\rvStoneWhiteAux\p\relax}%
-}
-\newcommand{\rvMovesBlack}[1]{%
-	\foreach \p in {#1}{\expandafter\rvMoveBlackAux\p\relax}%
-}
-\newcommand{\rvMovesWhite}[1]{%
-	\foreach \p in {#1}{\expandafter\rvMoveWhiteAux\p\relax}%
-}
-\newcommand{\rvMarkFrames}[1]{%
-	\foreach \p in {#1}{\expandafter\rvMarkFrameAux\p\relax}%
-}
+\providecommand{\rvStonesBlack}[1]{\foreach \p in {#1}{\expandafter\rvStoneBlackAux\p\relax}}
+\providecommand{\rvStonesWhite}[1]{\foreach \p in {#1}{\expandafter\rvStoneWhiteAux\p\relax}}
+\providecommand{\rvMovesBlack}[1]{\foreach \p in {#1}{\expandafter\rvMoveBlackAux\p\relax}}
+\providecommand{\rvMovesWhite}[1]{\foreach \p in {#1}{\expandafter\rvMoveWhiteAux\p\relax}}
+\providecommand{\rvMarkFrames}[1]{\foreach \p in {#1}{\expandafter\rvMarkFrameAux\p\relax}}
+\providecommand{\rvFlips}[1]{\foreach \p in {#1}{\expandafter\rvFlipAux\p\relax}}
 
-% ----------------------------------------------------------
-% Last move API (single field)
-% ----------------------------------------------------------
-\newcommand{\rvLastMove}[1]{%
-	\expandafter\rvLastMoveAux#1\relax%
-}
+\providecommand{\rvLastMove}[1]{\expandafter\rvLastMoveAux#1\relax}
 \def\rvLastMoveAux#1#2\relax{%
 	\rvLastMoveDot{\rvFileToX{#1}}{\rvRankToY{#2}}%
 }
 
-% ----------------------------------------------------------
-% Flips API (list)
-% ----------------------------------------------------------
-\newcommand{\rvFlips}[1]{%
-	\foreach \p in {#1}{\expandafter\rvFlipAux\p\relax}%
-}
-\def\rvFlipAux#1#2\relax{%
-	\rvFlipSymbol{\rvFileToX{#1}}{\rvRankToY{#2}}%
-}
-
-% ----------------------------------------------------------
-% Value map API
-% Usage: \rvValueMap{A1:0.15, E5:0.50, D4:-1.00}
-% ----------------------------------------------------------
-\newcommand{\rvValueMap}[1]{%
-	\foreach \pv in {#1}{\expandafter\rvValueMapAux\pv\relax}%
-}
+\providecommand{\rvValueMap}[1]{\foreach \pv in {#1}{\expandafter\rvValueMapAux\pv\relax}}
 \def\rvValueMapAux#1:#2\relax{%
 	\expandafter\rvValueMapCoordAux#1\relax{#2}%
 }
@@ -193,11 +197,10 @@
 	\rvValueLabel{\rvFileToX{#1}}{\rvRankToY{#2}}{#3}%
 }
 
-% ----------------------------------------------------------
-% Aux macros
-% ----------------------------------------------------------
+% Coordinate parser for tokens like "E4"
 \def\rvStoneBlackAux#1#2\relax{\rvStoneBlackAt{#1}{#2}}
 \def\rvStoneWhiteAux#1#2\relax{\rvStoneWhiteAt{#1}{#2}}
 \def\rvMoveBlackAux#1#2\relax{\rvMoveBlackAt{#1}{#2}}
 \def\rvMoveWhiteAux#1#2\relax{\rvMoveWhiteAt{#1}{#2}}
 \def\rvMarkFrameAux#1#2\relax{\rvMarkFrameAt{#1}{#2}}
+\def\rvFlipAux#1#2\relax{\rvFlipSymbol{\rvFileToX{#1}}{\rvRankToY{#2}}}
