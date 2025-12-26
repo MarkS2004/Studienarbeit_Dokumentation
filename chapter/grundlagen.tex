@@ -3,11 +3,11 @@
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \todo{}
 
-\section{Spielaufbau und Regelwerk von Othello}
+\section{Einführung in Spielaufbau und Regeln von Othello}
 \label{sec:othello}
 Bei Othello handelt es sich um ein strategisches Brettspiel für zwei Personen, bei dem die Spielenden abwechselnd schwarze und weiße Spielsteine auf einem schachbrettartigen Spielfeld platzieren. Das Spiel wurde in den 1880er-Jahren entwickelt und unter dem Namen \textit{Reversi} (lat.: \glqq die Umgedrehten\grqq) bekannt. Othello stellt die moderne und heute bedeutendere Variante von Reversi dar, deren Regelwerk standardisiert ist und bei internationalen Turnieren angewendet wird. Othello wurde 1971 in Japan patentiert und unterscheidet sich von Reversi insbesondere durch eine fest definierte Startaufstellung der vier Anfangsspielsteine sowie durch keine Begrenzung der Spielsteinnutzung. \autocite{beppimenozziBriefHistoryOthello2009}
 
-Für die Entwicklung eines Othello spielenden Roboters sowie des zugehörigen, hardwarelimitierten Spielalgorithmus ist ein grundlegendes Verständnis von Spielaufbau, Spielablauf und Regelwerk erforderlich. Im Folgenden werden daher die für diese Arbeit geltenden Spielregeln dargestellt. Die Beschreibung orientiert sich am offiziellen Regelwerk der World Othello Federation \autocite{worldothellofederationOfficialRulesGame}, wobei Detailregeln je nach Herausgeber bzw. Veranstalter variieren können. Ergänzend wird die in dieser Arbeit verwendete Darstellung des Spielbretts erläutert.
+Für die Entwicklung eines Othello spielenden Roboters sowie des zugehörigen, hardwarelimitierten Spielalgorithmus ist ein grundlegendes Verständnis von Spielaufbau, Spielablauf und Regelwerk erforderlich. Im Folgenden werden daher die für diese Arbeit geltenden Spielregeln dargestellt. Die Beschreibung orientiert sich am offiziellen Regelwerk \autocite{worldothellofederationOfficialRulesGame} der World Othello Federation, wobei Detailregeln je nach Herausgeber bzw. Veranstalter variieren können. Ergänzend wird die in dieser Arbeit verwendete Darstellung des Spielbretts erläutert.
 
 \paragraph{Ziel des Spiels}
 Ziel des Spiels ist es, am Spielende mehr Spielsteine der eigenen Farbe auf dem Spielbrett zu besitzen als der Gegenspieler. Das Spiel endet, sobald keiner der beiden Spieler gemäß den Regeln einen gültigen Zug ausführen kann.
@@ -192,10 +192,171 @@ Es gelten die folgenden Regeln:
 	\item Kann keiner der beiden Spieler einen weiteren Zug ausführen, endet das Spiel. Anschließend werden die Spielsteine gezählt, und der Spieler mit der höheren Anzahl an Spielsteinen seiner Farbe gewinnt.
 \end{enumerate}
 
-\section{Grundlagen der Spieltheorie}
+\section{Spieltheoretische Grundlagen adversarieller Suche}
 \label{sec:spieltheorie}
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \todo{}
 
-\section{Lego Spike System}
+\subsection{Formale Modellierung von Spielen als Suchprobleme}
+\label{subsec:modellierung-spiele-suchprobleme}
+
+% Grundidee:
+% - Brettspiele lassen sich formal als endliche Suchprobleme mit gegnerischen Akteuren modellieren
+% - Jeder Spielzug entspricht einer Zustandsänderung
+% - Ziel der Suche ist die Auswahl eines Zuges, der unter optimalem Gegenspiel
+%   den besten erwarteten Ausgang garantiert
+
+% Spielzustand (State):
+% - Vollständige Beschreibung der aktuellen Spielsituation
+% - Enthält:
+%   * Belegung aller Felder
+%   * Information über den aktiven Spieler
+% - Eigenschaften:
+%   * eindeutig
+%   * deterministisch
+%   * reproduzierbar
+
+% Aktionen (Actions):
+% - Menge aller in einem Zustand erlaubten Züge
+% - Abhängig von:
+%   * Spielregeln
+%   * aktueller Brettkonfiguration
+% - Bestimmt direkt den Verzweigungsfaktor des Suchbaums
+
+% Übergangsfunktion:
+% - Abbildung: (Zustand, Aktion) -> neuer Zustand
+% - Eigenschaften:
+%   * deterministisch
+%   * zustandsvollständig
+% - Grundlage für die Expansion des Suchbaums
+
+% Spielbaum:
+% - Wurzel: aktueller Zustand
+% - Knoten: erreichbare Folgezustände
+% - Kanten: Züge
+% - Ebenen:
+%   * alternierend nach Spielern (MAX / MIN)
+% - Tiefe:
+%   * entspricht der Anzahl simulierter Spielzüge
+
+% Terminalzustände:
+% - Zustände, in denen:
+%   * das Spiel beendet ist
+%   * keine legalen Züge mehr existieren
+% - Dienen als Referenzpunkte für exakte Bewertungen
+
+% Nutzenfunktion:
+% - Ordnet terminalen Zuständen einen numerischen Wert zu
+% - Typisch:
+%   * Gewinn / Verlust
+%   * Steindifferenz
+% - Grundlage jeder optimalen Entscheidungsfindung
+
+% Relevanz für Kapitel 3:
+% - Alle Suchalgorithmen (3.1–3.3) operieren auf exakt diesem Modell
+% - Unterschiede liegen nicht im Modell, sondern in:
+%   * Traversierung
+%   * Abbruchkriterien
+%   * Reduktion des Suchraums
+
+
+
+\subsection{Formale Entscheidungsprinzipien in kompetitiven Spielen}
+\label{subsec:prinzipien-kompetitive-spiele}
+
+% Grundannahmen:
+% - Zwei Spieler mit entgegengesetzten Zielen
+% - Beide handeln rational und optimal
+% - Jeder Spieler kennt:
+%   * den aktuellen Zustand
+%   * alle Regeln
+%   * die möglichen Züge des Gegners
+% - Keine Zufallseinflüsse oder verdeckten Informationen
+
+% Minimax-Prinzip (konzeptionell):
+% - Entscheidungsregel für optimale Zugwahl
+% - Annahme:
+%   * Der Gegenspieler minimiert den eigenen Nutzen
+% - Konsequenz:
+%   * Eigene Entscheidung basiert auf dem schlechtesten möglichen Gegenzug
+
+% MAX-Knoten:
+% - Repräsentieren eigene Entscheidungszustände
+% - Auswahl der Aktion mit maximalem Bewertungswert
+
+% MIN-Knoten:
+% - Repräsentieren gegnerische Entscheidungszustände
+% - Auswahl der Aktion mit minimalem Bewertungswert
+
+% Bewertung:
+% - Exakt:
+%   * bei vollständiger Durchsuchung bis zu Terminalzuständen
+% - Approximiert:
+%   * bei begrenzter Suchtiefe mittels Bewertungsfunktion
+
+% Begriffe mit direkter algorithmischer Bedeutung:
+% - Verzweigungsfaktor:
+%   * Anzahl möglicher Züge pro Zustand
+%   * bestimmt exponentielles Wachstum des Suchraums
+% - Suchtiefe:
+%   * Anzahl der simulierten Halbzüge
+% - Cutoff-Tiefe:
+%   * maximale Tiefe aufgrund begrenzter Rechenzeit
+% - Bewertungsfunktion:
+%   * heuristische Abschätzung der Güte nicht-terminaler Zustände
+% - Worst-Case-Optimierung:
+%   * zentrale Annahme aller Minimax-Varianten
+
+% Motivation für Algorithmuserweiterungen:
+% - Vollständige Minimax-Suche:
+%   * theoretisch korrekt
+%   * praktisch kaum durchführbar
+% - Notwendigkeit von:
+%   * Suchbaumreduktion
+%   * effizienterer Traversierung
+%   * heuristischer Entscheidungsunterstützung
+
+
+\subsection{Spieltheoretische Einordnung von Othello}
+\label{subsec:spieltheoretische-einordnung-othello}
+
+% Klassifikation:
+% - Zwei-Personen-Spiel
+% - Nullsummenspiel
+% - Nicht-kooperativ
+% - Deterministisch
+% - Vollständige Information
+% - Endlicher Zustands- und Aktionsraum
+
+% Bedeutung dieser Einordnung:
+% - Keine Unsicherheit -> keine probabilistischen Modelle notwendig
+% - Keine verdeckten Informationen -> vollständige Spielbaummodellierung möglich
+% - Gegensätzliche Ziele -> Minimax-basierte Verfahren geeignet
+
+% Zustandsraumcharakteristik:
+% - Sehr große Anzahl möglicher Brettkonfigurationen
+% - Hoher durchschnittlicher Verzweigungsfaktor
+% - Tiefe Spielbäume bis zum Spielende
+
+% Algorithmische Konsequenzen:
+% - Klassische Suchalgorithmen:
+%   * prinzipiell korrekt
+%   * aber rechnerisch teuer
+% - Erweiterungen notwendig:
+%   * Alpha-Beta-Pruning zur Reduktion des Suchraums
+%   * Iterative Deepening zur besseren Zeitkontrolle
+%   * Move Ordering zur Maximierung von Pruning-Effekten
+% - Bewertungsheuristiken zwingend:
+%   * exakte Bewertung nur am Spielende möglich
+%   * heuristische Näherung notwendig für frühe Entscheidungen
+
+% Abgrenzung zu nicht berücksichtigten Verfahren:
+% - Verfahren mit:
+%   * hohem Speicherbedarf
+%   * vielen Simulationen
+%   * langer Lernphase
+% - Unter Hardwarebeschränkungen ungeeignet
+
+\section{Aufbau und Komponenten von LEGO\textsuperscript{\textregistered} SPIKE}
 \label{sec:lego-spike}
 
 \section{Grundlagen robotischer Systeme}
