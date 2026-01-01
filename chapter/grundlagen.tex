@@ -1,7 +1,7 @@
 \chapter{Theoretische Grundlagen}
 \label{cha:Grundlagen}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \todo{}
+\todo[inline]{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.}
 
 \section{Einführung in Spielaufbau und Regeln von Othello}
 \label{sec:othello}
@@ -194,65 +194,86 @@ Es gelten die folgenden Regeln:
 
 \section{Spieltheoretische Grundlagen adversarieller Suche}
 \label{sec:spieltheorie}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \todo{}
+
+Die Spieltheorie stellt einen formalen Rahmen zur Beschreibung und Analyse von Situationen bereit, in denen mehrere Akteure, sogenannte \emph{Spieler}, Handlungen ausführen, die sich gegenseitig beeinflussen. Sie findet Anwendung in unterschiedlichen Fachdisziplinen, wobei der Begriff des Spielers jeweils unterschiedlich interpretiert wird, etwa als lebender Organismus in der Evolutionsbiologie, als wirtschaftlicher Akteur in der Ökonomie oder als künstlicher Agent in der Informatik \autocite[Kap.~1]{bonannoGameTheory2024}.
+
+In dieser Arbeit wird die Spieltheorie zur formalen Beschreibung und Analyse des Brettspiels Othello herangezogen, um darauf aufbauend geeignete Spielalgorithmen zu entwerfen. Ziel des folgenden Kapitels ist es, die spieltheoretischen Grundlagen zu schaffen, die für den Vergleich verschiedener Spielalgorithmen in Kapitel~\ref{cha:stand-der-technik} erforderlich sind.
+
+Die Betrachtung beschränkt sich bewusst auf die adversarielle Suche. Dabei handelt es sich um eine Klasse von Suchverfahren der künstlichen Intelligenz für Mehrspielerprobleme mit gegensätzlichen Zielen, wie sie bei Othello vorliegen. Diese Verfahren ermöglichen eine strukturierte und deterministische Entscheidungsfindung. Zudem eignen sie sich besonders für Systeme mit begrenzten Rechenressourcen, wie sie bei der Hardware des LEGO\textsuperscript{\textregistered} SPIKE Systems gegeben sind.
+
+In Abschnitt~\ref{subsec:modellierung-spiele-suchprobleme} werden grundlegende Begriffe der Spieltheorie eingeführt und Spiele formal als Suchprobleme modelliert. Darauf aufbauend behandelt Abschnitt~\ref{subsec:prinzipien-kompetitive-spiele} zentrale Prinzipien der Entscheidungsfindung in kompetitiven Spielen, die für die Auswahl geeigneter Algorithmen maßgeblich sind. Abschließend werden die vorgestellten Konzepte in Abschnitt~\ref{subsec:spieltheoretische-einordnung-othello} auf das Spiel Othello angewandt und dieses aus spieltheoretischer Sicht eingeordnet.
 
 \subsection{Formale Modellierung von Spielen als Suchprobleme}
 \label{subsec:modellierung-spiele-suchprobleme}
+Die Spieltheorie lässt sich in zwei Hauptbereiche unterteilen: die kooperative und die nicht-kooperative Spieltheorie. Die kooperative Spieltheorie geht davon aus, dass Spieler miteinander kommunizieren, Koalitionen bilden und bindende Vereinbarungen treffen können. Für diese Arbeit ist die nicht-kooperative, auch kompetitive Spieltheorie relevant, weshalb sich die folgende Betrachtung auf diesen Bereich beschränkt. In diesem Kontext können Spieler entweder nicht miteinander kommunizieren oder sind zwar zur Kommunikation fähig, können jedoch keine bindenden Vereinbarungen treffen. \autocite[Kap.~1]{bonannoGameTheory2024}
 
-% Grundidee:
-% - Brettspiele lassen sich formal als endliche Suchprobleme mit gegnerischen Akteuren modellieren
-% - Jeder Spielzug entspricht einer Zustandsänderung
-% - Ziel der Suche ist die Auswahl eines Zuges, der unter optimalem Gegenspiel
-%   den besten erwarteten Ausgang garantiert
+Im Folgenden werden die grundlegenden Begriffe der Spieltheorie anhand von Beispielen eingeführt und definiert. Der Einstieg erfolgt über ein simultan verlaufendes Standardbeispiel aus der britischen TV-Show \emph{Golden Balls}, da sich zentrale Konzepte der Spieltheorie in diesem Kontext anschaulich erläutern lassen. Anschließend werden die eingeführten Begriffe auf das Spiel Othello übertragen und um für sequentielle Spiele relevante Aspekte ergänzt.
 
-% Spielzustand (State):
-% - Vollständige Beschreibung der aktuellen Spielsituation
-% - Enthält:
-%   * Belegung aller Felder
-%   * Information über den aktiven Spieler
-% - Eigenschaften:
-%   * eindeutig
-%   * deterministisch
-%   * reproduzierbar
+Das Spiel Golden Balls funktioniert wie folgt: Zwei Spieler, Anton und Berta, entscheiden gleichzeitig und unabhängig voneinander, ob sie kooperieren oder defektieren. Wählen beide Spieler Kooperation, wird der Gewinn, beispielsweise in Höhe von 100\,€, gleichmäßig aufgeteilt. Entscheidet sich ein Spieler für Defektion, während der andere kooperiert, erhält der defektierende Spieler den gesamten Gewinn. Defektieren beide Spieler, erhalten beide keinen Gewinn. Die möglichen Entscheidungsausgänge sind in Tabelle~\ref{tab:golden-balls} zusammengefasst.
 
-% Aktionen (Actions):
-% - Menge aller in einem Zustand erlaubten Züge
-% - Abhängig von:
-%   * Spielregeln
-%   * aktueller Brettkonfiguration
-% - Bestimmt direkt den Verzweigungsfaktor des Suchbaums
+\begin{table}[hbt]	
+	\centering
+	\captionabove[Ausgänge des Spiels Golden Balls]{Mögliche Ausgänge des Spiels Golden Balls.}
+	\label{tab:golden-balls}
+	
+	\renewcommand{\arraystretch}{1.5}
+	
+	\begin{tabular}{c c|c c c c}
+		 & & \multicolumn{4}{c|}{\large \textcolor{blue}{Anton}} \\
+		 & & \multicolumn{2}{c|}{kooperiert ($s_{21}$)} & \multicolumn{2}{c|}{defektiert ($s_{22}$)}\\ \hline
+		\multirow{4}{*}{\large \textcolor{red}{Berta} \,} & \multirow{2}{*}{kooperiert ($s_{11}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
+		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 50\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}} \\ \cline{2-6}
+		 & \multirow{2}{*}{defektiert ($s_{12}$)} & \multirow{2}{*}{$o_2:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}} & \multirow{2}{*}{$o_4:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}}  \\
+		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 100\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}}\\ \hline
+	\end{tabular}
+	
+\end{table}
 
-% Übergangsfunktion:
-% - Abbildung: (Zustand, Aktion) -> neuer Zustand
-% - Eigenschaften:
-%   * deterministisch
-%   * zustandsvollständig
-% - Grundlage für die Expansion des Suchbaums
+Formal lässt sich die \textbf{Spielsituation} wie folgt beschreiben: Eine \textbf{Menge von Spielern}
+\( I = \{1=\text{Anton}, 2=\text{Berta}\} \) verfügt jeweils über zwei \textbf{reine Strategien}
+\( s_i \), nämlich \emph{Kooperieren} (\( s_{i1} \)) oder \emph{Defektieren} (\( s_{i2} \)).
+Abhängig von der Wahl der Strategien ergibt sich eine \textbf{Strategiekombination} \( s \), die als
+geordnetes Paar, etwa \( (s_1=\text{Kooperieren}, s_2=\text{Defektieren}) \), dargestellt wird.
+Der \textbf{Strategieraum}
+\( S = S_1 \times S_2 = \{s_{11}, s_{12}, s_{21}, s_{22}\} \) umfasst die Menge aller möglichen
+Kombinationen der Strategien \( s_i \in S_i \). Insgesamt existieren somit vier (\(2 \times 2\))
+mögliche Kombinationen reiner Strategien.
+Jede Strategiekombination \( s \) bestimmt ein \textbf{Ergebnis} \( o_i \). Die Menge aller möglichen
+Ergebnisse wird als \textbf{Ergebnisraum}
+\( O = \{o_1, o_2, o_3, o_4\} \) bezeichnet.
+Die Darstellung der Spielsituation in der Form \( \Gamma^{\prime} = (I, S, O) \) wird als \textbf{Spielform}
+bezeichnet und lässt sich beispielsweise in Matrixform, wie in
+Tabelle~\ref{tab:golden-balls}, darstellen. Wird diese um eine \textbf{Ergebnisfunktion}
+\( f : S \rightarrow O \) beziehungsweise \( f(s) = o_i \in O \) ergänzt, die jeder Strategiekombination \( s \)
+ein Ergebnis zuweist, ergibt sich die Darstellung \( \Gamma^{\prime \prime} = (I, S, O, f) \), die auch als
+\textbf{Game Frame} bezeichnet wird. \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.2.1]{hollerEinfuehrungSpieltheorie2019}
 
-% Spielbaum:
-% - Wurzel: aktueller Zustand
-% - Knoten: erreichbare Folgezustände
-% - Kanten: Züge
-% - Ebenen:
-%   * alternierend nach Spielern (MAX / MIN)
-% - Tiefe:
-%   * entspricht der Anzahl simulierter Spielzüge
+Das Spiel ist in diesem Stadium formal noch unvollständig beschrieben, da keine Priorisierung der Ergebnisse durch die Spieler vorliegt. Um eine Entscheidung treffen zu können, müssen die möglichen Entscheidungsausgänge bewertet werden. Dies erfordert neben der Kenntnis aller Ergebnisse auch deren relative Bewertung zueinander. Formal ausgedrückt müssen die Ausgänge in eine vollständige und transitive Ordnung überführt werden.
+Beispielhaft kann angenommen werden, dass beide Spieler egoistisch und nutzenmaximierend handeln. In diesem Fall ergibt sich für jeden Spieler eine individuelle Präferenzordnung über die möglichen Entscheidungsausgänge. Für Spieler~1 (Anton) ergibt sich die Präferenzordnung
+\( o_3 \succ_1 o_1 \succ_1 o_2 \sim_1 o_4 \),
+für Spieler~2 (Berta) entsprechend die Präferenzordnung
+\( o_2 \succ_2 o_1 \succ_2 o_3 \sim_2 o_4 \).
+\emph{(Anmerkung zur Notation:
+	$o \succeq_i o'$ bezeichnet eine schwache Präferenz;
+	$o \succ_i o'$ eine strikte Präferenz;
+	$o \sim_i o'$ Indifferenz.)}
+Die Annahme egoistischen und nutzenmaximierenden Handelns ist dabei frei gewählt und unter alternativen Annahmen ergeben sich entsprechend andere Präferenzordnungen.
+\autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.1]{bartholomaeSpieltheorie2016}
 
-% Terminalzustände:
-% - Zustände, in denen:
-%   * das Spiel beendet ist
-%   * keine legalen Züge mehr existieren
-% - Dienen als Referenzpunkte für exakte Bewertungen
 
-% Nutzenfunktion:
-% - Ordnet terminalen Zuständen einen numerischen Wert zu
-% - Typisch:
-%   * Gewinn / Verlust
-%   * Steindifferenz
-% - Grundlage jeder optimalen Entscheidungsfindung
+% FOrmelle Definition eines SPiels
+% Weitere Darstellung eines Nutzenfunktion
+
+% Übergang zu sequentiellen Spielen
+% Einführung Othello als Beispiel
+% Othello definiert als Spiel
+% Zustandraummodell: State, Action, Übergangsfunktion
+% Baumdarstellung: Expliziter Präresnations aller SPielverläufe
+% Rpckwärtz induktion
+
 
 % Relevanz für Kapitel 3:
-% - Alle Suchalgorithmen (3.1–3.3) operieren auf exakt diesem Modell
+% - Alle Suchalgorithmenoperieren auf exakt diesem Modell
 % - Unterschiede liegen nicht im Modell, sondern in:
 %   * Traversierung
 %   * Abbruchkriterien
