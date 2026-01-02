@@ -103,7 +103,7 @@ hyperref=true, %% hyperref-Paket verwenden, um Links zu erstellen
 
 \usepackage{enumitem}			% Erlaubt Änderung der Nummerierung in der Umgebung enumerate
 
-\usepackage{amsmath}			% Ergänzungen für Formeln
+\usepackage{amsmath,amssymb} 			% Ergänzungen für Formeln
 \usepackage{textcomp} 			% zum Einsatz von Eurozeichen u. a. Symbolen
 \usepackage{eurosym}			% bessere Darstellung Euro-Symbol mit \euro
 
@@ -181,6 +181,20 @@ marginal
 \usepackage{multirow}
 \pgfplotsset{compat=newest,width=0.6\linewidth}
 \usepgfplotslibrary{smithchart}
+
+\usepackage{amsthm}
+
+\newtheoremstyle{defcolon}%
+{\topsep}{\topsep}% Abstand oben/unten
+{\normalfont}% Body-Font
+{}% Einzug
+{\bfseries}% Head-Font
+{:}% Satzzeichen nach Kopf (hier :)
+{.5em}% Abstand nach Kopf
+{}% Head-Spec
+
+\theoremstyle{defcolon}
+\newtheorem{definition}{Definition}[chapter]
 
 \usepackage{tikz}						% Tikz sollte nach Listings Pakete geladen werden.
 \usetikzlibrary{arrows}

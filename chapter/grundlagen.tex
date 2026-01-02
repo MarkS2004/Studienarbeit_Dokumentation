@@ -195,7 +195,7 @@ Es gelten die folgenden Regeln:
 \section{Spieltheoretische Grundlagen adversarieller Suche}
 \label{sec:spieltheorie}
 
-Die Spieltheorie stellt einen formalen Rahmen zur Beschreibung und Analyse von Situationen bereit, in denen mehrere Akteure, sogenannte \emph{Spieler}, Handlungen ausführen, die sich gegenseitig beeinflussen. Sie findet Anwendung in unterschiedlichen Fachdisziplinen, wobei der Begriff des Spielers jeweils unterschiedlich interpretiert wird, etwa als lebender Organismus in der Evolutionsbiologie, als wirtschaftlicher Akteur in der Ökonomie oder als künstlicher Agent in der Informatik \autocite[Kap.~1]{bonannoGameTheory2024}.
+Die Spieltheorie stellt einen formalen Rahmen zur Beschreibung und Analyse von interaktiven, strategischen Situationen bereit, in denen mehrere Akteure, sogenannte \emph{Spieler}, Handlungen ausführen, die sich gegenseitig beeinflussen. Sie findet Anwendung in unterschiedlichen Fachdisziplinen, wobei der Begriff des Spielers jeweils unterschiedlich interpretiert wird, etwa als lebender Organismus in der Evolutionsbiologie, als wirtschaftlicher Akteur in der Ökonomie oder als künstlicher Agent in der Informatik \autocite[Kap.~1]{bonannoGameTheory2024}.
 
 In dieser Arbeit wird die Spieltheorie zur formalen Beschreibung und Analyse des Brettspiels Othello herangezogen, um darauf aufbauend geeignete Spielalgorithmen zu entwerfen. Ziel des folgenden Kapitels ist es, die spieltheoretischen Grundlagen zu schaffen, die für den Vergleich verschiedener Spielalgorithmen in Kapitel~\ref{cha:stand-der-technik} erforderlich sind.
 
@@ -213,46 +213,46 @@ Das Spiel Golden Balls funktioniert wie folgt: Zwei Spieler, Anton und Berta, en
 
 \begin{table}[hbt]	
 	\centering
-	\captionabove[Ausgänge des Spiels Golden Balls]{Mögliche Ausgänge des Spiels Golden Balls.}
+	\captionabove[Ausgänge des Spiels Golden Balls]{Mögliche Ausgänge des Spiels Golden Balls. (Basierend auf \autocite[Abb.~2.1]{bonannoGameTheory2024})}
 	\label{tab:golden-balls}
 	
 	\renewcommand{\arraystretch}{1.5}
 	
 	\begin{tabular}{c c|c c c c}
 		 & & \multicolumn{4}{c|}{\large \textcolor{blue}{Anton}} \\
-		 & & \multicolumn{2}{c|}{kooperiert ($s_{21}$)} & \multicolumn{2}{c|}{defektiert ($s_{22}$)}\\ \hline
-		\multirow{4}{*}{\large \textcolor{red}{Berta} \,} & \multirow{2}{*}{kooperiert ($s_{11}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
+		 & & \multicolumn{2}{c|}{kooperiert ($s_{11}$)} & \multicolumn{2}{c|}{defektiert ($s_{12}$)}\\ \hline
+		\multirow{4}{*}{\large \textcolor{red}{Berta} \,} & \multirow{2}{*}{kooperiert ($s_{21}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
 		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 50\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}} \\ \cline{2-6}
-		 & \multirow{2}{*}{defektiert ($s_{12}$)} & \multirow{2}{*}{$o_2:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}} & \multirow{2}{*}{$o_4:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}}  \\
+		 & \multirow{2}{*}{defektiert ($s_{22}$)} & \multirow{2}{*}{$o_2:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}} & \multirow{2}{*}{$o_4:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}}  \\
 		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 100\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}}\\ \hline
 	\end{tabular}
 	
 \end{table}
 
 Formal lässt sich die \textbf{Spielsituation} wie folgt beschreiben: Eine \textbf{Menge von Spielern}
-\( I = \{1=\text{Anton}, 2=\text{Berta}\} \) verfügt jeweils über zwei \textbf{reine Strategien}
-\( s_i \), nämlich \emph{Kooperieren} (\( s_{i1} \)) oder \emph{Defektieren} (\( s_{i2} \)).
-Abhängig von der Wahl der Strategien ergibt sich eine \textbf{Strategiekombination} \( s \), die als
-geordnetes Paar, etwa \( (s_1=\text{Kooperieren}, s_2=\text{Defektieren}) \), dargestellt wird.
+$ I = \{1=\text{Anton}, 2=\text{Berta}\} $ verfügt jeweils über zwei \textbf{reine Strategien}
+$ s_i $, nämlich \emph{Kooperieren} ($ s_{i1} $) oder \emph{Defektieren} ($ s_{i2} $).
+Abhängig von der Wahl der Strategien ergibt sich eine \textbf{Strategiekombination} $ s $, die als
+geordnetes Paar, etwa $ (s_1=\text{Kooperieren}, s_2=\text{Defektieren}) $, dargestellt wird.
 Der \textbf{Strategieraum}
-\( S = S_1 \times S_2 = \{s_{11}, s_{12}, s_{21}, s_{22}\} \) umfasst die Menge aller möglichen
-Kombinationen der Strategien \( s_i \in S_i \). Insgesamt existieren somit vier (\(2 \times 2\))
+$ S = S_1 \times S_2 = \{s_{11}, s_{12}, s_{21}, s_{22}\} $ umfasst die Menge aller möglichen
+Kombinationen der Strategien $ s_i \in S_i $. Insgesamt existieren somit vier ($2 \times 2$)
 mögliche Kombinationen reiner Strategien.
-Jede Strategiekombination \( s \) bestimmt ein \textbf{Ergebnis} \( o_i \). Die Menge aller möglichen
+Jede Strategiekombination $ s $ bestimmt ein \textbf{Ergebnis} $ o_i $. Die Menge aller möglichen
 Ergebnisse wird als \textbf{Ergebnisraum}
-\( O = \{o_1, o_2, o_3, o_4\} \) bezeichnet.
-Die Darstellung der Spielsituation in der Form \( \Gamma^{\prime} = (I, S, O) \) wird als \textbf{Spielform}
+$ O = \{o_1, o_2, o_3, o_4\} $ bezeichnet.
+Die Darstellung der Spielsituation in der Form $ \Gamma^{\dagger} = \langle I, S, O \rangle  $ wird als \textbf{Spielform}
 bezeichnet und lässt sich beispielsweise in Matrixform, wie in
 Tabelle~\ref{tab:golden-balls}, darstellen. Wird diese um eine \textbf{Ergebnisfunktion}
-\( f : S \rightarrow O \) beziehungsweise \( f(s) = o_i \in O \) ergänzt, die jeder Strategiekombination \( s \)
-ein Ergebnis zuweist, ergibt sich die Darstellung \( \Gamma^{\prime \prime} = (I, S, O, f) \), die auch als
+$ f : S \to O $ mit $ f(s) = o_i \in O $ ergänzt, die jeder Strategiekombination $ s $
+ein Ergebnis zuweist, ergibt sich die Darstellung $ \Gamma^{\dagger \dagger} = \langle I, S, O, f \rangle $, die auch als
 \textbf{Game Frame} bezeichnet wird. \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.2.1]{hollerEinfuehrungSpieltheorie2019}
 
 Das Spiel ist in diesem Stadium formal noch unvollständig beschrieben, da keine Priorisierung der Ergebnisse durch die Spieler vorliegt. Um eine Entscheidung treffen zu können, müssen die möglichen Entscheidungsausgänge bewertet werden. Dies erfordert neben der Kenntnis aller Ergebnisse auch deren relative Bewertung zueinander. Formal ausgedrückt müssen die Ausgänge in eine vollständige und transitive Ordnung überführt werden.
-Beispielhaft kann angenommen werden, dass beide Spieler egoistisch und nutzenmaximierend handeln. In diesem Fall ergibt sich für jeden Spieler eine individuelle Präferenzordnung über die möglichen Entscheidungsausgänge. Für Spieler~1 (Anton) ergibt sich die Präferenzordnung
-\( o_3 \succ_1 o_1 \succ_1 o_2 \sim_1 o_4 \),
+Beispielhaft kann angenommen werden, dass beide Spieler egoistisch und nutzenmaximierend handeln.  In diesem Fall ergibt sich für jeden Spieler eine individuelle Präferenzordnung über die möglichen Entscheidungsausgänge. Für Spieler~1 (Anton) ergibt sich die Präferenzordnung
+$ o_3 \succ_1 o_1 \succ_1 o_2 \sim_1 o_4 $,
 für Spieler~2 (Berta) entsprechend die Präferenzordnung
-\( o_2 \succ_2 o_1 \succ_2 o_3 \sim_2 o_4 \).
+$ o_2 \succ_2 o_1 \succ_2 o_3 \sim_2 o_4 $.
 \emph{(Anmerkung zur Notation:
 	$o \succeq_i o'$ bezeichnet eine schwache Präferenz;
 	$o \succ_i o'$ eine strikte Präferenz;
@@ -260,9 +260,72 @@ für Spieler~2 (Berta) entsprechend die Präferenzordnung
 Die Annahme egoistischen und nutzenmaximierenden Handelns ist dabei frei gewählt und unter alternativen Annahmen ergeben sich entsprechend andere Präferenzordnungen.
 \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.1]{bartholomaeSpieltheorie2016}
 
+Auf Grundlage der zuvor eingeführten Konzepte kann die Definition des Game Frames präzisiert werden. Daraus ergibt sich gemäß \autocite[Def.~2.1.3]{bonannoGameTheory2024} die nachfolgende Definition~\ref{def:ordinales-spiel} eines ordinalen Spiels in strategischer Form.
+\begin{definition}
+	\label{def:ordinales-spiel}
+	Ein \emph{ordinales Spiel in strategischer Form} ist ein Quintupel
+	\[
+	\Gamma=\langle I,(S_i)_{i\in I},O,f,(\succeq_i)_{i\in I}\rangle,
+	\quad \text{wobei}
+	\]
+	\begin{itemize}[
+		itemsep=0pt,
+		topsep=0pt,
+		parsep=0pt,
+		partopsep=0pt
+		]
+		\item $I=\{1,2,\ldots,n\}$ eine endliche Menge von Spielern mit $n\geq 2$ ist,
+		\item $S_i$ die Menge der Strategien von Spieler $i\in I$ bezeichnet und
+		$S=S_1 \times S_2 \times \ldots \times S_n$ der Strategieraum ist,
+		\item $O$ die Menge der möglichen Ergebnisse ist,
+		\item $f:S \to O$ eine Ergebnisfunktion ist, die jedem
+		Strategienprofil $s\in S$ genau ein Ergebnis $f(s)\in O$ zuordnet,
+		\item $\succeq_i$ eine vollständige und transitive Präferenzrelation von
+		Spieler $i\in I$ über der Ergebnismenge $O$ ist.
+	\end{itemize}
+\end{definition}
 
-% FOrmelle Definition eines SPiels
-% Weitere Darstellung eines Nutzenfunktion
+Neben der Darstellung von Präferenzen durch eine Ordnung können diese auch mittels einer Nutzenfunktion dargestellt werden. Dabei wird jedem möglichen Ergebnis ein reeller Zahlenwert zugeordnet, wobei ein Ergebnis \(o\) gegenüber einem Ergebnis \(o'\) präferiert wird, wenn der zugehörige Nutzenwert größer ist. Formal ist die Nutzenfunktion als Abbildung \(U \colon O \to \mathbb{R}\) definiert, die die Rangfolge der Präferenzen eines Spielers widerspiegelt. Ein höherer Nutzenwert entspricht einem aus Sicht des Spielers besseren Ergebnis. Nutzenwerte besitzen jedoch keine kardinale Bedeutung, sondern sind ordinal zu interpretieren. Die Wahl der Zahlenwerte ist daher grundsätzlich arbiträr; ein doppelt so hoher Nutzenwert impliziert kein doppelt so gutes Ergebnis. Unter der Annahme egoistischen und nutzenmaximierenden Handelns kann für jeden Spieler eine entsprechende Nutzenfunktion festgelegt werden, wie sie beispielhaft in Tabelle~\ref{tab:nutzenfunktion-golden-balls} dargestellt ist. \autocite[Kap.~2.1]{bonannoGameTheory2024}
+
+\begin{table}[hbt]
+	\centering
+	\captionabove[Nutzenfunktion der Spieler im Spiel Golden Balls]{Nutzenfunktion der Spieler im Spiel Golden Balls unter der Annahme egoistischen und nutzenmaximierenden Handelns.}
+	\label{tab:nutzenfunktion-golden-balls}
+	
+	\renewcommand{\arraystretch}{1.5}
+	
+	\begin{tabular}{r|c c c c}
+		Ergebnis $\rightarrow$ & $o_1$ & $o_2$ & $o_3$ & $o_4$ \\
+		Nutzenfunktion $\downarrow$ & & & & \\ \hline
+		\multicolumn{1}{c|}{\textcolor{blue}{$U_1$ (Anton):}} & \textcolor{blue}{$3$} & \textcolor{blue}{$2$} & \textcolor{blue}{$4$} & \textcolor{blue}{$2$} \\
+		\multicolumn{1}{c|}{\textcolor{red}{$U_2$ (Berta):}} & \textcolor{red}{$3$} & \textcolor{red}{$4$} & \textcolor{red}{$2$} & \textcolor{red}{$2$} \\
+	\end{tabular}
+\end{table}
+
+Basierend auf der Repräsentation der Präferenzen durch Nutzenfunktionen lässt sich ein ordinales Spiel in reduzierter Form definieren. Diese in der Literatur verbreitete Darstellung verzichtet auf eine explizite Spezifikation der Ergebnismenge und wird in der folgenden Definition~\ref{def:reduziertes-ordinales-spiel} formalisiert (vgl.~\autocite[Def.~2.1.3]{bonannoGameTheory2024}).
+
+\begin{definition}
+	\label{def:reduziertes-ordinales-spiel}
+	Ein \emph{reduziertes ordinales Spiel in strategischer Form} ist ein Tripel
+	\[
+	\Gamma^{\prime}=\langle I,(S_i)_{i\in I},(\pi_i)_{i\in I}\rangle,
+	\quad \text{wobei}
+	\]
+	\begin{itemize}[
+		itemsep=0pt,
+		topsep=0pt,
+		parsep=0pt,
+		partopsep=0pt
+		]
+		\item $I=\{1,2,\ldots,n\}$ eine endliche Menge von Spielern mit $n\geq 2$ ist,
+		\item $S_i$ die Menge der Strategien von Spieler $i\in I$ bezeichnet,
+		\item $\pi_i : S \to \mathbb{R}$ die Auszahlungsfunktion des Spiels $i$ ist, d.h. $\pi_i=U_i(f(s))$.
+	\end{itemize}
+\end{definition}
+
+
+
+
 
 % Übergang zu sequentiellen Spielen
 % Einführung Othello als Beispiel
