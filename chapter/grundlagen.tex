@@ -537,23 +537,15 @@ Um das Spiel formal als endliches extensives Spiel mit perfekter Information zu 
 \subsection{Formale Entscheidungsprinzipien in kompetitiven Spielen}
 \label{subsec:prinzipien-kompetitive-spiele}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+Wie im vorangegangenen Kapitel~\ref{subsec:modellierung-spiele-baum} dargestellt, handelt es sich bei Othello um ein Spiel, das mithilfe der Spieltheorie formal modelliert werden kann. Das Spiel weist mehrere charakteristische Eigenschaften auf, die für die algorithmische Analyse von zentraler Bedeutung sind:
+Othello ist zunächst ein kompetitives Spiel. Die Spieler kommunizieren nicht miteinander, schließen keine bindenden Vereinbarungen und verfolgen strikt antagonistische Ziele. Darüber hinaus ist das Spiel deterministisch, da es keine zufälligen Komponenten enthält und jeder Spielzustand eindeutig aus den zuvor ausgeführten Zügen hervorgeht. Es handelt sich um ein Zwei-Personen-Spiel, in dem die Spieler abwechselnd Züge ausführen.
+Weiterhin ist Othello ein Nullsummenspiel, da die Nutzenfunktionen der beiden Spieler entgegengesetzt sind, sodass ein Gewinn des einen Spielers zwangsläufig einen Verlust des anderen impliziert. Schließlich besitzt das Spiel perfekte Information, da beide Spieler jederzeit den vollständigen aktuellen Spielzustand, die Spielregeln sowie alle möglichen Züge des Gegners kennen.
 
-% Grundannahmen:
-% - Zwei Spieler mit entgegengesetzten Zielen
-% - Beide handeln rational und optimal
-% - Jeder Spieler kennt:
-%   * den aktuellen Zustand
-%   * alle Regeln
-%   * die möglichen Züge des Gegners
-% - Keine Zufallseinflüsse oder verdeckten Informationen
+Spiele mit diesen Eigenschaften werden häufig in extensiver Form beschrieben, typischerweise durch die Darstellung als Spielbaum. Dabei zeigt sich, dass die vollständige Lösung eines solchen Spiels rechnerisch anspruchsvoll ist, da der zugehörige Spielbaum eine große Anzahl an Knoten und Kanten umfasst. In der Praxis ist es daher erforderlich, Entscheidungen zu treffen, ohne die optimale Lösung exakt zu kennen oder den gesamten Spielbaum vollständig zu durchsuchen, insbesondere bei begrenzten zeitlichen und rechnerischen Ressourcen. Problemklassen mit diesen Eigenschaften werden in der Algorithmik, insbesondere im Bereich der Künstlichen Intelligenz, als adversariale Suche bezeichnet \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}. Im Folgenden werden die grundlegenden Konzepte adversarialer Suchverfahren eingeführt. Die konkreten Algorithmen und deren Anwendung auf das Spiel Othello werden in Kapitel~\ref{cha:stand-der-technik} erläutert.
 
-% Minimax-Prinzip (konzeptionell):
-% - Entscheidungsregel für optimale Zugwahl
-% - Annahme:
-%   * Der Gegenspieler minimiert den eigenen Nutzen
-% - Konsequenz:
-%   * Eigene Entscheidung basiert auf dem schlechtesten möglichen Gegenzug
+
+\todo[inline]{Grundlegende Konzepte/Begriffe adversariale Suche}
+
 
 % MAX-Knoten:
 % - Repräsentieren eigene Entscheidungszustände
