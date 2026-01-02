@@ -201,10 +201,10 @@ In dieser Arbeit wird die Spieltheorie zur formalen Beschreibung und Analyse des
 
 Die Betrachtung beschränkt sich bewusst auf die adversarielle Suche. Dabei handelt es sich um eine Klasse von Suchverfahren der künstlichen Intelligenz für Mehrspielerprobleme mit gegensätzlichen Zielen, wie sie bei Othello vorliegen. Diese Verfahren ermöglichen eine strukturierte und deterministische Entscheidungsfindung. Zudem eignen sie sich besonders für Systeme mit begrenzten Rechenressourcen, wie sie bei der Hardware des LEGO\textsuperscript{\textregistered} SPIKE Systems gegeben sind.
 
-In Abschnitt~\ref{subsec:modellierung-spiele-suchprobleme} werden grundlegende Begriffe der Spieltheorie eingeführt und Spiele formal als Suchprobleme modelliert. Darauf aufbauend behandelt Abschnitt~\ref{subsec:prinzipien-kompetitive-spiele} zentrale Prinzipien der Entscheidungsfindung in kompetitiven Spielen, die für die Auswahl geeigneter Algorithmen maßgeblich sind. Abschließend werden die vorgestellten Konzepte in Abschnitt~\ref{subsec:spieltheoretische-einordnung-othello} auf das Spiel Othello angewandt und dieses aus spieltheoretischer Sicht eingeordnet.
+In Abschnitt~\ref{subsec:modellierung-spiele-baum} werden grundlegende Begriffe der Spieltheorie eingeführt und Spiele formal als Suchprobleme modelliert. Darauf aufbauend behandelt Abschnitt~\ref{subsec:prinzipien-kompetitive-spiele} zentrale Prinzipien der Entscheidungsfindung in kompetitiven Spielen, die für die Auswahl geeigneter Algorithmen maßgeblich sind. Abschließend werden die vorgestellten Konzepte in Abschnitt~\ref{subsec:spieltheoretische-einordnung-othello} auf das Spiel Othello angewandt und dieses aus spieltheoretischer Sicht eingeordnet.
 
-\subsection{Formale Modellierung von Spielen als Suchprobleme}
-\label{subsec:modellierung-spiele-suchprobleme}
+\subsection{Formale Modellierung von Spielen als Suchbäume}
+\label{subsec:modellierung-spiele-baum}
 Die Spieltheorie lässt sich in zwei Hauptbereiche unterteilen: die kooperative und die nicht-kooperative Spieltheorie. Die kooperative Spieltheorie geht davon aus, dass Spieler miteinander kommunizieren, Koalitionen bilden und bindende Vereinbarungen treffen können. Für diese Arbeit ist die nicht-kooperative, auch kompetitive Spieltheorie relevant, weshalb sich die folgende Betrachtung auf diesen Bereich beschränkt. In diesem Kontext können Spieler entweder nicht miteinander kommunizieren oder sind zwar zur Kommunikation fähig, können jedoch keine bindenden Vereinbarungen treffen. \autocite[Kap.~1]{bonannoGameTheory2024}
 
 Im Folgenden werden die grundlegenden Begriffe der Spieltheorie anhand von Beispielen eingeführt und definiert. Der Einstieg erfolgt über ein simultan verlaufendes Standardbeispiel aus der britischen TV-Show \emph{Golden Balls}, da sich zentrale Konzepte der Spieltheorie in diesem Kontext anschaulich erläutern lassen. Anschließend werden die eingeführten Begriffe auf das Spiel Othello übertragen und um für sequentielle Spiele relevante Aspekte ergänzt.
@@ -219,34 +219,34 @@ Das Spiel Golden Balls funktioniert wie folgt: Zwei Spieler, Anton und Berta, en
 	\renewcommand{\arraystretch}{1.5}
 	
 	\begin{tabular}{c c|c c c c}
-		 & & \multicolumn{4}{c|}{\large \textcolor{blue}{Anton}} \\
-		 & & \multicolumn{2}{c|}{kooperiert ($s_{11}$)} & \multicolumn{2}{c|}{defektiert ($s_{12}$)}\\ \hline
+		 & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\large \textcolor{blue}{Anton}} \\
+		 & & \multicolumn{2}{c|}{kooperiert ($s_{11}$)} & \multicolumn{2}{c|}{defektiert ($s_{12}$)}\\ \cline{2-6}
 		\multirow{4}{*}{\large \textcolor{red}{Berta} \,} & \multirow{2}{*}{kooperiert ($s_{21}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
 		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 50\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}} \\ \cline{2-6}
 		 & \multirow{2}{*}{defektiert ($s_{22}$)} & \multirow{2}{*}{$o_2:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}} & \multirow{2}{*}{$o_4:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}}  \\
-		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 100\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}}\\ \hline
+		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 100\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}}\\ \cline{2-6}
 	\end{tabular}
 	
 \end{table}
 
-Formal lässt sich die \textbf{Spielsituation} wie folgt beschreiben: Eine \textbf{Menge von Spielern}
-$ I = \{1=\text{Anton}, 2=\text{Berta}\} $ verfügt jeweils über zwei \textbf{reine Strategien}
-$ s_i $, nämlich \emph{Kooperieren} ($ s_{i1} $) oder \emph{Defektieren} ($ s_{i2} $).
-Abhängig von der Wahl der Strategien ergibt sich eine \textbf{Strategiekombination} $ s $, die als
+Formal lässt sich die \emph{Spielsituation} wie folgt beschreiben: Eine \emph{Menge von Spielern}
+$ I = \{1=\text{Anton}, 2=\text{Berta}\} $ verfügt jeweils über zwei \emph{reine Strategien}
+$ s_i $, nämlich \glqq Kooperieren\grqq{} ($ s_{i1} $) oder \glqq Defektieren\grqq ($ s_{i2} $).
+Abhängig von der Wahl der Strategien ergibt sich eine \emph{Strategiekombination} $ s $, die als
 geordnetes Paar, etwa $ (s_1=\text{Kooperieren}, s_2=\text{Defektieren}) $, dargestellt wird.
-Der \textbf{Strategieraum}
+Der \emph{Strategieraum}
 $ S = S_1 \times S_2 = \{s_{11}, s_{12}, s_{21}, s_{22}\} $ umfasst die Menge aller möglichen
 Kombinationen der Strategien $ s_i \in S_i $. Insgesamt existieren somit vier ($2 \times 2$)
 mögliche Kombinationen reiner Strategien.
-Jede Strategiekombination $ s $ bestimmt ein \textbf{Ergebnis} $ o_i $. Die Menge aller möglichen
-Ergebnisse wird als \textbf{Ergebnisraum}
+Jede Strategiekombination $ s $ bestimmt ein \emph{Ergebnis} $ o_i $. Die Menge aller möglichen
+Ergebnisse wird als \emph{Ergebnisraum}
 $ O = \{o_1, o_2, o_3, o_4\} $ bezeichnet.
-Die Darstellung der Spielsituation in der Form $ \Gamma^{\dagger} = \langle I, S, O \rangle  $ wird als \textbf{Spielform}
+Die Darstellung der Spielsituation in der Form $ \Gamma^{\dagger} = \langle I, S, O \rangle  $ wird als \emph{Spielform}
 bezeichnet und lässt sich beispielsweise in Matrixform, wie in
-Tabelle~\ref{tab:golden-balls}, darstellen. Wird diese um eine \textbf{Ergebnisfunktion}
+Tabelle~\ref{tab:golden-balls}, darstellen. Wird diese um eine \emph{Ergebnisfunktion}
 $ f : S \to O $ mit $ f(s) = o_i \in O $ ergänzt, die jeder Strategiekombination $ s $
 ein Ergebnis zuweist, ergibt sich die Darstellung $ \Gamma^{\dagger \dagger} = \langle I, S, O, f \rangle $, die auch als
-\textbf{Game Frame} bezeichnet wird. \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.2.1]{hollerEinfuehrungSpieltheorie2019}
+\emph{Game Frame} bezeichnet wird. \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.2.1]{hollerEinfuehrungSpieltheorie2019}
 
 Das Spiel ist in diesem Stadium formal noch unvollständig beschrieben, da keine Priorisierung der Ergebnisse durch die Spieler vorliegt. Um eine Entscheidung treffen zu können, müssen die möglichen Entscheidungsausgänge bewertet werden. Dies erfordert neben der Kenntnis aller Ergebnisse auch deren relative Bewertung zueinander. Formal ausgedrückt müssen die Ausgänge in eine vollständige und transitive Ordnung überführt werden.
 Beispielhaft kann angenommen werden, dass beide Spieler egoistisch und nutzenmaximierend handeln.  In diesem Fall ergibt sich für jeden Spieler eine individuelle Präferenzordnung über die möglichen Entscheidungsausgänge. Für Spieler~1 (Anton) ergibt sich die Präferenzordnung
@@ -294,11 +294,11 @@ Neben der Darstellung von Präferenzen durch eine Ordnung können diese auch mit
 	
 	\renewcommand{\arraystretch}{1.5}
 	
-	\begin{tabular}{r|c c c c}
+	\begin{tabular}{c|c c c c}
 		Ergebnis $\rightarrow$ & $o_1$ & $o_2$ & $o_3$ & $o_4$ \\
 		Nutzenfunktion $\downarrow$ & & & & \\ \hline
-		\multicolumn{1}{c|}{\textcolor{blue}{$U_1$ (Anton):}} & \textcolor{blue}{$3$} & \textcolor{blue}{$2$} & \textcolor{blue}{$4$} & \textcolor{blue}{$2$} \\
-		\multicolumn{1}{c|}{\textcolor{red}{$U_2$ (Berta):}} & \textcolor{red}{$3$} & \textcolor{red}{$4$} & \textcolor{red}{$2$} & \textcolor{red}{$2$} \\
+		\textcolor{blue}{$U_1$ (Anton):} & \textcolor{blue}{$3$} & \textcolor{blue}{$2$} & \textcolor{blue}{$4$} & \textcolor{blue}{$2$} \\
+		\textcolor{red}{$U_2$ (Berta):} & \textcolor{red}{$3$} & \textcolor{red}{$4$} & \textcolor{red}{$2$} & \textcolor{red}{$2$} \\
 	\end{tabular}
 \end{table}
 
@@ -323,29 +323,221 @@ Basierend auf der Repräsentation der Präferenzen durch Nutzenfunktionen lässt
 	\end{itemize}
 \end{definition}
 
+Im Gegensatz zu simultanen Interaktionen verlaufen viele Spiele sequentiell. Dies gilt auch für Othello, bei dem die Spieler Schwarz und Weiß abwechselnd ziehen und Kenntnis aller bisherigen Züge besitzen. Solche Spiele werden als \emph{dynamische Spiele} oder \emph{Spiele in extensiver Form} bezeichnet. Othello zählt zudem zu den Spielen mit \emph{perfekter Information}, da jedem Spieler zum Zeitpunkt seines Zuges alle vorherigen Züge bekannt sind.
 
+Spiele dieser Art lassen sich formal in strategischer Form (Normalform) darstellen, sodass die zuvor eingeführten Definitionen ihre Gültigkeit behalten. Für praktische Analysen ist diese Darstellung jedoch ungeeignet, da Strategien und einzelne Entscheidungen, anders als im Beispiel \emph{Golden Balls}, nicht übereinstimmen. In dynamischen Spielen mit perfekter Information ist eine Strategie als vollständiger Handlungsplan zu verstehen, der für jede mögliche Spielsituation eine zulässige Aktion festlegt. Der Strategieraum $S = S_1 \times S_2$ umfasst daher alle Kombinationen solcher Pläne und ist entsprechend komplex. Eine explizite Auflistung der Strategiemengen oder eine Darstellung in Matrixform ist folglich nicht praktikabel. Für die Analyse und die algorithmische Umsetzung sequentieller Spiele wird stattdessen die extensive Form verwendet, in der das Spiel als Baum dargestellt wird. Im Folgenden wird die Definition solcher gewurzelten, gerichteten Spielbäume eingeführt (vgl.~\autocite[Def.~3.1.1, Def.~3.1.2, Def.~3.1.3]{bonannoGameTheory2024}).
 
+\begin{definition}
+	\label{def:rooted-directed-tree}
+	Ein \emph{gewurzelter gerichteter Baum} besteht aus einer Menge von Knoten und gerichteten Kanten, die diese verbinden.
+	\begin{itemize}[
+		itemsep=0pt,
+		topsep=0pt,
+		parsep=0pt,
+		partopsep=0pt,
+		before=\vspace{-0.5\baselineskip}
+		]
+		\item Die Wurzel besitzt keinen eingehenden Pfeil (Eingangsgrad $0$), während jeder andere Knoten genau einen eingehenden Pfeil besitzt (Eingangsgrad $1$).
+		\item Von der Wurzel zu jedem anderen Knoten existiert genau ein eindeutiger Pfad, das heißt eine eindeutige Folge gerichteter Kanten.
+		\item Ein Knoten ohne ausgehende Pfeile (Ausgangsgrad $0$) heißt Endknoten, jeder andere Knoten heißt Entscheidungsknoten.
+		\item Die Menge aller Knoten wird mit $X$ bezeichnet, die Menge der Entscheidungsknoten mit $D$ und die Menge der Endknoten mit $Z$, sodass $X = D \cup Z$ gilt.
+	\end{itemize}
+\end{definition}
 
+\begin{definition}
+	\label{def:finite-extensive-form}
+	Eine \emph{endliche extensive Form mit perfekter Information} (auch \emph{extensive-form game frame}) besteht aus den folgenden Bestandteilen:%
+	\begin{itemize}[
+		itemsep=0pt,
+		topsep=0pt,
+		parsep=0pt,
+		partopsep=0pt,
+		before=\vspace{-0.5\baselineskip}
+		]
+		\item einem endlichen gewurzelten gerichteten Baum,
+		\item einer Spielermenge $I=\{1,\ldots,n\}$ und einer Zuordnung, die jedem Entscheidungsknoten genau einen Spieler zuweist,
+		\item einer Aktionsmenge $A$ und einer Zuordnung, die jeder gerichteten Kante genau eine Aktion zuweist, wobei aus demselben Knoten keine zwei Kanten dieselbe Aktion tragen,
+		\item einer Ergebnismenge $O$ und einer Zuordnung, die jedem Endknoten genau ein Ergebnis zuweist.
+	\end{itemize}
+\end{definition}
 
-% Übergang zu sequentiellen Spielen
-% Einführung Othello als Beispiel
-% Othello definiert als Spiel
-% Zustandraummodell: State, Action, Übergangsfunktion
-% Baumdarstellung: Expliziter Präresnations aller SPielverläufe
-% Rpckwärtz induktion
+\begin{definition}
+	\label{def:finite-extensive-game}
+	Ein \emph{endliches extensives Spiel mit perfekter Information} ist eine endliche extensive Form mit perfekter Information zusammen mit einer Rangordnung der Ergebnismenge.
+	Für jeden Spieler $i \in I$ ist eine Präferenzrelation $\succeq_i$ auf $O$ gegeben, die üblicherweise durch eine ordinale Nutzenfunktion $U_i : O \to \mathbb{R}$ dargestellt werden kann.
+\end{definition}
 
+Zur Veranschaulichung der zuvor eingeführten Definitionen werden die initialen Züge des Spiels Othello betrachtet und ein entsprechender Spielbaum konstruiert.
 
-% Relevanz für Kapitel 3:
-% - Alle Suchalgorithmenoperieren auf exakt diesem Modell
-% - Unterschiede liegen nicht im Modell, sondern in:
-%   * Traversierung
-%   * Abbruchkriterien
-%   * Reduktion des Suchraums
+Abbildung~\ref{fig:othello-initiale-spielsituationen} zeigt die ersten möglichen Züge von Schwarz und Weiß.
+In der Unterabbildung~(i) eröffnet Schwarz das Spiel ausgehend von der Startaufstellung; dargestellt sind die zulässigen Anfangszüge. In den Unterabbildungen~(a) bis~(d) ist Weiß am Zug. Gezeigt werden jeweils die resultierenden Spielsituationen in Abhängigkeit vom zuvor ausgeführten Zug von Schwarz sowie die daraus folgenden möglichen Aktionen von Weiß.
+Es sei angemerkt, dass aufgrund der Symmetrieeigenschaften von Othello einzelne Spielsituationen zusammengefasst werden könnten. Auf eine solche Reduktion wird jedoch bewusst verzichtet, um im Folgenden den vollständigen Spielbaum darzustellen.
 
+\begin{figure}[hbt]
+	\centering
+	\input{tikz/reversi-board}
+	
+	\leavevmode
+	\makebox[\textwidth][c]{%
+		% ------------------ LINKS: ------------------
+		\begin{minipage}[c]{0.32\textwidth}
+			\centering
+			\vspace{12mm}
+			\begin{tikzpicture}[scale=0.5]
+				\rvBoard
+				\rvCoords
+				\rvStonesBlack{E4, D5}
+				\rvStonesWhite{E5, D4}
+				\rvMovesBlack{D3, C4, F5, E6}
+				\rvValueMap{C4:a, D3:b, E6:c, F5:d}
+			\end{tikzpicture}
+			\vfill
+			\par\vspace{0.4em}
+			{\footnotesize (i) Zuvor Startaufstellung}
+		\end{minipage}%
+		\hspace{0.04\textwidth}
+		% ------------------ RECHTS: ------------------
+		\begin{minipage}[t]{0.64\textwidth}
+			\centering
+			
+			% ===== Reihe 1 =====
+			\begin{minipage}[t]{0.49\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.5]
+					\rvBoard
+					\rvCoords
+					\rvStonesBlack{C4, D4, E4, D5}
+					\rvStonesWhite{E5}
+					\rvLastMove{C4}
+					\rvFlips{D4}
+					\rvMovesWhite{C3, E3, C5}
+				\end{tikzpicture}
+				\par\vspace{0.2em}{\footnotesize (a) Schwarz zuvor: C4}
+			\end{minipage}%
+			\hfill
+			\begin{minipage}[t]{0.49\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.5]
+					\rvBoard
+					\rvCoords
+					\rvStonesBlack{E4, D5, D3, D4}
+					\rvStonesWhite{E5}
+					\rvLastMove{D3}
+					\rvFlips{D4}
+					\rvMovesWhite{C3, E3, C5}
+				\end{tikzpicture}
+				\par\vspace{0.2em}{\footnotesize (b) Schwarz zuvor: D3}
+			\end{minipage}
+			
+			\vspace{4mm}
+			
+			% ===== Reihe 2 =====
+			\begin{minipage}[t]{0.49\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.5]
+					\rvBoard
+					\rvCoords
+					\rvStonesBlack{E4, D5, E5, E6}
+					\rvStonesWhite{D4}
+					\rvLastMove{E6}
+					\rvFlips{E5}
+					\rvMovesWhite{F4, D6, F6}
+				\end{tikzpicture}
+				\par\vspace{0.2em}{\footnotesize (c) Schwarz zuvor: C6}
+			\end{minipage}%
+			\hfill
+			\begin{minipage}[t]{0.49\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.5]
+					\rvBoard
+					\rvCoords
+					\rvStonesBlack{E4, D5, E5, F5}
+					\rvStonesWhite{D4}
+					\rvLastMove{F5}
+					\rvFlips{E5}
+					\rvMovesWhite{F4, D6, F6}
+				\end{tikzpicture}
+				\par\vspace{0.2em}{\footnotesize (d) Schwarz zuvor: F5}
+			\end{minipage}
+			
+		\end{minipage}%
+	}
+	\vspace{0.5\baselineskip}
+	\caption[Erste regelkonforme Züge bei Othello]{Erste regelkonforme Züge von Schwarz und Weiß im Spiel Othello.}
+	\label{fig:othello-initiale-spielsituationen}
+ \end{figure}
 
+Die initialen Spielzüge lassen sich gemäß den zuvor eingeführten Definitionen in einen gewurzelten gerichteten Baum überführen, der in Abbildung~\ref{fig:othello-spielbaum-initial} dargestellt ist.
+	
+\begin{figure}[h!]
+	\centering
+	
+	\forestset{
+		Knotenlabel/.style={
+			label/.append style={font=\normalsize\bfseries}
+		},
+		EL/.style n args={1}{
+			edge label={
+				node[midway, above, sloped,
+				fill=white,
+				inner sep=1.8pt,
+				font=\normalsize\normalfont]{#1}
+			}
+		}
+	}
+	
+	\begin{forest}
+		for tree={
+			grow'=south,
+			edge={-latex, line width=1pt},
+			parent anchor=south,
+			child anchor=north,
+			s sep=12mm,
+			l sep=24mm,
+			draw=none,
+			circle,
+			fill,
+			inner sep=2pt,
+			label distance=2.5mm,
+			Knotenlabel,
+		}
+		[ , label=above:{(i)}
+		[ , label=right:{(d)}, EL={F5}
+		[ , EL={C5} ]
+		[ , EL={E3} ]
+		[ , EL={C3} ]
+		]
+		[ , label=right:{(c)}, EL={C6}
+		[ , EL={C5} ]
+		[ , EL={E3} ]
+		[ , EL={C3} ]
+		]
+		[ , label=right:{(b)}, EL={D3}
+		[ , EL={F4} ]
+		[ , EL={F6} ]
+		[ , EL={C6} ]
+		]
+		[ , label=right:{(a)}, EL={C4}
+		[ , EL={F4} ]
+		[ , EL={F6} ]
+		[ , EL={C6} ]
+		]
+		]
+	\end{forest}
+	
+	\vspace{0.5\baselineskip}
+	\caption[Spielbaum der initialen Züge in Othello]{Spielbaum der initialen Züge in Othello.}
+	\label{fig:othello-spielbaum-initial}
+\end{figure}
+
+Der dargestellte Spielbaum ist nicht vollständig und enthält daher keine Endknoten, sondern ausschließlich Entscheidungsknoten. Auf der ersten Ebene (der Wurzel) ist die Ausgangssituation dargestellt. Die davon ausgehenden Kanten repräsentieren die möglichen Aktionen von Schwarz. Auf der nächsten Ebene sind die Spielsituationen dargestellt, in denen Weiß am Zug ist. Die Kanten geben die möglichen Folgeaktionen von Weiß an.
+
+Um das Spiel formal als endliches extensives Spiel mit perfekter Information zu modellieren, müssen der vollständige Spielbaum sowie die Spielermenge $I = \{1 = \text{Schwarz},\, 2 = \text{Weiß}\}$ festgelegt werden. Dabei gilt das Aussetzen als zulässige Aktion, sofern kein regelkonformer Zug möglich ist. Der Spielbaum endet, sobald das Spiel abgeschlossen ist, also wenn kein weiterer Zug ausgeführt werden kann. Jedem Endknoten, der eine Endspielsituation beschreibt, wird ein Ergebnis zugeordnet. Diese Ergebnisse werden für jeden Spieler mithilfe einer Nutzenfunktion bewertet, um eine Präferenzrelation zu definieren. So kann einem Sieg der Wert $1$, einer Niederlage der Wert $-1$ und einem Remis der Wert $0$ zugewiesen werden. Alternativ kann die Nutzenfunktion auf der Differenz der Spielsteine basieren.
 
 \subsection{Formale Entscheidungsprinzipien in kompetitiven Spielen}
 \label{subsec:prinzipien-kompetitive-spiele}
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 % Grundannahmen:
 % - Zwei Spieler mit entgegengesetzten Zielen
