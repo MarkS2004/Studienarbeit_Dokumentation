@@ -1,23 +1,93 @@
-\chapter{Konzeptioneller Systementwurf}
+\chapter{Systematischer Konzeptentwurf}
 \label{cha:konzeptentwurf}
+\todo[inline]{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer}
+\pagebreak  
 
-Je nach Art der Arbeit kann diese Kapitelüberschrift auch \glqq Konzeptentwurf\grqq~lauten.
+\section{Ausgangssituation und Rahmenbedingungen}
+\label{sec:ausgangssituation}
+Zu Beginn des Konzeptentwurfs wurde die Aufgabenstellung präzisiert, indem der konkrete Spielaufbau, die geltenden Spielregeln sowie weitere technische und organisatorische Rahmenbedingungen eindeutig festgelegt wurden. Diese Festlegungen sind erforderlich, um ein regelkonformes und vergleichbares Spiel zwischen Robotern unterschiedlicher Teams zu ermöglichen. Die Erarbeitung der Spezifikationen erfolgte in gemeinsamer Abstimmung aller beteiligten Parteien. Im Folgenden werden diese Spezifikationen beschrieben und die vorliegende Ausgangssituation analysiert.
 
-Beschreibung der Ausgangssituation und des Themenumfelds. Ggf. wird darauf eingegangen, welche Randbedingungen und Einflüsse zu beachten sind.
+\paragraph{Spielplattform}
+Zur Reduktion der Systemkomplexität wird als Spielplattform kein physisches Brett, sondern eine digitale Umgebung verwendet. Das Spiel wird daher von beiden Robotern auf einem Tablet des Herstellers Apple (iPad) ausgeführt. Hierfür kommt die Applikation \glqq Reverse (Othello)\grqq{} \autocite{marcarelliReverseOthello2025} zum Einsatz, die für iPad und iPhone entwickelt wurde und das gemeinsame Spielen auf einem einzelnen Endgerät ermöglicht. Dabei werden die Standardeinstellungen der App verwendet, und es gelten die dort implementierten Regeln, wie sie auch in Abschnitt~\ref{sec:othello} beschrieben sind.
 
-Anforderungsanalyse und Anforderungsdefinition, nach Möglichkeit strukturiert, um zu einem späteren Zeitpunkt die Anforderungen nachvollziehbar verifizieren zu können.
+\paragraph{Spielaufbau}
+Das Tablet wird flach und mittig auf einem Tisch positioniert, wobei eine geringe Aufbauhöhe anzustreben ist, idealerweise ohne Schutzhülle. Verwendet wird die standardmäßige Darstellung des Spielfelds der App in der jeweils vorgegebenen Auflösung. Das Robotersystem muss daher die Spielfeldgröße dynamisch erfassen. Eine entsprechende Kalibrierung oder Anpassung ist vor Spielbeginn durchzuführen.\\
+Zur Definition eines einheitlichen Größenbereichs wird das Spielfeld auf eine minimale quadratische Kantenlänge von \SI{14}{\centi\metre} (Darstellung bei iPad Air, 11~Zoll) und eine maximale Kantenlänge von \SI{19}{\centi\metre} (Darstellung bei iPad Pro, 13~Zoll) beschränkt. Die beiden Roboter sind auf gegenüberliegenden Spielhälften zu positionieren. Um das Spielfeld ist ein Sicherheitsabstand von mindestens \SI{5.0}{\centi\metre} freizuhalten. Um Kollisionen zu vermeiden, darf weder der aktive Roboter während seines Spielzugs in den Ruhezustandsbereich des gegnerischen Teams eindringen noch der pausierende Roboter seinen Ruhezustandsbereich verlassen.\\
+Der Spielaufbau, die relevanten Maße sowie die Benutzeroberfläche der Spielplattform sind in der folgenden Abbildung~\ref{fig:spielaufbau} dargestellt.
 
-Herleitung einer Lösung (einer Methodik, eines experimentellen Aufbaus oder von unterschiedlichen Konzepten), Lösungsbewertung und bewusste Wahl des gewählten Vorgehens. An dieser Stelle ist auch auf die Zuverlässigkeit einer Methodik oder auf die Genauigkeit von Untersuchungen einzugehen. Die Überlegungen sollen dazu helfen, mit der angestrebten Lösung die gestellten Anforderungen zu erfüllen, um schließlich die Ziele der Arbeit erreichen zu können.
+\begin{figure}[hbt]
+	\centering
+	\begin{tikzpicture}[scale=0.8, transform shape] 
+		% Bild auf Textbreite
+		\node[anchor=south west, inner sep=0] (img) at (0,0)
+		{\includegraphics[width=\linewidth]{images/spielaufbau}};
+		
+		\begin{scope}[x={(img.south east)},y={(img.north west)},xscale=1/30,yscale=1/20]
+			
+			\draw[<->,line width=0.75pt, color=white] (10.5,14) -- (19.5,14) node[midway,below,font=\footnotesize,text=white,transform shape=false]{\SI{14}{\centi\metre} - \SI{19}{\centi\metre}};
+			\draw[<->,line width=0.75pt, color=white] (11,5.5) -- (11,14.5) node[midway,below,rotate=90,font=\footnotesize,text=white,transform shape=false]{\SI{14}{\centi\metre} - \SI{19}{\centi\metre}};
+			
+			\fill[pattern=north east lines, pattern color=red!70] (0,0) rectangle (7.75,20);
+			\draw[red, line width=1pt] (0,0) -- (7.75,0) -- (7.75,20) -- (0,20);
+			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\footnotesize] at (4,10) {Ruhezustands-\\bereich\\Roboter 1};
+			
+			\fill[pattern=north east lines, pattern color=blue!70] (22.25,0) rectangle (30,20);
+			\draw[blue, line width=1pt] (30,20) -- (22.25,20) -- (22.25,0) -- (30,0);
+			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\footnotesize] at (26,10) {Ruhezustands-\\bereich\\Roboter 2};
+			
+			\draw[green!70!black, dashed, line width=1.0pt] (8,3) rectangle (22,17);
+			\node[anchor=west,font=\footnotesize,text=black,transform shape=false] at (7.75,17.75) {Sicherheitszone};
+			
+			\draw[<->,line width=0.75pt,color=black] (8,2) -- (10.5,2)
+			node[midway,below,font=\footnotesize,transform shape=false]{\SI{5}{\centi\metre}};
+			\draw[line width=0.35pt] (8,2) -- ++(0,1);
+			\draw[line width=0.35pt] (8,2) -- ++(0,-0.5);
+			\draw[line width=0.35pt] (10.5,2) -- ++(0,3.5);
+			\draw[line width=0.35pt] (10.5,2) -- ++(0,-0.5);
+			
+			\draw[<->,line width=0.75pt,color=black] (19.5,2) -- (22,2)
+			node[midway,below,font=\footnotesize,transform shape=false]{\SI{5}{\centi\metre}};
+			\draw[line width=0.35pt] (19.5,2) -- ++(0,3.5);
+			\draw[line width=0.35pt] (19.5,2) -- ++(0,-0.5);
+			\draw[line width=0.35pt] (22,2) -- ++(0,1);
+			\draw[line width=0.35pt] (22,2) -- ++(0,-0.5);
+			
+%			\draw[step=1, gray!60, very thin] (0,0) grid (30,20);
+%			\draw[red, line width=0.6pt] (0,0) rectangle (30,20);
 
-Bei einer Gegenüberstellung von verschiedenen Lösungsansätzen kann z.~B. eine Nutzwertanalyse helfen. Dabei sind nicht nur z.~B. die Funktion, Leistungsfähigkeit, Umsetzbarkeit und Nutzbarkeit, sondern auch z.~B. wirtschaftliche Aspekte, wie Stück-, Entwicklungskosten oder Ressourcenverbrauch zu berücksichtigen. Sehr bedeutend sind auch Aspekte der Nachhaltigkeit unter Betrachtung des gesamten Lebenszyklus einer erarbeiteten Lösung.
+		\end{scope}
+	\end{tikzpicture}
+	\vspace{0.5\baselineskip}
+	\caption[Spielaufbau mit Sicherheits- und Ruhezonen]{Spielaufbau mit Sicherheits- und Ruhezonen.}	
+	\label{fig:spielaufbau}
+\end{figure}
 
-Sowohl bei der Anforderungsdefinition, als auch bei der Lösungsfindung gibt es eine große Anzahl an verschiedenen Methoden. Eine kleine Auswahl ist in der folgenden Aufzählung zu finden.
+\paragraph{Spielablauf und Zeitregelung}
+Wie in den Spielregeln definiert, beginnt der Spieler Schwarz, der zuvor ausgelost wird. Anschließend werden die Spielzüge abwechselnd durchgeführt, wobei die maximale Dauer eines einzelnen Spielzugs auf \SI{2}{\minute} begrenzt ist. Diese Zeitvorgabe kann im Verlauf des Projekts im gegenseitigen Einvernehmen angepasst werden.
+Zur Übergabe der Spielzüge zwischen den Robotern wird eine digitale Schachuhr \autocite{seanoconnorMultiPlayerChess2021} verwendet. Diese ist webbasiert, erfordert keine Registrierung und kann über mehrere Endgeräte synchronisiert werden. Die Schachuhr wird auf einem Smartphone geöffnet. Die Positionierung des Smartphones sowie die Skalierung der Webseite obliegen den jeweiligen Teams.
+Der Wechsel zum nächsten Spieler erfolgt durch Betätigung des Touchdisplays, wobei sich die farbliche Darstellung der Benutzeroberfläche entsprechend ändert. Die Funktionalitäten sowie die Benutzeroberfläche der Schachuhr sind in Abbildung~X dargestellt. Die Schachuhr dient ausschließlich der Zugübergabe und nicht der Erfassung der tatsächlichen Zugspielzeit.
 
-\begin{itemize}
-\item Anforderungsdefinition mithilfe des Requirements Engineering  \autocite{Pohl.2021}
-\item Systems Engineering Ansatz \autocite{Schluter.2023}
-\item Agile Entwicklungsmethodiken \autocite{Cohn.2010, Martin.2020, Wirdemann.2022}
-\item Klassische Bewertungsverfahren \autocite{Breiing.1997, Zangemeister.2014}
-\end{itemize}
 
-Ziel dieses Kapitels ist, dass auf Basis von umfassend und genau formulierten Anforderungen (ggf. auch Nicht-Zielen) eine Lösungsvielfalt erarbeitet wird, welche anschließend strukturiert bewertet wird, um eine fundierte Begründung für die angestrebte Art der Umsetzung herzuleiten.
+\paragraph{Hardwareeinschränkungen}
+
+
+%Je nach Art der Arbeit kann diese Kapitelüberschrift auch \glqq Konzeptentwurf\grqq~lauten.
+%
+%Beschreibung der Ausgangssituation und des Themenumfelds. Ggf. wird darauf eingegangen, welche Randbedingungen und Einflüsse zu beachten sind.
+%
+%Anforderungsanalyse und Anforderungsdefinition, nach Möglichkeit strukturiert, um zu einem späteren Zeitpunkt die Anforderungen nachvollziehbar verifizieren zu können.
+%
+%Herleitung einer Lösung (einer Methodik, eines experimentellen Aufbaus oder von unterschiedlichen Konzepten), Lösungsbewertung und bewusste Wahl des gewählten Vorgehens. An dieser Stelle ist auch auf die Zuverlässigkeit einer Methodik oder auf die Genauigkeit von Untersuchungen einzugehen. Die Überlegungen sollen dazu helfen, mit der angestrebten Lösung die gestellten Anforderungen zu erfüllen, um schließlich die Ziele der Arbeit erreichen zu können.
+%
+%Bei einer Gegenüberstellung von verschiedenen Lösungsansätzen kann z.~B. eine Nutzwertanalyse helfen. Dabei sind nicht nur z.~B. die Funktion, Leistungsfähigkeit, Umsetzbarkeit und Nutzbarkeit, sondern auch z.~B. wirtschaftliche Aspekte, wie Stück-, Entwicklungskosten oder Ressourcenverbrauch zu berücksichtigen. Sehr bedeutend sind auch Aspekte der Nachhaltigkeit unter Betrachtung des gesamten Lebenszyklus einer erarbeiteten Lösung.
+%
+%Sowohl bei der Anforderungsdefinition, als auch bei der Lösungsfindung gibt es eine große Anzahl an verschiedenen Methoden. Eine kleine Auswahl ist in der folgenden Aufzählung zu finden.
+%
+%\begin{itemize}
+%\item Anforderungsdefinition mithilfe des Requirements Engineering  \autocite{Pohl.2021}
+%\item Systems Engineering Ansatz \autocite{Schluter.2023}
+%\item Agile Entwicklungsmethodiken \autocite{Cohn.2010, Martin.2020, Wirdemann.2022}
+%\item Klassische Bewertungsverfahren \autocite{Breiing.1997, Zangemeister.2014}
+%\end{itemize}
+%
+%Ziel dieses Kapitels ist, dass auf Basis von umfassend und genau formulierten Anforderungen (ggf. auch Nicht-Zielen) eine Lösungsvielfalt erarbeitet wird, welche anschließend strukturiert bewertet wird, um eine fundierte Begründung für die angestrebte Art der Umsetzung herzuleiten.

@@ -123,7 +123,7 @@ Es gelten die folgenden Regeln:
 				\rvFlips{C4, C5, C6, D6, D7, E5, F4}
 			\end{tikzpicture}
 		}
-		\caption{Spielzug mit Überflügelung mehrerer Spielsteinreihen vor (a) und nach dem Zug (b).}
+		\caption[Spielzug mit Überflügelung mehrerer Spielsteinreihen]{Spielzug mit Überflügelung mehrerer Spielsteinreihen vor (a) und nach dem Zug (b).}
 		\label{fig:othello-ueberfluegeln-mehrerer-Reihen}
 	\end{figure}
 	
@@ -152,7 +152,7 @@ Es gelten die folgenden Regeln:
 				\rvLastMove{A7}
 			\end{tikzpicture}
 		}
-		\caption{Spielzug ohne Überflügelung über eigene Spielsteine vor (a) und nach dem Zug (b).}
+		\caption[Spielzug ohne Überflügelung über eigene Spielsteine]{Spielzug ohne Überflügelung über eigene Spielsteine vor (a) und nach dem Zug (b).}
 		\label{fig:othello-ueberspringen-eigene-reihe}
 	\end{figure}
 	
@@ -182,7 +182,7 @@ Es gelten die folgenden Regeln:
 				\rvLastMove{A2}
 			\end{tikzpicture}
 		}
-		\caption{Spielzug mit Überflügelung nur in direkter Linie vor (a) und nach dem Zug (b).}
+		\caption[Spielzug mit Überflügelung nur in direkter Linie]{Spielzug mit Überflügelung nur in direkter Linie vor (a) und nach dem Zug (b).}
 		\label{fig:othello-ueberfluegeln-in-direkter-linie}
 	\end{figure}
 	\item Alle in einem Zug überflügelten Spielsteine müssen umgedreht werden, auch wenn es für den Spieler vorteilhaft wäre, sie nicht umzudrehen.
@@ -209,19 +209,19 @@ Die Spieltheorie lässt sich in zwei Hauptbereiche unterteilen: die kooperative 
 
 Im Folgenden werden die grundlegenden Begriffe der Spieltheorie anhand von Beispielen eingeführt und definiert. Der Einstieg erfolgt über ein simultan verlaufendes Standardbeispiel aus der britischen TV-Show \emph{Golden Balls}, da sich zentrale Konzepte der Spieltheorie in diesem Kontext anschaulich erläutern lassen. Anschließend werden die eingeführten Begriffe auf das Spiel Othello übertragen und um für sequentielle Spiele relevante Aspekte ergänzt.
 
-Das Spiel\emph{Golden Balls} funktioniert wie folgt: Zwei Spieler, Anton und Berta, entscheiden gleichzeitig und unabhängig voneinander, ob sie kooperieren oder defektieren. Wählen beide Spieler Kooperation, wird der Gewinn, beispielsweise in Höhe von 100\,€, gleichmäßig aufgeteilt. Entscheidet sich ein Spieler für Defektion, während der andere kooperiert, erhält der defektierende Spieler den gesamten Gewinn. Defektieren beide Spieler, erhalten beide keinen Gewinn. Die möglichen Entscheidungsausgänge sind in Tabelle~\ref{tab:golden-balls} zusammengefasst.
+Das Spiel \emph{Golden Balls} funktioniert wie folgt: Zwei Spieler, Anton und Berta, entscheiden gleichzeitig und unabhängig voneinander, ob sie kooperieren oder defektieren. Wählen beide Spieler Kooperation, wird der Gewinn, beispielsweise in Höhe von 100\,€, gleichmäßig aufgeteilt. Entscheidet sich ein Spieler für Defektion, während der andere kooperiert, erhält der defektierende Spieler den gesamten Gewinn. Defektieren beide Spieler, erhalten beide keinen Gewinn. Die möglichen Entscheidungsausgänge sind in Tabelle~\ref{tab:golden-balls} zusammengefasst.
 
 \begin{table}[hbt]	
 	\centering
-	\captionabove[Ausgänge des Spiels Golden Balls]{Mögliche Ausgänge des Spiels Golden Balls. (Basierend auf \autocite[Abb.~2.1]{bonannoGameTheory2024})}
+	\captionabove[Ausgänge des Spiels \emph{Golden Balls}]{Mögliche Ausgänge des Spiels \emph{Golden Balls}. (Basierend auf \autocite[Abb.~2.1]{bonannoGameTheory2024})}
 	\label{tab:golden-balls}
 	
 	\renewcommand{\arraystretch}{1.5}
 	
 	\begin{tabular}{c c|c c c c}
-		 & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\large \textcolor{blue}{Anton}} \\
+		 & \multicolumn{1}{c}{} & \multicolumn{4}{c}{\large \textcolor{blue}{Anton \normalsize($i=1$)}} \\
 		 & & \multicolumn{2}{c|}{kooperiert ($s_{11}$)} & \multicolumn{2}{c|}{defektiert ($s_{12}$)}\\ \cline{2-6}
-		\multirow{4}{*}{\large \textcolor{red}{Berta} \,} & \multirow{2}{*}{kooperiert ($s_{21}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
+		\multirow{4}{*}{\large \textcolor{red}{\shortstack{Berta\\ \normalsize($i=2$)}}} & \multirow{2}{*}{kooperiert ($s_{21}$)} & \multirow{2}{*}{$o_1:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 50\,€,}} & \multirow{2}{*}{$o_3:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 100\,€,}} \\
 		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 50\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}} \\ \cline{2-6}
 		 & \multirow{2}{*}{defektiert ($s_{22}$)} & \multirow{2}{*}{$o_2:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}} & \multirow{2}{*}{$o_4:$} & \multicolumn{1}{l|}{\textcolor{blue}{Anton erhält 0\,€,}}  \\
 		 & & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 100\,€.}} & & \multicolumn{1}{l|}{\textcolor{red}{Berta erhält 0\,€.}}\\ \cline{2-6}
@@ -230,15 +230,15 @@ Das Spiel\emph{Golden Balls} funktioniert wie folgt: Zwei Spieler, Anton und Ber
 \end{table}
 
 Formal lässt sich die \emph{Spielsituation} wie folgt beschreiben: Eine \emph{Menge von Spielern}
-$ I = \{1=\text{Anton}, 2=\text{Berta}\} $ verfügt jeweils über zwei \emph{reine Strategien}
+$ I = \{1, 2\}$, wobei $1=\text{Anton}$ und $2=\text{Berta}$, verfügt jeweils über zwei \emph{reine Strategien}
 $ s_i $, nämlich \glqq Kooperieren\grqq{} ($ s_{i1} $) oder \glqq Defektieren\grqq{} ($ s_{i2} $).
 Abhängig von der Wahl der Strategien ergibt sich eine \emph{Strategiekombination} $ s $, die als
-geordnetes Paar, etwa $ (s_1=\text{Kooperieren}, s_2=\text{Defektieren}) $, dargestellt wird.
+geordnetes Paar, etwa $ S_i=(s_{i1}, s_{i2}) $, dargestellt wird.
 Der \emph{Strategieraum}
-$ S = S_1 \times S_2 = \{s_{11}, s_{12}, s_{21}, s_{22}\} $ umfasst die Menge aller möglichen
+$ S = S_1 \times S_2 = \{s_1, s_2, s_3, s_4\} = \{(s_{11}, s_{21}), (s_{11}, s_{22}), (s_{12}, s_{21}), (s_{12}, s_{22  })\} $ umfasst die Menge aller möglichen
 Kombinationen der Strategien $ s_i \in S_i $. Insgesamt existieren somit vier ($2 \times 2$)
 mögliche Kombinationen reiner Strategien.
-Jede Strategiekombination $ s $ bestimmt ein \emph{Ergebnis} $ o_i $. Die Menge aller möglichen
+Jede Strategiekombination $ s $ bestimmt ein \emph{Ergebnis} $ o $. Die Menge aller möglichen
 Ergebnisse wird als \emph{Ergebnisraum}
 $ O = \{o_1, o_2, o_3, o_4\} $ bezeichnet.
 Die Darstellung der Spielsituation in der Form $ \Gamma^{\dagger} = \langle I, S, O \rangle  $ wird als \emph{Spielform}
@@ -260,7 +260,7 @@ $ o_2 \succ_2 o_1 \succ_2 o_3 \sim_2 o_4 $.
 Die Annahme egoistischen und nutzenmaximierenden Handelns ist dabei frei gewählt und unter alternativen Annahmen ergeben sich entsprechend andere Präferenzordnungen.
 \autocite[Kap.~2.1]{bonannoGameTheory2024}, \autocite[Kap.~1.1]{bartholomaeSpieltheorie2016}
 
-Auf Grundlage der zuvor eingeführten Konzepte kann die Definition des \emph{Game Frames} erweitert werden. Daraus ergibt sich gemäß \autocite[Def.~2.1.3]{bonannoGameTheory2024} die nachfolgende Definition~\ref{def:ordinales-spiel} eines \emph{ordinalen Spiels in strategischer Form}.
+Auf Grundlage der zuvor eingeführten Konzepte kann die Definition des Game Frames erweitert werden. Daraus ergibt sich gemäß \autocite[Def.~2.1.3]{bonannoGameTheory2024} die nachfolgende Definition~\ref{def:ordinales-spiel} eines \emph{ordinalen Spiels in strategischer Form}.
 \begin{definition}
 	\label{def:ordinales-spiel}
 	Ein \emph{ordinales Spiel in strategischer Form} ist ein Quintupel
@@ -302,7 +302,7 @@ Neben der Darstellung von Präferenzen durch eine Ordnung können diese auch mit
 	\end{tabular}
 \end{table}
 
-Basierend auf der Repräsentation der Präferenzen durch Nutzenfunktionen lässt sich ein \emph{ordinales Spiel in reduzierter Form} definieren. Diese in der Literatur verbreitete Darstellung verzichtet auf eine explizite Spezifikation der Ergebnismenge und wird in der folgenden Definition~\ref{def:reduziertes-ordinales-spiel} formalisiert (vgl.~\autocite[Def.~2.1.3]{bonannoGameTheory2024}).
+Basierend auf der Repräsentation der Präferenzen durch Nutzenfunktionen lässt sich ein \emph{ordinales Spiel in reduzierter Form} definieren. Diese in der Literatur verbreitete Darstellung verzichtet auf eine explizite Spezifikation der Ergebnismenge und wird in der folgenden Definition formalisiert (vgl.~\autocite[Def.~2.1.3]{bonannoGameTheory2024}).
 
 \begin{definition}
 	\label{def:reduziertes-ordinales-spiel}
@@ -325,11 +325,11 @@ Basierend auf der Repräsentation der Präferenzen durch Nutzenfunktionen lässt
 
 Im Gegensatz zu simultanen Interaktionen verlaufen viele Spiele sequentiell. Dies gilt auch für Othello, bei dem die Spieler Schwarz und Weiß abwechselnd ziehen und Kenntnis aller bisherigen Züge besitzen. Solche Spiele werden als \emph{dynamische Spiele} oder \emph{Spiele in extensiver Form} bezeichnet. Othello zählt zudem zu den Spielen mit \emph{perfekter Information}, da jedem Spieler zum Zeitpunkt seines Zuges alle vorherigen Züge bekannt sind.
 
-Spiele dieser Art lassen sich formal in strategischer Form (Normalform) darstellen, sodass die zuvor eingeführten Definitionen ihre Gültigkeit behalten. Für praktische Analysen ist diese Darstellung jedoch ungeeignet, da Strategien und einzelne Entscheidungen, anders als im Beispiel \emph{Golden Balls}, nicht übereinstimmen. In dynamischen Spielen mit perfekter Information ist eine Strategie als vollständiger Handlungsplan zu verstehen, der für jede mögliche Spielsituation eine zulässige Aktion festlegt. Der Strategieraum $S = S_1 \times S_2$ umfasst daher alle Kombinationen solcher Pläne und ist entsprechend komplex. Eine explizite Auflistung der Strategiemengen oder eine Darstellung in Matrixform ist folglich nicht praktikabel. Für die Analyse und die algorithmische Umsetzung sequentieller Spiele wird stattdessen die extensive Form verwendet, in der das Spiel als Baum dargestellt wird. Im Folgenden wird die Definition solcher gewurzelten, gerichteten Spielbäume eingeführt (vgl.~\autocite[Def.~3.1.1, Def.~3.1.2, Def.~3.1.3]{bonannoGameTheory2024}).
+Spiele dieser Art lassen sich formal in strategischer Form (Normalform) darstellen, sodass die zuvor eingeführten Definitionen ihre Gültigkeit behalten. Für praktische Analysen ist diese Darstellung jedoch ungeeignet, da Strategien und einzelne Entscheidungen, anders als im Beispiel \emph{Golden Balls}, nicht übereinstimmen. In dynamischen Spielen mit perfekter Information ist eine Strategie als vollständiger Handlungsplan zu verstehen, der für jede mögliche Spielsituation eine zulässige Aktion festlegt. Der Strategieraum $S = S_1 \times S_2$ umfasst daher alle Kombinationen solcher Pläne und ist entsprechend komplex. Eine explizite Auflistung der Strategiemengen oder eine Darstellung in Matrixform ist folglich nicht praktikabel. Für die Analyse und die algorithmische Umsetzung sequentieller Spiele wird stattdessen die extensive Form verwendet, in der das Spiel als Baum dargestellt wird. Im Folgenden wird die Definition solcher gewurzelten, gerichteten Spielbäume eingeführt.
 
 \begin{definition}
 	\label{def:rooted-directed-tree}
-	Ein \emph{gewurzelter gerichteter Baum} besteht aus einer Menge von Knoten und gerichteten Kanten, die diese verbinden.
+	Ein \emph{gewurzelter gerichteter Baum} besteht aus einer Menge von Knoten und gerichteten Kanten, die diese verbinden. (vgl.~\autocite[Def.~3.1.1]{bonannoGameTheory2024})
 	\begin{itemize}[
 		itemsep=0pt,
 		topsep=0pt,
@@ -346,7 +346,7 @@ Spiele dieser Art lassen sich formal in strategischer Form (Normalform) darstell
 
 \begin{definition}
 	\label{def:finite-extensive-form}
-	Eine \emph{endliche extensive Form mit perfekter Information} (auch \emph{extensive-form game frame}) besteht aus den folgenden Bestandteilen:%
+	Eine \emph{endliche extensive Form mit perfekter Information} (auch \emph{extensive-form game frame}) besteht aus den folgenden Bestandteilen (vgl.~\autocite[Def.~3.1.2]{bonannoGameTheory2024}):
 	\begin{itemize}[
 		itemsep=0pt,
 		topsep=0pt,
@@ -364,7 +364,7 @@ Spiele dieser Art lassen sich formal in strategischer Form (Normalform) darstell
 \begin{definition}
 	\label{def:finite-extensive-game}
 	Ein \emph{endliches extensives Spiel mit perfekter Information} ist eine endliche extensive Form mit perfekter Information zusammen mit einer Rangordnung der Ergebnismenge.
-	Für jeden Spieler $i \in I$ ist eine Präferenzrelation $\succeq_i$ auf $O$ gegeben, die üblicherweise durch eine ordinale Nutzenfunktion $U_i : O \to \mathbb{R}$ dargestellt werden kann.
+	Für jeden Spieler $i \in I$ ist eine Präferenzrelation $\succeq_i$ auf $O$ gegeben, die üblicherweise durch eine ordinale Nutzenfunktion $U_i : O \to \mathbb{R}$ dargestellt werden kann (vgl.~\autocite[Def.~3.1.3]{bonannoGameTheory2024}).
 \end{definition}
 
 Zur Veranschaulichung dieser eingeführten Definitionen werden die initialen Züge des Spiels Othello betrachtet und ein entsprechender Spielbaum konstruiert.
@@ -393,7 +393,7 @@ Es sei angemerkt, dass aufgrund der Symmetrieeigenschaften von Othello einzelne 
 			\end{tikzpicture}
 			\vfill
 			\par\vspace{0.4em}
-			{\footnotesize (i) Zuvor Startaufstellung}
+			{\footnotesize (i) Startaufstellung}
 		\end{minipage}%
 		\hspace{0.04\textwidth}
 		% ------------------ RECHTS: ------------------
@@ -534,7 +534,7 @@ Der dargestellte Spielbaum ist nicht vollständig und enthält daher keine Endkn
 
 Um das Spiel formal als endliches extensives Spiel mit perfekter Information zu modellieren, müssen der vollständige Spielbaum sowie die Spielermenge $I = \{1 = \text{Schwarz},\, 2 = \text{Weiß}\}$ festgelegt werden. Dabei gilt das Aussetzen als zulässige Aktion, sofern kein regelkonformer Zug möglich ist. Der Spielbaum endet, sobald das Spiel abgeschlossen ist, also wenn kein weiterer Zug ausgeführt werden kann. Jedem Endknoten, der eine Endspielsituation beschreibt, wird ein Ergebnis zugeordnet. Diese Ergebnisse werden für jeden Spieler mithilfe einer Nutzenfunktion bewertet, um eine Präferenzrelation zu definieren. So kann einem Sieg der Wert $1$, einer Niederlage der Wert $-1$ und einem Remis der Wert $0$ zugewiesen werden. Alternativ kann die Nutzenfunktion auf der Differenz der Spielsteine basieren.
 
-\subsection{Formale Entscheidungsprinzipien in kompetitiven Spielen}
+\subsection{Entscheidungsprinzipien in kompetitiven Spielen}
 \label{subsec:prinzipien-kompetitive-spiele}
 
 Wie im vorangegangenen Kapitel~\ref{subsec:modellierung-spiele-baum} dargestellt, handelt es sich bei Othello um ein Spiel, das mithilfe der Spieltheorie formal modelliert werden kann. Das Spiel weist mehrere charakteristische Eigenschaften auf, die für die algorithmische Analyse von zentraler Bedeutung sind:
