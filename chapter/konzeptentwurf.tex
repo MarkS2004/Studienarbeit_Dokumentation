@@ -10,10 +10,12 @@ Zu Beginn des Konzeptentwurfs wurde die Aufgabenstellung präzisiert, indem der 
 \paragraph{Spielplattform}
 Zur Reduktion der Systemkomplexität wird als Spielplattform kein physisches Brett, sondern eine digitale Umgebung verwendet. Das Spiel wird daher von beiden Robotern auf einem Tablet des Herstellers Apple (iPad) ausgeführt. Hierfür kommt die Applikation \glqq Reverse (Othello)\grqq{} \autocite{marcarelliReverseOthello2025} zum Einsatz, die für iPad und iPhone entwickelt wurde und das gemeinsame Spielen auf einem einzelnen Endgerät ermöglicht. Dabei werden die Standardeinstellungen der App verwendet, und es gelten die dort implementierten Regeln, wie sie auch in Abschnitt~\ref{sec:othello} beschrieben sind.
 
-\paragraph{Spielaufbau}
-Das Tablet wird flach und mittig auf einem Tisch positioniert, wobei eine geringe Aufbauhöhe anzustreben ist, idealerweise ohne Schutzhülle. Verwendet wird die standardmäßige Darstellung des Spielfelds der App in der jeweils vorgegebenen Auflösung. Das Robotersystem muss daher die Spielfeldgröße dynamisch erfassen. Eine entsprechende Kalibrierung oder Anpassung ist vor Spielbeginn durchzuführen.\\
-Zur Definition eines einheitlichen Größenbereichs wird das Spielfeld auf eine minimale quadratische Kantenlänge von \SI{14}{\centi\metre} (Darstellung bei iPad Air, 11~Zoll) und eine maximale Kantenlänge von \SI{19}{\centi\metre} (Darstellung bei iPad Pro, 13~Zoll) beschränkt. Die beiden Roboter sind auf gegenüberliegenden Spielhälften zu positionieren. Um das Spielfeld ist ein Sicherheitsabstand von mindestens \SI{5.0}{\centi\metre} freizuhalten. Um Kollisionen zu vermeiden, darf weder der aktive Roboter während seines Spielzugs in den Ruhezustandsbereich des gegnerischen Teams eindringen noch der pausierende Roboter seinen Ruhezustandsbereich verlassen.\\
-Der Spielaufbau, die relevanten Maße sowie die Benutzeroberfläche der Spielplattform sind in der folgenden Abbildung~\ref{fig:spielaufbau} dargestellt.
+\paragraph{Spielablauf und Zeitregelung}
+Wie in den Spielregeln festgelegt, beginnt der Spieler Schwarz, der zuvor ausgelost wird. Anschließend werden die Spielzüge abwechselnd ausgeführt, wobei die maximale Dauer eines einzelnen Spielzugs auf \SI{2}{\minute} begrenzt ist. Diese Zeitvorgabe kann im Verlauf des Projekts im gegenseitigen Einvernehmen angepasst werden.
+Zur Übergabe der Spielzüge zwischen den Robotern wird eine digitale Schachuhr verwendet \autocite{seanoconnorMultiPlayerChess2021}. Diese ist internetbasiert, erfordert keine Registrierung und kann über mehrere Endgeräte synchronisiert werden. Die Schachuhr wird auf einem Mobiltelefon geöffnet. Die Positionierung des Mobiltelefons sowie die Skalierung der Internetseite obliegen den jeweiligen Teams.
+Der Wechsel zum nächsten Spieler erfolgt durch Betätigung einer Schaltfläche auf dem berührungsempfindlichen Bildschirm, wobei sich die farbliche Darstellung der Benutzeroberfläche entsprechend ändert. Die Funktionalitäten sowie die Benutzeroberfläche der Schachuhr sind in Abbildung~\ref{fig:multi-player-chess-clock} dargestellt. Die Schachuhr dient ausschließlich der Zugübergabe und nicht der Erfassung der tatsächlichen Zugspielzeit.
+
+
 
 \begin{figure}[hbt]
 	\centering
@@ -29,14 +31,14 @@ Der Spielaufbau, die relevanten Maße sowie die Benutzeroberfläche der Spielpla
 			
 			\fill[pattern=north east lines, pattern color=red!70] (0,0) rectangle (7.75,20);
 			\draw[red, line width=1pt] (0,0) -- (7.75,0) -- (7.75,20) -- (0,20);
-			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\footnotesize] at (4,10) {Ruhezustands-\\bereich\\Roboter 1};
+			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\normalsize] at (3.75,10) {Ruhezustands-\\bereich\\Roboter 1};
 			
 			\fill[pattern=north east lines, pattern color=blue!70] (22.25,0) rectangle (30,20);
 			\draw[blue, line width=1pt] (30,20) -- (22.25,20) -- (22.25,0) -- (30,0);
-			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\footnotesize] at (26,10) {Ruhezustands-\\bereich\\Roboter 2};
+			\node[transform shape=false, align=center, inner sep=6pt, fill=white, fill opacity=0.8, text opacity=1, rounded corners=6pt, font=\normalsize] at (26.25,10) {Ruhezustands-\\bereich\\Roboter 2};
 			
 			\draw[green!70!black, dashed, line width=1.0pt] (8,3) rectangle (22,17);
-			\node[anchor=west,font=\footnotesize,text=black,transform shape=false] at (7.75,17.75) {Sicherheitszone};
+			\node[anchor=west,font=\normalsize,text=black,transform shape=false] at (7.75,17.75) {Sicherheitszone};
 			
 			\draw[<->,line width=0.75pt,color=black] (8,2) -- (10.5,2)
 			node[midway,below,font=\footnotesize,transform shape=false]{\SI{5}{\centi\metre}};
@@ -63,14 +65,33 @@ Der Spielaufbau, die relevanten Maße sowie die Benutzeroberfläche der Spielpla
 \end{figure}
 
 \paragraph{Spielablauf und Zeitregelung}
-Wie in den Spielregeln definiert, beginnt der Spieler Schwarz, der zuvor ausgelost wird. Anschließend werden die Spielzüge abwechselnd durchgeführt, wobei die maximale Dauer eines einzelnen Spielzugs auf \SI{2}{\minute} begrenzt ist. Diese Zeitvorgabe kann im Verlauf des Projekts im gegenseitigen Einvernehmen angepasst werden.
+Wie in den Spielregeln definiert, beginnt der Spieler Schwarz, welcher durch Zufall bestimmt wird. Anschließend werden die Spielzüge abwechselnd durchgeführt, wobei die maximale Dauer eines einzelnen Spielzugs auf \SI{2}{\minute} begrenzt ist. Diese Zeitvorgabe kann im Verlauf des Projekts im gegenseitigen Einvernehmen angepasst werden.
 Zur Übergabe der Spielzüge zwischen den Robotern wird eine digitale Schachuhr \autocite{seanoconnorMultiPlayerChess2021} verwendet. Diese ist webbasiert, erfordert keine Registrierung und kann über mehrere Endgeräte synchronisiert werden. Die Schachuhr wird auf einem Smartphone geöffnet. Die Positionierung des Smartphones sowie die Skalierung der Webseite obliegen den jeweiligen Teams.
-Der Wechsel zum nächsten Spieler erfolgt durch Betätigung des Touchdisplays, wobei sich die farbliche Darstellung der Benutzeroberfläche entsprechend ändert. Die Funktionalitäten sowie die Benutzeroberfläche der Schachuhr sind in Abbildung~X dargestellt. Die Schachuhr dient ausschließlich der Zugübergabe und nicht der Erfassung der tatsächlichen Zugspielzeit.
+Der Wechsel zum nächsten Spieler erfolgt durch Betätigung einer Schaltfläche auf dem berührungsempfindlichen Bildschirm, wobei sich die farbliche Darstellung der Benutzeroberfläche entsprechend ändert. Die Funktionalitäten sowie die Benutzeroberfläche der Schachuhr sind in Abbildung~\ref{fig:multi-player-chess-clock} dargestellt. Die Schachuhr dient ausschließlich der Zugübergabe und nicht der Erfassung der tatsächlichen Zugspielzeit.
 
+
+\begin{figure}[hbt]
+	\centering
+	\input{tikz/reversi-board}
+	\subfigure[Spieler 1 am Zug]{
+	\includegraphics[width=0.2\linewidth]{images/multi-player-chess-clock-1}
+	}
+	\hspace{0.2\linewidth}
+	\subfigure[Spieler 2 am Zug]{
+	\includegraphics[width=0.2\linewidth]{images/multi-player-chess-clock-2}
+	}
+	\caption[Digitale Schachuhr zur Zugübergabe]{Benutzeroberfläche der digitalen Schachuhr zur Zugübergabe. In (a) ist Spieler~1 am Zug, in (b) Spieler~2. Der Spielerwechsel erfolgt durch Betätigung der hervorgehobenen Schaltfläche.}
+	\label{fig:multi-player-chess-clock}
+\end{figure}
 
 \paragraph{Hardwareeinschränkungen}
+Die Interaktion des Roboters mit dem Tablet erfolgt ausschließlich über einen Touchstift oder vergleichbare mechanische Betätigungsmechanismen. Die konkrete technische Umsetzung, beispielsweise hinsichtlich Form, Halterung oder Betätigungsart, ist nicht standardisiert und obliegt den jeweiligen Teams.
+Für den Aufbau des Roboters sind ausschließlich ausgewählte Bauteile aus dem LEGO\textsuperscript{\textregistered} SPIKE Prime-Baukastensystem zu verwenden. Ergänzend dürfen wenige selbst gefertigte Bauteile aus dem 3D-Druck eingesetzt werden, etwa zur Befestigung des Touchstifts. Stationäre Komponenten des Roboters dürfen auf der Tischfläche im Ruhezustandsbereich fixiert werden, beispielsweise mittels Klettband, Klebeband oder vergleichbarer Befestigungsmittel.
 
 
+\section{Definition und Analyse der Anforderungen}
+\label{sec:anforderungen}
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 %Je nach Art der Arbeit kann diese Kapitelüberschrift auch \glqq Konzeptentwurf\grqq~lauten.
 %
 %Beschreibung der Ausgangssituation und des Themenumfelds. Ggf. wird darauf eingegangen, welche Randbedingungen und Einflüsse zu beachten sind.
