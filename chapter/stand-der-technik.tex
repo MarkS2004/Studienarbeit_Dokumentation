@@ -1,3 +1,63 @@
 \chapter{Stand der Othello-Algorithmen}
 \label{cha:stand-der-technik}
+
+% Um das antagonistische Ziel von Othello zu erreichen, versucht jeder Spieler immer den für sich bestmöglichen Spielzug durchzuführen. Da ein einzelner Spielzug kurzfristig belohnend sein kann, da viele gegnerische Steine überflügelt werden, jedoch in einem direkt oder erst später darauffolgenden Zug des Gegenspielers zu Nachteilen führen kann, sollte die Spielweise nicht darauf basieren, mit jedem Zug die maximale Anzahl an Steinen zu überflügeln. Vielmehr muss das Spiel langfristig geplant sein und sich bereits über zukünftige Züge Gedanken gemacht werden. Dies passiert als menschlicher Spieler unterbewusst, jedoch muss ein Roboter hierfür das Prinzip der Suchalgorithmen aus der Informatik anwenden. Diese Suchalgorithmen dienen dazu, einen systematischen Lösungsweg in einem Zustandsraum zu finden. Dieser Zustandsraum setzt sich so aus verschiedenen Zuständen und Übergängen zwischen diesen zusammen. Da der Gegenspieler in Othello mehr oder weniger unvorhersehbare Züge vornimmt, muss bei einem optimalen Suchalgorithmus anhand des aktuellen Spielfortschritts durch den Zustandsraum iteriert werden. Ein Ziel dieser Suchalgorithmen ist es, unnötige Rechnungen zu vermeiden, um den Suchaufwand zu reduzieren oder den kostengünstigsten Lösungsweg zu ermitteln, um an das gewünschte Ziel zu kommen. In diesem Fall ist das gewünschte Ziel, die Partie zu gewinnen, indem man mehr Steine der eigenen Farbe auf dem Spielfeld hat.
+
+Um das antagonistische Zielspiel Othello zu modellieren, strebt jeder Spieler an, in jedem Zug eine Entscheidung zu treffen, die seine Gewinnchancen maximiert. Kurzfristig kann das Überflügeln vieler gegnerischer Steine durch einen einzelnen Zug vorteilhaft erscheinen, jedoch können solche lokalen Maximierungsstrategien in unmittelbar folgenden oder späteren Zügen des Gegenspielers zu Nachteilen führen. Daher sollte die Strategie nicht ausschließlich darauf ausgerichtet sein, in jedem Zug die maximale Anzahl an Steinen zu erfassen, sondern vielmehr langfristig ausgerichtet sein und die Folgen zukünftiger Züge mit in Betracht zu ziehen. Während menschliche Spieler solche Überlegungen häufig intuitiv durchführen, erfordert ein Computergesteuerter Roboter die Anwendung von Suchverfahren aus der Informatik. Diese Suchalgorithmen dienen dazu, in einem Zustandsraum, bestehend aus möglichen Spielpositionen und den Übergängen zwischen ihnen, eine Sequenz von Zügen zu identifizieren, die zur Erreichung eines definierten Ziels führt. Da der Gegenspieler in Othello potenziell unvorhersehbare Züge ausführt, iterieren optimale Suchalgorithmen über den Zustandsraum unter Berücksichtigung möglicher gegnerischer Antworten. Ein zentrales Ziel dieser Verfahren ist es, den Rechenaufwand zu minimieren, indem redundante oder wenig vielversprechende Suchpfade eliminiert werden, und gleichzeitig den kosteneffizientesten Weg zur Zielerreichung zu ermitteln. In diesem Kontext besteht das Ziel darin, die Partie zu gewinnen, indem am Ende des Spiels eine größere Anzahl eigener Steine auf dem Spielfeld vorhanden ist. \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}
+
+Als Vergleichsobjekt zwischen verschiedenen Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken, um den zu durchsuchenden Zustandsraum zu reduzieren. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und der nicht der gesamte Zustandsraum mit allen möglichen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}. Leistungsmessgrößen geben den Suchalgorithmen konkrete Bewertungen anhand ihres Speicherbedarfs, in Form von den benötigten Bytes, ihrer jeweiligen Zeitkomplexität anhand der Big-O-Notation und durch die Güte der Heuristik anhand von Gütefunktionalen, wie effektiv der Zustandssuchraum reduziert wird \autocite[Kap.~5.2]{russellArtificialIntelligenceModern2016}. Die subjektiven Vergleichskriterien können dabei die Anwendbarkeit auf den jeweiligen Zweck oder die Robustheit unter Zeit bzw. Ressourcenbegrenzung sein \autocite{balogunComparativeAnalysisAIbased2024}.
+
+Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums vernachlässigt, um vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
+
+\section{Geeignete Algorithmen für Othello unter begrenzten Ressourcen}
+\label{sec:geeignete-algorithmen}
+
+\paragraph{Alpha-Beta-Pruning}
+\label{subsec:alpha-beta-pruning}
+Alpha‑Beta‑Pruning ist eine Optimierung des Minimax‑Algorithmus zur Suche in Spielbäumen. Der Algorithmus verwaltet zwei Schranken $\alpha$ und $\beta$, welche die beste bisher gefundene Bewertung für den Max‑ bzw. Min‑Spieler repräsentieren. Während der Suche kann ein Zweig sofort verworfen werden, wenn klar ist, dass er das Endergebnis nicht verbessern kann, weil $\alpha \geq \beta$ gilt. Dies reduziert die Zahl der auszuwertenden Knoten erheblich gegenüber Minimax \autocite[Kap.~5.3]{russellArtificialIntelligenceModern2016}.    
+
+\paragraph{Iterative Deepening}
+\label{subsec:iterative-deepening}
+Iterative Deepening kombiniert Tiefensuche mit schrittweise erhöhter Grenztiefe: Zunächst wird bis Tiefe 1 gesucht, dann bis Tiefe 2 usw., bis ein Zeitlimit erreicht ist. Diese Strategie liefert in begrenzter Zeit stets eine aktuelle beste Lösung und verbessert zugleich die Reihenfolge der Züge für spätere Alpha‑Beta‑Schnitte, da Ergebnisse früherer Suchen als Heuristiken dienen \autocite[Kap.~3.5]{russellArtificialIntelligenceModern2016}.  
+
+\paragraph{Move Ordering}
+\label{subsec:move-ordering}
+Move Ordering bezeichnet Strategien zur Sortierung der Züge vor der Bewertung, sodass zuerst vielversprechende Züge untersucht werden. Eine gute Zugreihenfolge erhöht die Wahrscheinlichkeit früher Alpha‑Beta‑Schnitte und reduziert so die Gesamtzahl der expandierten Knoten. Typische Heuristiken berücksichtigen beispielsweise starke heuristische Bewertungen, Killer‑Moves oder Ergebnisse aus vorherigen Suchtiefen \autocite[Kap.~5.3.1]{russellArtificialIntelligenceModern2016}.  
+
+\paragraph{Negamax}
+\label{subsec:negamax}
+Negamax ist eine Variante des Minimax‑Algorithmus, die die Symmetrie zweier Spieler in Nullsummenspielen ausnutzt. Anstelle separater Max‑ und Min‑Funktionen wird ein einheitlicher Max‑Operator verwendet, wobei die Bewertung des Gegners als negative Bewertung aus Sicht des aktuellen Spielers dargestellt wird. Dies vereinfacht die Implementierung und entspricht formal Minimax unter der Nullsummenbedingung.
+
+\paragraph{Negascout}
+\label{subsec:negascout}
+Negascout ist eine Alpha‑Beta‑Variante innerhalb des Negamax‑Frameworks, die durch den Einsatz schmaler „Nullfenster“ Suchintervalle versucht, zusätzliche Schnittpunkte zu erzeugen. Der erste Zug wird mit vollem Fenster untersucht, während nachfolgende Züge zunächst mit einem minimalen Fenster geprüft werden. Nur wenn diese Prüfung scheitert, werden vollständige Suchen ausgeführt. Dies kann im besten Fall die Effizienz gegenüber klassischem Alpha‑Beta steigern, wenn die Zugreihenfolge gut ist.  
+
+\section{Nicht betrachtete Algorithmen}
+\label{sec:nicht-betrachtete-algorithmen}
+
+\section{Auswahl des Algorithmus}
+\label{sec:auswahl-des-algorithmus}
+
+\begin{table}[hbt]
+	\centering
+	\captionabove[Vergleich von Suchalgorithmen]{Vergleich der Suchalgorithmen hinsichtlich Zeitkomplexität, Speicherbedarf, Güte der Heuristik und Robustheit bei Ressourcenbegrenzung.}
+	\label{tab:algorithmus-vergleich}
+	
+	\renewcommand{\arraystretch}{1.5}
+	\setlength{\tabcolsep}{6pt} % Abstand zwischen Spalten
+	
+	\begin{tabular}{p{3cm}|p{2.75cm} p{2.75cm} p{3.5cm} p{2.5cm}}
+		Algorithmus & Zeitkomplexität & Speicherbedarf & Güte der Heuristik & Robustheit \\ \hline
+		Alpha-Beta-Pruning & $O(b^{d/2})$ &  &  &  \\
+		Negamax & $O(b^d)$ &  &  &  \\
+		Iterative Deepening & $O(b^d)$ & &  &  \\
+		Move Ordering &  &  & &  \\
+		Negascout & $O(b^{d/2})$ &  & &  \\
+	\end{tabular}
+\end{table}
+
+
+
+
+
 % Referenzsatz: Auf Basis der spieltheoretischen Einordnung als deterministisches Zwei-Personen-Nullsummenspiel mit vollständiger Information kann Othello als adversarielles Suchproblem modelliert werden. Aufgrund der hohen Zustandsraumkomplexität sind klassische Minimax-basierte Verfahren nur in Verbindung mit Suchbaumreduktion, Tiefenbegrenzung und heuristischen Bewertungsfunktionen praktisch einsetzbar.
