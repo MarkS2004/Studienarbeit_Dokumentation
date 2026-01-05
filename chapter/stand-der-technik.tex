@@ -5,54 +5,458 @@
 
 Um das antagonistische Zielspiel Othello zu modellieren, strebt jeder Spieler an, in jedem Zug eine Entscheidung zu treffen, die seine Gewinnchancen maximiert. Kurzfristig kann das Überflügeln vieler gegnerischer Steine durch einen einzelnen Zug vorteilhaft erscheinen, jedoch können solche lokalen Maximierungsstrategien in unmittelbar folgenden oder späteren Zügen des Gegenspielers zu Nachteilen führen. Daher sollte die Strategie nicht ausschließlich darauf ausgerichtet sein, in jedem Zug die maximale Anzahl an Steinen zu erfassen, sondern vielmehr langfristig ausgerichtet sein und die Folgen zukünftiger Züge mit in Betracht zu ziehen. Während menschliche Spieler solche Überlegungen häufig intuitiv durchführen, erfordert ein Computergesteuerter Roboter die Anwendung von Suchverfahren aus der Informatik. Diese Suchalgorithmen dienen dazu, in einem Zustandsraum, bestehend aus möglichen Spielpositionen und den Übergängen zwischen ihnen, eine Sequenz von Zügen zu identifizieren, die zur Erreichung eines definierten Ziels führt. Da der Gegenspieler in Othello potenziell unvorhersehbare Züge ausführt, iterieren optimale Suchalgorithmen über den Zustandsraum unter Berücksichtigung möglicher gegnerischer Antworten. Ein zentrales Ziel dieser Verfahren ist es, den Rechenaufwand zu minimieren, indem redundante oder wenig vielversprechende Suchpfade eliminiert werden, und gleichzeitig den kosteneffizientesten Weg zur Zielerreichung zu ermitteln. In diesem Kontext besteht das Ziel darin, die Partie zu gewinnen, indem am Ende des Spiels eine größere Anzahl eigener Steine auf dem Spielfeld vorhanden ist. \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}
 
-Als Vergleichsobjekt zwischen verschiedenen Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken, um den zu durchsuchenden Zustandsraum zu reduzieren. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und der nicht der gesamte Zustandsraum mit allen möglichen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}. Leistungsmessgrößen geben den Suchalgorithmen konkrete Bewertungen anhand ihres Speicherbedarfs, in Form von den benötigten Bytes, ihrer jeweiligen Zeitkomplexität anhand der Big-O-Notation und durch die Güte der Heuristik anhand von Gütefunktionalen, wie effektiv der Zustandssuchraum reduziert wird \autocite[Kap.~5.2]{russellArtificialIntelligenceModern2016}. Die subjektiven Vergleichskriterien können dabei die Anwendbarkeit auf den jeweiligen Zweck oder die Robustheit unter Zeit bzw. Ressourcenbegrenzung sein \autocite{balogunComparativeAnalysisAIbased2024}.
+Als Vergleichsobjekt zwischen verschiedenen Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken, um den zu durchsuchenden Zustandsraum zu reduzieren. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und der nicht der gesamte Zustandsraum mit allen möglichen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}.
 
-Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums vernachlässigt, um vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
+Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums zu vernachlässigen und vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
+
+Leistungsmessgrößen geben den Suchalgorithmen konkrete Bewertungen anhand ihres Speicherbedarfs, in Form von den benötigten Bytes, ihrer jeweiligen Zeitkomplexität anhand von Landau-Symbolen (englisch big O notation) und durch die Güte der Heuristik anhand von Gütefunktionen, wie effektiv der Suchalgorithmus den Zustandssuchraum einschränkt, indem sie die Zustände bewerten \autocite[Kap.~5.2]{russellArtificialIntelligenceModern2016}.
+
+In der Informatik werden die Landau Symbole benutzt, um Algorithmen anhand des Wachstums ihres Zeitbedarfs in Abhängigkeit des Wachstums der Eingangsgrößen zu klassifizieren. Dabei werden zwei Funktionen $f(n)$ als zu bestimmende Funktion und $g(n)$ als Vergleichsfunktion angenommen. Der Zusammenhang wird dann als $f(n) \in O(g(n))$ dargestellt und sagt aus, dass die Funktion $f$ höchstens genauso schnell wie $g$ wächst. Konstanten werden dabei in der Regel vernachlässigt, da sie das Wachstumsverhalten nicht verändern \autocite[Kap.~3]{bachmannAnalytischeZahlentheorieDargestellt1894}.
+
+Als Beispiel wird ein Feld mit $n$ Elementen angenommen, in dem ein bestimmter Wert $x$ gesucht wird, der sich an einer zufälligen Stelle befindet. Das Feld wird linear durchsucht, indem jedes Element nacheinander überprüft wird. Daraus ergeben sich verschiedene Laufzeiten, je nachdem, an welcher Stelle sich $x$ befindet:
+
+\begin{itemize}
+	\item \textbf{Bester Fall:} $x$ steht an erster Stelle, $T(n) = 1$
+	\item \textbf{Schlechtester Fall:} $x$ steht an letzter Stelle oder ist nicht enthalten, $T(n) = n$
+	\item \textbf{Durchschnitt:} $x$ steht im Mittel in der Mitte, $T(n) = \frac{n}{2}$
+\end{itemize}
+
+Für die Landau Symbole ergibt sich dadurch $T(n) \in O(n)$. Das bedeutet in diesem Fall, dass die Laufzeit der linearen Suche proportional zu der Anzahl der Elemente im Feld wächst.
+
+Gütefunktionen bewerten Zustände innerhalb eines Suchalgorithmus anhand von numerischen Werten. Dabei wird im Falle von Othello bewertet, wie gut ein Zustand im Hinblick auf einen Sieg ist, wonach sich die nächsten zu untersuchenden Zustände richten. So wird der Zustandsraum gezielt zu durchsuchen, anstatt alle Möglichkeiten blind zu prüfen, wodurch womöglich Rechenressourcen verschwendet werden. Dabei wird zwischen Kostenfunktionen, die den bisherigen Aufwand messen, heuristischen Funktionen, die den verbleibenden Aufwand zum Ziel schätzen und der kombinierten Gütefunktion, die die beiden anderen Funktionen kombiniert, unterschieden.
+
+Als Beispiel wird die Zustandsbewertung bei einer Zahlensuche verwendet. Ziel ist es von einer Startzahl $s$ zu einer Zielzahl $z$ zu kommen. Übergänge sind dabei die Erhöhung oder Verringerung der aktuellen Zahl um den Wert 1 und den Kosten von jedem Übergang von ebenfalls 1. Ein Zustand wird in Form einer Ganzzahl $n$ dargestellt. Die Kostenfunktion $g(n) = |n - s|$ beschreibt die bisher ausgeführten Schritte. Die heuristische Funktion wird $h(n) = |n - z|$, als Differenz der aktuellen Zahl bis zur Zielzahl angenommen. Die kombinierte Gütefunktion ist somit $f(n) = g(n) + h(n) = |n - s| + |n - z|$. Angenommen die Startzahl sei $s = 10$ und die Zielzahl $z = 20$. Es kann nun für jeden Zustand $n$ die Güte berechnet werden.
+
+\begin{table}[hbt]
+	\centering
+	\captionabove[Gütefunktion für Zustände]{Gütefunktion $f(n) = |n - 10| + |n - 20|$ für die Zustände $n = 8 \dots 20$.}
+	\label{tab:guetefunktion}
+	
+	\renewcommand{\arraystretch}{1.5}
+	\setlength{\tabcolsep}{6pt}
+	
+	\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+		Zustand $n$ & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 & 21 \\ \hline
+		$f(n)$ & 14 & 12 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 10 & 12\\
+	\end{tabular}
+\end{table}
+
+Die Zahlensuche wird beendet sobald $n = z$, wodurch Zustand $n = 21$ nicht erreichbar wäre, jedoch zur Veranschaulichung trotzdem dargestellt ist. Der Suchalgorithmus geht nun immer in den Zustand $n$ über, der das kleinste $f(n)$ besitzt bei dem $n$ näher an $z$ liegt, als im aktuellen Zustand. Um eine Vergleichbarkeit zwischen Suchalgorithmen herzustellen, müssen alle betrachteten Algorithmen dasselbe Problem behandeln, sowie denselben Zustandsraum und dieselbe Gütefunktion verwenden.
+
+Des weiteren können subjektiven Vergleichskriterien dabei die Anwendbarkeit auf den jeweiligen Zweck oder die Robustheit unter Zeit bzw. Ressourcenbegrenzung sein \autocite{balogunComparativeAnalysisAIbased2024}.
 
 \section{Geeignete Algorithmen für Othello unter begrenzten Ressourcen}
 \label{sec:geeignete-algorithmen}
 
+Um die Algorithmen zu vergleichen müssen vorerst Rahmenbedingungen zu Bewertung und Messung der Bewertungsgrößen definiert werden. Es werden drei Aufstellungen des Spielfeldes festgelegt, anhand denen jeder Algorithmus den nächstbesten Zug bestimmt. Die Aufstellungen basieren auf manuell gespielten Partien bis zu einem gewissen Punkt, um einen realistischen Spielstand widerzuspiegeln. Es handelt sich dabei um eine Startstellung, bei der 14 Steine auf dem Spielfeld gelegt sind, eine Stellung etwa in der Mitte des Spiels mit 40 Steinen und eine am Ende der Partie mit 52 Steinen. In Jeder Aufstellung ist der Spieler mit den schwarzen Steinen am Zug, jedoch spielt es keine Rolle, welche Farbe von den Algorithmen behandelt wird und wer begonnen hat.
+
+\begin{figure}[!h]
+	\centering
+	\input{tikz/reversi-board}
+	\subfigure[Spielsituation am Anfang]{
+		\begin{tikzpicture}[scale=0.5]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{B2, C2, C3, C6, D2, D4}
+			\rvStonesWhite{C4, C5, D3, D5, E3, E4, E5, E6}
+			\rvMovesBlack{B4, B6, D6, F2, F3, F4, F5, F6}
+		\end{tikzpicture}
+	}
+	\subfigure[Spielsituation in der Mitte]{
+		\begin{tikzpicture}[scale=0.5]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{A6, A7, A8, B4, B7, C1, C5, C7, D4, D6, E1, F5, G1, H6}
+			\rvStonesWhite{B5, B6, C2, C6, D1, D2, D3, D5, D7, E2, E3, E4, E5, E6, E7, E8, F2, F3, F6, F7, G2, G5, G6, G7, H2, H5}
+			\rvMovesBlack{A5, B1, C3, C4, C8, D8, F4, F8, G3, H1, H4, H7, H8}
+		\end{tikzpicture}
+	}
+	\subfigure[Spielsituation an Ende]{
+		\begin{tikzpicture}[scale=0.5]
+			\rvBoard
+			\rvCoords
+			\rvStonesBlack{A4, A5, A6, B4, B5, B6, C3, C4, C5, C6, D1, D8, E2, E3, E5, F1, F3, F5, F8, G1, G2, G4, G5, H1, H3, H5}
+			\rvStonesWhite{A3, A7, B3, B7, C1, C2, C7, C8, D2, D3, D4, D5, D6, D7, E4, E6, E7, F2, F4, F6, F7, G3, G6, G7, H6, H8}
+			\rvMovesBlack{A2, A8, B1, B2, B8, E1, D8, G8, H2, H7}
+		\end{tikzpicture}
+	}
+	\caption[Spielsituationen Algorithmen]{Spielsituation in drei Fortschritten unterschiedlicher Partien.}
+	\label{fig:startaufstellungen}
+\end{figure}
+
+Des weiteren spielt die Gütefunktion und die Gewichtung der Faktoren eine tragende Rolle, für welchen Spielzug sich die Algorithmen entscheiden. Um die Gütefunktion aufzustellen wird der Disk-Square-Ansatz angewandt. nach diesem wird eine Matrix aufgestellt, in der alle Positionen des Spielfeldes mit einer Gewichtung behaftet sind. Dabei sind Positionen in den Ecken, sowie an den Kanten, jedoch nicht an den direkt anliegenden Feldern an den Kanten neben den Ecken, besonders erstrebenswert, da diese gar nicht oder schwerer zurückgewonnen werden können, als in der Mitte des Feldes. Daraus ergibt sich, dass die Felder, die direkt neben den Kanten liegen nicht vorteilhaft sind, da sie dem Gegenspieler ermöglichen die Kanten zu erreichen \autocite[Kap.~2.A]{setthawongUsingGeneticApproach2005}. Die gewählte Gewichtungsmatrix sieht wie folgt aus:
+
+\begin{figure}[!h]
+	\centering
+	\input{tikz/reversi-board}
+	\begin{tikzpicture}[scale=0.75]
+		\rvBoard
+		\rvCoords
+		\rvValueMatrix
+		{120,-20,20,5,5,20,-20,120}
+		{-20,-40,-5,-5,-5,-5,-40,-20}
+		{20,-5,15,3,3,15,-5,20}
+		{5,-5,3,3,3,3,-5,5}
+		{5,-5,3,3,3,3,-5,5}
+		{20,-5,15,3,3,15,-5,20}
+		{-20,-40,-5,-5,-5,-5,-40,-20}
+		{120,-20,20,5,5,20,-20,120}
+	\end{tikzpicture}
+	\caption[Gewichtungsmatrix]{Die Gewichtungsmatrix auf dem Spielbrett dargestellt.}
+	\label{fig:gewichtungsmatrix}
+\end{figure}
+
+\newpage
+Zusätzlich zu der Gewichtungsmatrix wird die Mobilität des Spielers im Vergleich zum Gegner in Betracht gezogen. Dazu werden die eigenen möglichen Züge mit den möglichen Zügen des Gegners verglichen, wäre dieser stattdessen am Zuge. Eine höhere Mobilität ist Erstrebenswert, da somit mehr Möglichkeiten für den Spielverlauf entstehen \autocite[Kap.~3.A]{setthawongUsingGeneticApproach2005}. Die Mobilität errechnet sich mit $M = n_{Zuege\_B} - n_{Zuege\_W}$. Durch eine Gewichtung der Mobilität $\omega_M$ ergibt sich zusammen mit der Gewichtungsmatrix die Gütefunktion: 
+\begin{equation}
+	f(n) = Gesamtpunktzahl_B - Gesamtpunktzahl_W + M * \omega_M
+\end{equation}
+
+Da die Algorithmen sich hauptsächlich darin unterscheiden, wie effizient sie den Zustandssuchraum reduzieren muss die Suchtiefe untersucht werden. Hierzu werden alle Situationen von den Algorithmen mit Suchtiefen von 1 bis 5 berechnet. Bei der Suchtiefe sind somit die Landau Symbole zu beachten, da der Zustandsraum nicht linear mit der Anzahl der Suchtiefe und unterschiedlich zwischen den Algorithmen wächst. Dies bedeutet, dass der Rechenaufwand signifikant mit jeder Erhöhung der Suchtiefe wächst und man einen gewissen Punkt erreicht, an dem eine größere Suchtiefe keine Vorteile mehr erzeugt, da die Varianz der Züge des Gegners zu groß wird.
+
+Bewertet werden die Algorithmen anhand ihres Zeitbedarfs, Speicherbedarfs, ihrer Güte und ihrer Robustheit. Der Zeitbedarf wird hierzu in Mikrosekunden und der Speicherbedarf wird in Bytes gemessen. Um die Robustheit zu bestimmen, wird die Basisgewichtungsmatrix mithilfe von Zufallszahlen variiert. Dazu wird ein sogenannter Seed Key verwendet. Dieser Seed Key initialisiert den deterministischen Zufallszahlengenerator, um dieselbe Folge an Pseudozufallszahlen zu erhalten. So kann gewährleistet werden, dass die Algorithmen bei mehreren Durchläufen dieselben Rahmenbedingungen haben. Auf welchen Wert der Seed Key gesetzt wird spielt in erster Linie keine Rolle, relevant ist nur, dass er in allen Durchläufen gleich ist. Um Die Gewichtungsmatrix anzupassen wird darauf für jedes Element der Matrix eine Pseudozufallszahl $r$ zwischen $-0.5$ und $0.5$ generiert. Jedes Element $i_{m, n}$ wird dann mit $1 + r$ multipliziert. Von diesen Pseudozufallszahlen werden drei Sets generiert. Zusätzlich wird die Gewichtung der Mobilität mit den Werten 0.75, 1.00 und 1.25 multipliziert. Um viele Varianten zu gewährleisten werden alle Kombinationen der betrachtet und jede Kombination 5 mal berechnet, um einen Stichprobenumfang von $3\ Zufallszahlensets * 3\ Mobilitätsgewichtungen * 5\ Durchl\textit{ä}ufe = 45\ Stichproben$ zu erhalten. Jeder Algorithmus berechnet darauf den besten Zug für die Suchtiefen 1, 2, 3, 4 und 5. Für die 5 betrachteten Algorithmen ergibt sich somit ein gesamter Berechungssatz von $45\ Stichproben * 5\ Suchtiefen * 5\ Algorithmen = 1125\ Berechnungss\textit{ä}tzen$.
+
+Die Berechnungen werden mithilfe von Python Skripten durchgeführt, da die vorgesehene Hardware für den Roboter ebenfalls Python verwendet. Als Entwicklungsumgebung wurde Visual Studio Code, aufgrund der Vertrautheit mit dieser, verwendet. Der Computer der für die Berechnungen verwendet wurde besitzt abweichende Hardware von der des Roboter wodurch auch die Berechnungszeiten beeinflusst werden, jedoch ist die Vergleichbarkeit der Algorithmen trotz dessen gewährleistet. Die Skripte geben eine Datei im .txt Format aus und sind in Anhang enthalten.
+
+\paragraph{Minimax-Algorithmus}
+\label{subsec:minimax-algorithmus}
+Der Minimax-Algorithmus kann als Übergeordnet angesehen werden, auf dem andere Algorithmen aufbauen und diesen optimieren. Bei diesem Algorithmus wird von zwei Spielern ausgegangen: der Max-Spieler, der versucht, den eigenen Wert unter den möglichen Optionen zu maximieren, und der Min-Spieler, der versucht, den minimalen Wert für den Max-Spieler zu erreichen. Der Min-Spieler ist somit der Gegenspieler. Als Beispiel kann folgender Spielbaum konstruiert werden:
+
+\begin{figure}[H]
+	\centering
+	
+	\forestset{
+		Knotenlabel/.style={
+			label/.append style={font=\normalsize\bfseries}
+		},
+		EL/.style n args={1}{
+			edge label={
+				node[midway, above, sloped,
+				fill=white,
+				inner sep=1.8pt,
+				font=\normalsize\normalfont]{#1}
+			}
+		}
+	}
+	
+	\begin{forest}
+		for tree={
+			grow'=south,
+			edge={-latex, line width=1pt},
+			parent anchor=south,
+			child anchor=north,
+			s sep=12mm,
+			l sep=24mm,
+			draw=none,
+			circle,
+			fill,
+			inner sep=2pt,
+			label distance=2.5mm,
+			Knotenlabel,
+		}
+		[ , label=above:{[Max]}
+		[ , label=right:{(b)[Min]}
+		[ , EL={9} ]
+		[ , EL={2} ]
+		]
+		[ , label=right:{(a)[Min]}
+		[ , EL={5} ]
+		[ , EL={3} 
+		]
+		]
+		]
+	\end{forest}
+	
+	\vspace{0.5\baselineskip}
+	\caption[Beispielbaum Minimax]{Beispielbaum des Minimax-Algorithmus.}
+	\label{fig:minimax-baum}
+\end{figure}
+
+Nun wird an jedem Min-Knoten davon ausgegangen, dass immer der geringste Wert gewählt wird. In diesem Fall gilt für den linken Knoten (a) $min(3, 5) = 3$ und für den rechten Knoten (b) $min(2, 9) = 2$. Für den Max-Spieler bleiben somit die Knoten 2 an Stelle (b) und 3 an Stelle (a) übrig. Der Algorithmus entscheidet sich folglich für den linken Pfad, da $max(3, 2) = 3$. In Othello kann für die Zahlenwerte die Heuristik verwendet werden, die jeden Zustand bewertet.
+
+\newpage
 \paragraph{Alpha-Beta-Pruning}
 \label{subsec:alpha-beta-pruning}
-Alpha‑Beta‑Pruning ist eine Optimierung des Minimax‑Algorithmus zur Suche in Spielbäumen. Der Algorithmus verwaltet zwei Schranken $\alpha$ und $\beta$, welche die beste bisher gefundene Bewertung für den Max‑ bzw. Min‑Spieler repräsentieren. Während der Suche kann ein Zweig sofort verworfen werden, wenn klar ist, dass er das Endergebnis nicht verbessern kann, weil $\alpha \geq \beta$ gilt. Dies reduziert die Zahl der auszuwertenden Knoten erheblich gegenüber Minimax \autocite[Kap.~5.3]{russellArtificialIntelligenceModern2016}.    
+Alpha‑Beta‑Pruning ist eine Optimierung des Minimax‑Algorithmu. Der Algorithmus verwaltet zwei Schranken $\alpha$ und $\beta$, welche die beste bisher gefundene Bewertung für den Max‑ bzw. Min‑Spieler repräsentieren. Diese beiden Schranken bestimmen nun, welcher Pfad nicht weiterverfolgt werden muss. Anhand des Beispiels \ref{fig:minimax-baum} sind die Startwerte $\alpha = -\inf$ und $\beta = \inf$. Zuerst wird am linken Min-Knoten geprüft auf $min(\inf, 3) = 3 = \beta$ und darauf $min(3, 5) = 3 = \beta$. Am oberen Max-Knoten wird $max(-\inf, 3) = 3 = \alpha$ bestimmt. Für den rechten Ast wird dasselbe Verfahren durchgeführt, wodurch sich $\beta = 2$ ergibt. Anhand der Abbruchbedingung $\alpha \geq \beta$ kann nun bestimmt werden, dass die Suche im rechten Ast abgebrochen werden kann, falls dieser weiterführen würde. So kann die Anzahl der auszuwertenden Zustände erheblich reduziert werden \autocite[Kap.~5.3]{russellArtificialIntelligenceModern2016}.
 
+\begin{figure}[H]
+	\centering
+	\subfigure[Durchschnittliche Zeit pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Zeit (µs)},
+				ymode=log, xtick={1,...,5},
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={AlphaBeta: Durchschnittliche Zeit}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,2179) (2,8412) (3,62315) (4,310785) (5,2111972)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,2975) (2,10354) (3,117572) (4,425988) (5,4989373)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,1949) (2,5047) (3,32526) (4,78932) (5,338372)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfigure[Speicherverbrauch pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Speicher (Bytes)},
+				xtick={1,...,5},
+				scaled y ticks=false,
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={AlphaBeta: Speicherverbrauch}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,5609) (2,8443) (3,9585) (4,11389) (5,13701)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,5336) (2,6961) (3,9550) (4,11502) (5,13468)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,5304) (2,6913) (3,9336) (4,11251) (5,13030)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[AlphaBeta Performance]{Durchschnittliche Zeit und Speicherverbrauch des Alpha-Beta-Pruning in Abhängigkeit von der Suchtiefe.}
+	\label{fig:alphabeta-performance}
+\end{figure}
+
+
+\newpage
+\todo[inline]{Texte anpassen und besser erklären, auf Ergebnis eingehen, Quellen}
 \paragraph{Iterative Deepening}
 \label{subsec:iterative-deepening}
 Iterative Deepening kombiniert Tiefensuche mit schrittweise erhöhter Grenztiefe: Zunächst wird bis Tiefe 1 gesucht, dann bis Tiefe 2 usw., bis ein Zeitlimit erreicht ist. Diese Strategie liefert in begrenzter Zeit stets eine aktuelle beste Lösung und verbessert zugleich die Reihenfolge der Züge für spätere Alpha‑Beta‑Schnitte, da Ergebnisse früherer Suchen als Heuristiken dienen \autocite[Kap.~3.5]{russellArtificialIntelligenceModern2016}.  
 
+\begin{figure}[H]
+	\centering
+	\subfigure[Durchschnittliche Zeit pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Zeit (µs)},
+				ymode=log, xtick={1,...,5},
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={IterDeep: Durchschnittliche Zeit}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,2279) (2,10617) (3,74994) (4,390209) (5,2521484)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,2965) (2,13457) (3,132964) (4,567151) (5,5639908)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,2105) (2,7221) (3,39634) (4,118971) (5,463935)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfigure[Speicherverbrauch pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Speicher (Bytes)},
+				xtick={1,...,5},
+				scaled y ticks=false,
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={IterDeep: Speicherverbrauch}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,5840) (2,8091) (3,10909) (4,12820) (5,15078)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,6448) (2,8803) (3,10998) (4,12894) (5,14850)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,6080) (2,8400) (3,10803) (4,12718) (5,14366)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[IterDeep Performance]{Durchschnittliche Zeit und Speicherverbrauch des IterDeep-Algorithmus in Abhängigkeit von der Suchtiefe.}
+	\label{fig:iterdeep-performance}
+\end{figure}
+
+
+\newpage
 \paragraph{Move Ordering}
 \label{subsec:move-ordering}
 Move Ordering bezeichnet Strategien zur Sortierung der Züge vor der Bewertung, sodass zuerst vielversprechende Züge untersucht werden. Eine gute Zugreihenfolge erhöht die Wahrscheinlichkeit früher Alpha‑Beta‑Schnitte und reduziert so die Gesamtzahl der expandierten Knoten. Typische Heuristiken berücksichtigen beispielsweise starke heuristische Bewertungen, Killer‑Moves oder Ergebnisse aus vorherigen Suchtiefen \autocite[Kap.~5.3.1]{russellArtificialIntelligenceModern2016}.  
 
+\begin{figure}[H]
+	\centering
+	\subfigure[Durchschnittliche Zeit pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Zeit (µs)},
+				ymode=log, xtick={1,...,5},
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={MoveOrder: Durchschnittliche Zeit}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,4436) (2,28899) (3,97354) (4,405391) (5,1178975)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,5568) (2,43298) (3,150109) (4,656074) (5,2292903)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,3543) (2,15955) (3,57021) (4,154632) (5,408477)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfigure[Speicherverbrauch pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Speicher (Bytes)},
+				xtick={1,...,5},
+				scaled y ticks=false,
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={MoveOrder: Speicherverbrauch}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,5632) (2,7337) (3,9136) (4,10673) (5,12712)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,5738) (2,7417) (3,9235) (4,10802) (5,12413)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,5649) (2,7247) (3,9106) (4,10592) (5,12274)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[MoveOrder Performance]{Durchschnittliche Zeit und Speicherverbrauch des MoveOrder-Algorithmus in Abhängigkeit von der Suchtiefe.}
+	\label{fig:moveorder-performance}
+\end{figure}
+
+
+\newpage
 \paragraph{Negamax}
 \label{subsec:negamax}
 Negamax ist eine Variante des Minimax‑Algorithmus, die die Symmetrie zweier Spieler in Nullsummenspielen ausnutzt. Anstelle separater Max‑ und Min‑Funktionen wird ein einheitlicher Max‑Operator verwendet, wobei die Bewertung des Gegners als negative Bewertung aus Sicht des aktuellen Spielers dargestellt wird. Dies vereinfacht die Implementierung und entspricht formal Minimax unter der Nullsummenbedingung.
 
+\begin{figure}[H]
+	\centering
+	\subfigure[Durchschnittliche Zeit pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Zeit (µs)},
+				ymode=log, xtick={1,...,5},
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={Negamax: Durchschnittliche Zeit}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,2207) (2,8354) (3,63469) (4,316436) (5,2124191)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,2873) (2,10285) (3,118282) (4,432783) (5,5011795)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,1936) (2,5070) (3,32142) (4,78696) (5,339006)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfigure[Speicherverbrauch pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Speicher (Bytes)},
+				xtick={1,...,5},
+				scaled y ticks=false,
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={Negamax: Speicherverbrauch}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,5064) (2,6896) (3,9399) (4,11316) (5,13626)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,5336) (2,6961) (3,9551) (4,11502) (5,13454)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,5304) (2,6913) (3,9321) (4,11275) (5,13029)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[Negamax Performance]{Durchschnittliche Zeit und Speicherverbrauch des Negamax-Algorithmus in Abhängigkeit von der Suchtiefe.}
+	\label{fig:negamax-performance}
+\end{figure}
+
+
+\newpage
 \paragraph{Negascout}
 \label{subsec:negascout}
 Negascout ist eine Alpha‑Beta‑Variante innerhalb des Negamax‑Frameworks, die durch den Einsatz schmaler „Nullfenster“ Suchintervalle versucht, zusätzliche Schnittpunkte zu erzeugen. Der erste Zug wird mit vollem Fenster untersucht, während nachfolgende Züge zunächst mit einem minimalen Fenster geprüft werden. Nur wenn diese Prüfung scheitert, werden vollständige Suchen ausgeführt. Dies kann im besten Fall die Effizienz gegenüber klassischem Alpha‑Beta steigern, wenn die Zugreihenfolge gut ist.  
 
+\begin{figure}[H]
+	\centering
+	\subfigure[Durchschnittliche Zeit pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Zeit (µs)},
+				ymode=log, xtick={1,...,5},
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={Negascout: Durchschnittliche Zeit}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,2362) (2,8919) (3,52686) (4,268206) (5,1235961)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,3010) (2,14207) (3,140836) (4,507567) (5,3910554)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,2196) (2,5838) (3,35259) (4,101064) (5,384424)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfigure[Speicherverbrauch pro Tiefe]{
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.45\textwidth,
+				xlabel={Tiefe}, ylabel={Speicher (Bytes)},
+				xtick={1,...,5},
+				scaled y ticks=false,
+				legend style={at={(0.5,-0.25)}, anchor=north, legend columns=-1, font=\small},
+				title={Negascout: Speicherverbrauch}
+				]
+				\addplot[smooth,mark=o,blue] coordinates {(1,5248) (2,7032) (3,9489) (4,11621) (5,13704)}; \addlegendentry{Anfang}
+				\addplot[smooth,mark=square,red] coordinates {(1,5408) (2,7330) (3,9786) (4,11783) (5,13796)}; \addlegendentry{Mitte}
+				\addplot[smooth,mark=triangle,green] coordinates {(1,5376) (2,7083) (3,9549) (4,11477) (5,13404)}; \addlegendentry{Ende}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[Negascout Performance]{Durchschnittliche Zeit und Speicherverbrauch des Negascout-Algorithmus in Abhängigkeit von der Suchtiefe.}
+	\label{fig:negascout-performance}
+\end{figure}
+
 \section{Nicht betrachtete Algorithmen}
 \label{sec:nicht-betrachtete-algorithmen}
+
+\paragraph{MTD(F) (Alpha-Beta-Suche)}
+\label{subsec:mtdf-alpha-beta}
+
+\todo[inline]{Texte anpassen und besser erklären, Quellen}
+MTD(F) ist eine Variante der Alpha-Beta-Suche, die durch wiederholte, eng begrenzte Suchvorgänge den Suchbaum effizienter durchsucht. Die Methode zielt darauf ab, die exakten Bewertungswerte von Knoten schneller zu bestimmen.  
+Für Anwendungen mit stark eingeschränkten Speicher- und Zeitressourcen kann die wiederholte Suche und die Notwendigkeit, Zwischenergebnisse zwischenzuspeichern, den Rechenaufwand erhöhen, was die Einsatzfähigkeit einschränkt.
+
+\paragraph{Q-Learning}
+\label{subsec:q-learning}
+Q-Learning ist ein modellfreies Reinforcement-Learning-Verfahren, das Aktionen auf Basis von Zuständen bewertet und durch Belohnungssignale eine Politik erlernt.  
+In Szenarien mit begrenzten Ressourcen kann die Notwendigkeit, große Q-Tabellen oder neuronale Approximatoren für alle möglichen Spielzustände zu verwalten, schnell zu Speicher- und Rechenproblemen führen.
+
+\paragraph{Multi Prob Cut (MPC)}
+\label{subsec:multi-prob-cut}
+Multi Prob Cut ist eine Technik zur Reduzierung der Anzahl von Knoten in Spielbäumen, indem statistische Wahrscheinlichkeiten genutzt werden, um Knoten frühzeitig zu verwerfen.  
+Die Methode setzt umfangreiche statistische Berechnungen voraus, die bei limitierten Rechenkapazitäten den Vorteil der Schnittmethode teilweise neutralisieren.
+
+\paragraph{A*-Search-Algorithm}
+\label{subsec:a-star-search}
+A*-Suche verwendet heuristische Bewertung, um den Weg von einem Startzustand zu einem Zielzustand effizient zu finden, wobei sowohl Kosten als auch geschätzte Restkosten berücksichtigt werden.  
+Für komplexe Spielbäume wie Othello wächst die Zahl der zu bewertenden Zustände exponentiell, sodass der Speicherbedarf für die offene und geschlossene Liste schnell die verfügbaren Ressourcen überschreiten kann.
+
+\paragraph{Min-Max}
+\label{subsec:min-max}
+Min-Max ist ein deterministischer Entscheidungsalgorithmus für Zwei-Personen-Spiele, der alle möglichen Züge und Gegenreaktionen simuliert, um den optimalen Zug zu bestimmen.  
+Ohne Optimierungen wie Alpha-Beta-Schnitt führt die vollständige Exploration des Spielbaums bei Othello zu einer exponentiell steigenden Anzahl von Zuständen, was die Anwendung auf begrenzter Hardware erschwert.
+
+\paragraph{Monte-Carlo-Tree-Search (MCTS)}
+\label{subsec:mcts}
+MCTS bewertet Züge durch wiederholte, zufällige Simulationen des Spiels und aktualisiert die Knotenwerte entsprechend der erzielten Ergebnisse.  
+Die Zahl der erforderlichen Simulationen für eine zuverlässige Bewertung kann bei ressourcenbeschränkten Systemen zu langen Wartezeiten oder unvollständigen Bewertungen führen.
+
+\paragraph{Upper Confidence Bounds (applied to Tree Search)}
+\label{subsec:uct-tree-search}
+Die Upper-Confidence-Bounds-Methode wählt Knoten in einem Suchbaum basierend auf dem Upper-Confidence-Bound-Prinzip, das Exploration und Exploitation balanciert.  
+Die Berechnung und Aktualisierung der statistischen Werte für jeden Knoten beansprucht Speicher und Rechenleistung, was die praktische Anwendbarkeit in Umgebungen mit begrenzten Ressourcen einschränkt.
+
+
 
 \section{Auswahl des Algorithmus}
 \label{sec:auswahl-des-algorithmus}
 
+\todo[inline]{Tabelle mit Daten befüllen, Algorithmen vergleichen, Entscheidung begründen}
+Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sowie die errechneten Züge zwischen allen übereinstimmen und nur von der Suchtiefe sowie der Gewichtung abhängig sind, kann rein anhand des Zeit- und Speicherbedarfs der für diesen Anwendungsfall beste Suchalgorithmus gewählt werden. Für die Zeitkomplexität wird immer vom schlechtesten Fall der Sortierung des Zustandsraums ausgegangen. Der Zeitbedarf wird ebenfalls im schlechtesten Fall angegeben. Dieser war für jeden Algorithmus im mittleren Spielzustand, in dem sich die meiste Zeit aufgehalten wird.
+
 \begin{table}[hbt]
 	\centering
-	\captionabove[Vergleich von Suchalgorithmen]{Vergleich der Suchalgorithmen hinsichtlich Zeitkomplexität, Speicherbedarf, Güte der Heuristik und Robustheit bei Ressourcenbegrenzung.}
+	\captionabove[Vergleich von Suchalgorithmen]{Vergleich der Suchalgorithmen hinsichtlich Zeitbedarf, Speicherbedarf und Robustheit bei Ressourcenbegrenzung.}
 	\label{tab:algorithmus-vergleich}
 	
 	\renewcommand{\arraystretch}{1.5}
-	\setlength{\tabcolsep}{6pt} % Abstand zwischen Spalten
+	\setlength{\tabcolsep}{6pt}
 	
-	\begin{tabular}{p{3cm}|p{2.75cm} p{2.75cm} p{3.5cm} p{2.5cm}}
-		Algorithmus & Zeitkomplexität & Speicherbedarf & Güte der Heuristik & Robustheit \\ \hline
-		Alpha-Beta-Pruning & $O(b^{d/2})$ &  &  &  \\
-		Negamax & $O(b^d)$ &  &  &  \\
-		Iterative Deepening & $O(b^d)$ & &  &  \\
-		Move Ordering &  &  & &  \\
-		Negascout & $O(b^{d/2})$ &  & &  \\
+	\begin{tabular}{p{4.5cm}|p{3.5cm} p{3.5cm} p{3.5cm}}
+		Algorithmus & Zeitkomplexität, Zeitbedarf & Speicherbedarf & Robustheit \\ \hline
+		Alpha-Beta-Pruning & $O(b^{d})$,  &  &   \\
+		Iterative Deepening & $O(b^{d})$ & &   \\
+		Move Ordering & $O(b^{d})$ &  &  \\
+		Negamax & $O(b^{d})$ &  &   \\
+		Negascout & $O(b^{d})$ &  &  \\
 	\end{tabular}
 \end{table}
 
