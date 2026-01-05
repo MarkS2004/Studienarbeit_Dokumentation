@@ -244,9 +244,8 @@ Darüber hinaus werden die Anforderungen nach ihrer Kritikalität (Krit.) auf ei
 
 \section{Funktionale Analyse des Systems}
 \label{sec:funktionsanalyse}
-Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in einzelne Teilfunktionen zerlegt und analysiert. Die Hauptfunktion besteht darin, gegen einen weiteren Roboter das Spiel Othello gemäß den festgelegten Regeln, dem definierten Spielaufbau und dem vorgegebenen Ablauf auszuführen und dabei das Ziel des Gewinns zu verfolgen. Die funktionale Zerlegung dient der systematischen Strukturierung des Gesamtsystems, um die Komplexität zu reduzieren und klar abgegrenzte Schnittstellen zu definieren. Dadurch können die einzelnen Teilfunktionen weitgehend unabhängig voneinander untersucht und jeweils geeignete Lösungsansätze abgeleitet werden. Die Abbildung~\ref{fig:funktionsanalyse} zeigt den anfänglichen Spielablauf sowie die Unterteilung des eigenen Spielzugs in mehrere Teilfunktionen.
 
-- Funktion bereits vor Begin des Spielsaufbaus: Kalibierung, EInmessung des Spielfelds da größe dynamisch gestaltet wird, manueell. Es soll dabei  
+Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in einzelne Teilfunktionen zerlegt und analysiert. Die Hauptfunktion besteht darin, gegen einen weiteren Roboter das Spiel Othello gemäß den festgelegten Regeln, dem definierten Spielaufbau und dem vorgegebenen Ablauf auszuführen und dabei das Ziel des Gewinns zu verfolgen. Die funktionale Zerlegung dient der systematischen Strukturierung des Gesamtsystems, um die Komplexität zu reduzieren und klar abgegrenzte Schnittstellen zu definieren. Dadurch können die einzelnen Teilfunktionen weitgehend unabhängig voneinander untersucht und jeweils geeignete Lösungsansätze abgeleitet werden. Die Abbildung~\ref{fig:funktionsanalyse} zeigt den anfänglichen Spielablauf sowie die Unterteilung des eigenen Spielzugs in mehrere Teilfunktionen.
 
 \begin{figure}[hbt]
 	\centering
@@ -266,7 +265,7 @@ Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in ei
 		% -------- Raster --------
 		%\draw[very thin, gray!20] (0,0) grid[step=\MINOR] (\XMAX,\YMAX);
 		%\draw[thin, gray!45] (0,0) grid[step=\MAJOR] (\XMAX,\YMAX);
-	
+		
 		\path[draw=black, thin, fill=gray!25] (10,20) -- ++(25,0) -- ++(5,5) -- ++(-5,5) -- ++(-25,0) -- ++(5,-5) -- cycle;
 		\node[align=center] at (25,25) {\footnotesize Erkennung des \\ \footnotesize Startbefehls};
 		
@@ -280,22 +279,21 @@ Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in ei
 		\node[align=center] at (25,5) {\footnotesize Ausführung des \\ \footnotesize Spielzugs};
 		
 		\path[draw=black, thin, fill=gray!25] (40,0) -- ++(25,0) -- ++(5,5) -- ++(-5,5) -- ++(-25,0) -- ++(5,-5) -- cycle;
-		\node[align=center] at (55,5) {\footnotesize Rückfahrt in die \\ \footnotesize Ruhezustandspose};
+		\node[align=center] at (55,5) {\footnotesize Rückfahrt in die \\ \footnotesize Ruheposition};
 		
 		\path[draw=black, thin, fill=gray!25] (70,0) -- ++(25,0) -- ++(5,5) -- ++(-5,5) -- ++(-25,0) -- ++(5,-5) -- cycle;
-		\node[align=center] at (85,5) {\footnotesize Beeindung des \\ \footnotesize Spielzugs};
-		
+		\node[align=center] at (85,5) {\footnotesize Beendigung des \\ \footnotesize Spielzugs};
+
 		\path[draw=black, thin, fill=gray!10] (0,50) -- ++(25,0) -- ++(5,5) -- ++(-5,5) -- ++(-25,0) -- cycle;
-		\node[align=center] at (15,55) {\footnotesize Kalibrierung};
+		\node[align=center] at (15,55) {\footnotesize Kalibrierung, \\ \footnotesize Einmessung};
 		
 		\path[draw=black, thin, fill=gray!25] (30,50) -- ++(45,0) -- ++(5,5) -- ++(-5,5) -- ++(-45,0) -- ++(5,-5) -- cycle;
-		\node[align=center] at (55,55) {\footnotesize Auführung des eigenen Spielzuges};
+		\node[align=center] at (55,55) {\footnotesize Ausführung des eigenen Spielzugs};
 		
 		\path[draw=black, thin, fill=gray!10] (80,50) -- ++(25,0) -- ++(5,5) -- ++(-5,5) -- ++(-25,0) -- ++(5,-5) -- cycle;
-		\node[align=center] at (95,55) {\footnotesize Prädektion des\\ \footnotesize nächsten Zuges};
+		\node[align=center] at (95,55) {\footnotesize Prädiktion des \\ \footnotesize nächsten Zuges};
 		
 		\path[draw=black, thin, fill=gray!25] (101,26) -- ++(4,0) -- ++(0,-12) -- ++(-98,0) -- ++(0,-8) -- ++(5,0) -- ++(1,-1) -- ++(-1,-1) -- ++(-7,0) -- ++(0,12) -- ++(98,0) -- ++(0,8) -- ++(-2,0) -- ++(1,1) -- cycle;
-		
 		
 		\draw [thick] (4, 31) -- (30, 49);
 		\draw [thick] (106, 31) -- (80, 49);
@@ -309,11 +307,10 @@ Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in ei
 		\draw [thick] (110, 49) -- ++(0, 14);
 		
 		\draw[<->, thick] (1,62) -- ++(28,0)
-		node[midway, above] {\footnotesize Vor Spielbegin};
+		node[midway, above] {\footnotesize Vor Spielbeginn};
 		
 		\draw[<->, thick] (31,62) -- ++(48,0)
-		node[midway, above] {\footnotesize Dauer maximal \SI{2}{\minute}};
-		
+		node[midway, above] {\footnotesize Dauer: maximal \SI{2}{\minute}};
 		
 		\draw[<->, thick] (81,62) -- ++(28,0)
 		node[midway, above] {\footnotesize Gegnerischer Spielzug};
@@ -324,7 +321,42 @@ Auf Basis der definierten Anforderungen wird die Hauptfunktion des Systems in ei
 	\label{fig:funktionsanalyse}
 \end{figure}
 
+Bereits vor Spielbeginn muss das technische System über eine Funktion zur Kalibrierung und Einmessung verfügen. Diese dient der Bestimmung des Spielfelds sowie der relativen Position des Roboters zum Spielfeld, da diese Größen als dynamisch zu betrachten sind.
+Ziel dieser Funktion ist es, die bedienende Person dabei zu unterstützen, die Kalibrierung präzise durchzuführen, ohne dass eine Anpassung des Quellcodes erforderlich ist. Die konkrete technische Umsetzung dieser Funktion ist vom gewählten Robotersystem abhängig und wird daher vorerst nicht weiter betrachtet.
 
+Als nächste Funktion folgt die Ausführung des eigenen Spielzugs mit einer maximalen Gesamtdauer von \SI{2}{\minute}. Aufgrund dieser zeitlichen Begrenzung ist eine sinnvolle Aufteilung des Zeitpensums auf geeignete Unterfunktionen erforderlich. Die Ausführung erfolgt abwechselnd mit dem gegnerischen Spielzug.
+Für die vorliegende Betrachtung wird angenommen, dass das System mit der Farbe Schwarz spielt und den ersten Zug ausführt. In der späteren Umsetzung wird bei der Farbe Weiß zunächst auf den Abschluss des gegnerischen Spielzugs gewartet.
+Diese Funktion stellt die Hauptfunktion der Arbeit dar und gliedert sich in die folgenden sechs Teilfunktionen, die im Weiteren näher betrachtet werden.
+\begin{enumerate}
+	\item \textbf{Erkennung des Startbefehls:}  
+	Zu Spielbeginn ist eine einmalige Eingabe durch die bedienende Person erforderlich, um den Start des Spiels zu signalisieren. Im weiteren Spielverlauf muss das System erkennen, dass die Schaltfläche der Schachuhr farblich auf Rot wechselt. Sobald diese Änderung detektiert wird, beginnt der eigene Spielzug.
+	
+	\item \textbf{Erkennung der Spielsituation:}  
+	Anschließend ist die aktuelle Spielsituation zu erfassen, insbesondere die Position der Spielsteine nach dem gegnerischen Zug. Dabei kann auf den bekannten vorherigen Spielzustand sowie auf das Wissen über zulässige Folgezustände zurückgegriffen werden.
+	
+	\item \textbf{Bestimmung des nächsten Spielzugs:}  
+	Zu Beginn wird überprüft, ob das Spiel bereits beendet ist. Anschließend bestimmt das System mithilfe eines Spielalgorithmus den nächsten eigenen Spielzug. Ziel ist es, einen Zug zu wählen, der unter Berücksichtigung der verfügbaren Rechenzeit langfristig zu einer Gewinnstrategie beiträgt. Hierbei soll ein möglichst großer Anteil des verfügbaren Zeitbudgets für die Entscheidungsfindung genutzt werden.
+	
+	\item \textbf{Ausführung des Spielzugs:}  
+	Der ermittelte Spielzug wird anschließend ausgeführt. Ist kein regelkonformer Spielzug möglich, wird dieser Schritt übersprungen. Zur Ausführung fährt der Roboter aus dem Ruhezustandsbereich, positioniert sich präzise über dem Spielfeld und betätigt das Tablet mittels Touchstift oder eines vergleichbaren mechanischen Betätigungsmechanismus. Die Bewegung muss positionsgenau erfolgen, darf das Tablet nicht verschieben, soll möglichst wenig Zeit beanspruchen und darf den Ruhezustandsbereich des gegnerischen Roboters nicht durchqueren.
+	
+	\item \textbf{Rückfahrt in die Ruheposition:}  
+	Nach der Ausführung des Spielzugs fährt der Roboter zurück in seine definierte Ruheposition.
+	
+	\item \textbf{Beendigung des Spielzugs:}  
+	Abschließend wird der Spielzug durch die Betätigung der Schaltfläche der Schachuhr beendet und damit an den gegnerischen Spieler übergeben.
+\end{enumerate}
+
+Nach der Beendigung des eigenen Spielzugs folgt der gegnerische Spielzug. Während dieser Phase kann die verfügbare Zeit genutzt werden, um den Zug des Gegners zu prognostizieren und dadurch den Aufwand bei der anschließenden Erkennung der Spielsituation zu reduzieren. Alternativ besteht die Möglichkeit, diese Zeit – sofern technisch umsetzbar – zur Vorausplanung des nächsten eigenen Spielzugs zu verwenden.
+Diese Funktionen während des gegnerischen Spielzugs sind funktional nicht zwingend erforderlich und dienen ausschließlich der Optimierung. Sie werden daher im Rahmen dieser Arbeit nicht weiter betrachtet.
+
+Nach dem Abschluss des gegnerischen Spielzugs beginnt erneut die Ausführung des eigenen Spielzugs. Dieser Ablauf wiederholt sich zyklisch, bis das Ende des Spiels erkannt wird.
+
+\section{Auswahl und Bewertung geeigneter Lösungsansätze}
+\label{sec:loesungsansaetze}
+\todo[inline]{Für jede Teilfunktion mehrer Lösungsansätze präsentieren und diese Bewerten. Fokus auf Bestimmung des nächsten SPielzugs und RÜckfahr in die Ruheposition. Nutzweranalyse?}
+
+% Notizen: Einzelne Lösungenauftellen, diese Bewerten (Nutweranalyse), zusammenstellen zu einem GEsamtkonzept
 
 
 
