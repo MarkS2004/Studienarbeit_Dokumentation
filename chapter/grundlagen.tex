@@ -199,7 +199,7 @@ Die Spieltheorie stellt einen formalen Rahmen zur Beschreibung und Analyse von i
 
 In dieser Arbeit wird die Spieltheorie zur formalen Beschreibung und Analyse des Brettspiels Othello herangezogen, um darauf aufbauend geeignete Spielalgorithmen zu entwerfen. Ziel des folgenden Kapitels ist es, die spieltheoretischen Grundlagen zu schaffen, die für den Vergleich verschiedener Spielalgorithmen in Kapitel~\ref{cha:stand-der-technik} erforderlich sind.
 
-Die Betrachtung beschränkt sich bewusst auf die adversarielle Suche. Dabei handelt es sich um eine Klasse von Suchverfahren der künstlichen Intelligenz für Mehrspielerprobleme mit gegensätzlichen Zielen, wie sie bei Othello vorliegen. Diese Verfahren ermöglichen eine strukturierte und deterministische Entscheidungsfindung. Zudem eignen sie sich besonders für Systeme mit begrenzten Rechenressourcen, wie sie bei der Hardware des LEGO\textsuperscript{\textregistered} SPIKE Systems gegeben sind.
+Die Betrachtung beschränkt sich bewusst auf die adversarielle Suche. Dabei handelt es sich um eine Klasse von Suchverfahren der künstlichen Intelligenz für Mehrspielerprobleme mit gegensätzlichen Zielen, wie sie bei Othello vorliegen. Diese Verfahren ermöglichen eine strukturierte und deterministische Entscheidungsfindung. Zudem eignen sie sich besonders für Systeme mit begrenzten Rechenressourcen, wie sie bei der Hardware des LEGO\textsuperscript{\textregistered} Education SPIKE\texttrademark{} Systems gegeben sind.
 
 In Abschnitt~\ref{subsec:modellierung-spiele-baum} werden grundlegende Begriffe der Spieltheorie eingeführt und Spiele formal als Suchbäume modelliert. Darauf aufbauend behandelt Abschnitt~\ref{subsec:prinzipien-kompetitive-spiele} zentrale Prinzipien der Entscheidungsfindung in kompetitiven Spielen, die im Wesentlichen adversariale Suchprobleme darstellen. Abschließend werden die vorgestellten Konzepte in Abschnitt~\ref{subsec:spieltheoretische-einordnung-othello} auf das Spiel Othello angewandt und dieses aus spieltheoretischer Sicht eingeordnet.
 
@@ -285,7 +285,7 @@ Auf Grundlage der zuvor eingeführten Konzepte kann die Definition des Game Fram
 	\end{itemize}
 \end{definition}
 
-Neben der Darstellung von Präferenzen durch eine Ordnung können diese auch mittels einer \emph{Nutzenfunktion} dargestellt werden. Dabei wird jedem möglichen Ergebnis ein reeller Zahlenwert zugeordnet, wobei ein Ergebnis \(o\) gegenüber einem Ergebnis \(o'\) präferiert wird, wenn der zugehörige Nutzenwert größer ist. Formal ist die Nutzenfunktion als Abbildung \(U \colon O \to \mathbb{R}\) definiert, die die Rangfolge der Präferenzen eines Spielers widerspiegelt. Ein höherer Nutzenwert entspricht einem aus Sicht des Spielers besseren Ergebnis. Nutzenwerte besitzen jedoch keine kardinale Bedeutung, sondern sind ordinal zu interpretieren. Die Wahl der Zahlenwerte ist daher grundsätzlich arbiträr; ein doppelt so hoher Nutzenwert impliziert kein doppelt so gutes Ergebnis. Unter der Annahme egoistischen und nutzenmaximierenden Handelns kann für jeden Spieler eine entsprechende Nutzenfunktion festgelegt werden, wie sie beispielhaft in Tabelle~\ref{tab:nutzenfunktion-golden-balls} dargestellt ist. \autocite[Kap.~2.1]{bonannoGameTheory2024}
+Neben der Darstellung von Präferenzen durch eine Ordnung können diese auch mittels einer \emph{Nutzenfunktion} dargestellt werden. Dabei wird jedem möglichen Ergebnis ein reeller Zahlenwert zugeordnet, wobei ein Ergebnis $o$ gegenüber einem Ergebnis $o'$ präferiert wird, wenn der zugehörige Nutzenwert größer ist. Formal ist die Nutzenfunktion als Abbildung $U \colon O \to \mathbb{R}$ definiert, die die Rangfolge der Präferenzen eines Spielers widerspiegelt. Ein höherer Nutzenwert entspricht einem aus Sicht des Spielers besseren Ergebnis. Nutzenwerte besitzen jedoch keine kardinale Bedeutung, sondern sind ordinal zu interpretieren. Die Wahl der Zahlenwerte ist daher grundsätzlich arbiträr; ein doppelt so hoher Nutzenwert impliziert kein doppelt so gutes Ergebnis. Unter der Annahme egoistischen und nutzenmaximierenden Handelns kann für jeden Spieler eine entsprechende Nutzenfunktion festgelegt werden, wie sie beispielhaft in Tabelle~\ref{tab:nutzenfunktion-golden-balls} dargestellt ist. \autocite[Kap.~2.1]{bonannoGameTheory2024}
 
 \begin{table}[hbt]
 	\centering
@@ -624,8 +624,46 @@ Spiele mit diesen Eigenschaften werden häufig in extensiver Form beschrieben, t
 %   * langer Lernphase
 % - Unter Hardwarebeschränkungen ungeeignet
 
-\section{Aufbau und Komponenten von LEGO\textsuperscript{\textregistered} SPIKE}
+\section{Aufbau des LEGO\textsuperscript{\textregistered} Education SPIKE\texttrademark{} Prime Baukastensystems}
 \label{sec:lego-spike}
+Das LEGO\textsuperscript{\textregistered} Education SPIKE\texttrademark{} Prime Baukastensystem ist ein Lernsystem auf Basis von Klemmbausteinen des Herstellers LEGO\textsuperscript{\textregistered}. Es verfolgt ein praxisorientiertes didaktisches Konzept für den Schulunterricht in den Bereichen Mathematik, Informatik, Naturwissenschaften und Technik \autocite{legogroupLEGOEducationSPIKE}.
+Das System umfasst Sensoren, Aktoren, einen Mikrocontroller sowie eine integrierte Entwicklungsumgebung. Es ist mit Komponenten des LEGO\textsuperscript{\textregistered} Technic\texttrademark{} Baukastensystems kompatibel und ermöglicht dadurch den Aufbau komplexerer mechatronischer Systeme.
+Das SPIKE-System ist in zwei Ausführungen erhältlich, Essential und Prime. In der vorliegenden Arbeit wird die Prime-Variante betrachtet, auf die sich die nachfolgende Beschreibung beschränkt.
+
+Die Grundlage des Systems ist die Möglichkeit, mehrere Bausteine und Komponenten über standardisierte Steckverbindungen miteinander zu verbinden. Hierfür steht eine Vielzahl von Kunststoffelementen in unterschiedlichen Geometrien zur Verfügung, darunter verschiedene Verbindungselemente, Zahnräder, Getriebekomponenten, Achsen, Räder, Ketten sowie weitere mechanische Bauteile. \autocite{conradelectronicseLEGOEducation45678}
+Von besonderer Relevanz sind der programmierbare Hub als Mikrocontroller, die Entwicklungsumgebung sowie die verfügbaren Aktoren und Sensoren. Diese Komponenten bestimmen den Aufbau und die funktionalen Möglichkeiten des Roboters maßgeblich und stellen zugleich wesentliche technische Randbedingungen dar. Aus diesem Grund werden sie im Folgenden näher betrachtet. Dabei geht der Umfang der verfügbaren Bauteile über den des Basis-Sets hinaus.
+
+\paragraph{Programmierbarer Hub}
+Der programmierbare Hub (offizielle Bezeichnung: Technic\texttrademark{} Large Hub) bildet die zentrale Steuereinheit des Systems. Er stellt insgesamt sechs Ein- und Ausgänge zur Verfügung, an die Motoren und Sensoren angeschlossen werden können.
+Zur integrierten Hardware gehört eine 5×5-LED-Matrix, die zur visuellen Anzeige von Statusinformationen dient. Weiterhin ist ein sechssachsiger Inertialsensor verbaut, der aus drei Achsen zur Erfassung linearer Beschleunigungen und drei Achsen zur Messung von Drehraten besteht.
+Die Bedienung erfolgt über ein integriertes Taster-Navigationssystem, während akustische Rückmeldungen über einen eingebauten Lautsprecher ausgegeben werden können. Für die Kommunikation mit der Entwicklungsumgebung stehen eine USB-Schnittstelle sowie eine Bluetooth-Verbindung zur Verfügung. Die Energieversorgung erfolgt über einen herausnehmbaren, wiederaufladbaren Akku.
+Die detaillierten technischen Spezifikationen sind dem Datenblatt in \autocite{legoreducationLEGOEducationSPIKE} zu entnehmen. Hervorzuheben ist der integrierte Prozessor mit einer Taktfrequenz von \SI{100}{\mega\hertz}. Zusätzlich stehen \SI{320}{\kilo\byte} Arbeitsspeicher sowie \SI{32}{\mega\byte} nichtflüchtiger Speicher für Programmcode und Daten zur Verfügung.
+
+\paragraph{Entwicklungsumgebung}
+Die Programmierung des Hubs erfolgt über die mitgelieferte Entwicklungsumgebung in Form einer dedizierten Programmier-App, die sowohl für mobile Endgeräte, insbesondere Tablets des Herstellers Apple, als auch für Desktop-Computer verfügbar ist. Die Entwicklungsumgebung unterstützt zwei Programmieransätze: eine blockbasierte visuelle Programmierung sowie eine textbasierte Programmierung auf Basis von MicroPython.
+Für beide Varianten stehen zahlreiche vorgefertigte Module und Funktionsbausteine zur Verfügung, die den Zugriff auf Sensoren, Aktoren und weitere Systemkomponenten ermöglichen. Die zugehörigen Programmierschnittstellen sind umfangreich dokumentiert und werden direkt innerhalb der Entwicklungsumgebung bereitgestellt \autocite{legoreducationLEGOEducationSPIKEa}.
+
+\paragraph{Großer und mittelgroßer Winkelmotor}
+Es stehen insgesamt drei große und drei mittelgroße Winkelmotoren (offizielle Bezeichnungen: Technic\texttrademark{} Medium Angular Motor und Technic Large Angular Motor) mit integriertem Rotationssensor zur Verfügung. Die beiden Motortypen unterscheiden sich insbesondere in ihrer Geometrie, ihrem Eigengewicht sowie dem verfügbaren Drehmoment.  
+Beide Varianten ermöglichen die Erfassung sowohl relativer als auch absoluter Positionen im Bereich von $\pm \SI{180}{\degree}$. Die Auflösung beträgt $360$ Zählwerte pro Umdrehung. Die Positionsgenauigkeit liegt bei höchstens $\pm \SI{3}{\degree}$ und ergibt sich im Wesentlichen aus Sensortoleranzen sowie mechanischem Spiel im Getriebe. Die Aktualisierungsrate der Positionsmessung beträgt $\SI{100}{\hertz}$.  
+Weiterführende und detaillierte Angaben, insbesondere zur Motorleistung, sind den jeweiligen Datenblättern~\autocite{legoreducationLEGOEducationSPIKEb} und~\autocite{legoreducationLEGOEducationSPIKEc} zu entnehmen.
+
+\paragraph{Abstandssensor}
+Es steht ein Abstandssensor (offizielle Bezeichnung: Technic\texttrademark{} Distance Sensor) zur Verfügung, der zur berührungslosen Messung von Distanzen zu Objekten mittels Ultraschall dient. Der Sensor besitzt einen Öffnungswinkel von $\pm \SI{35}{\degree}$ und eine Auflösung von $\SI{1}{\milli\metre}$.  
+Es stehen zwei Messmodi zur Verfügung: ein Normalmodus sowie ein Schnellmodus. Im Normalmodus können Entfernungen im Bereich von $\SI{50}{\milli\metre}$ bis $\SI{2000}{\milli\metre}$ mit einer Messgenauigkeit von $\pm \SI{20}{\milli\metre}$ erfasst werden. Der Schnellmodus ist auf einen Messbereich von $\SI{50}{\milli\metre}$ bis $\SI{300}{\milli\metre}$ begrenzt und weist eine Genauigkeit von $\pm \SI{15}{\milli\metre}$ auf.  
+Weiterführende technische Angaben sind dem zugehörigen Datenblatt~\autocite{legoreducationLEGOEducationSPIKEd} zu entnehmen.
+
+\paragraph{Kraftsensor}
+Es steht ein Kraftsensor (offizielle Bezeichnung: Technic\texttrademark{} Force Sensor) zur Verfügung, mit dem Berührungs-, Tipp- und Kraftzustände erfasst werden können. Der Sensor unterstützt drei Betriebsarten: Berührungs-Modus, Tipp-Modus und Kraft-Modus.  
+Im Berührungs-Modus beziehungsweise Tipp-Modus liegt die Aktivierungszone im Bereich von $\SI{0}{\milli\metre}$ bis $\SI{2}{\milli\metre}$. Der Schwellwert ist firmwareseitig auf $\SI{1}{\milli\metre}$ mit einer Toleranz von $\pm \SI{0.5}{\milli\metre}$ festgelegt. Die erforderliche Aktivierungskraft beträgt $\SI{0.5}{\newton}$ bis $\SI{1.0}{\newton}$ bei einer Toleranz von $\pm 10\,\%$. Im Berührungs-Modus erfolgt die Sensorausgabe binär, wobei der Zustand entweder aktiviert oder nicht aktiviert ist. Im Tipp-Modus wird ein diskreter Ausgabewert im Bereich von $0$ bis $3$ bereitgestellt.  
+Im Kraft-Modus ermöglicht der Sensor die Messung aufgebrachter Kräfte. Die Aktivierungszone liegt hierbei zwischen $\SI{2}{\milli\metre}$ und $\SI{8}{\milli\metre}$, während der messbare Kraftbereich von $\SI{2.5}{\newton}$ bis $\SI{10}{\newton}$ reicht. Die Auflösung der Sensorausgabe beträgt $\SI{0.1}{\newton}$, wobei der maximale Ausgabewert auf $\SI{10}{\newton}$ begrenzt ist. Die Messgenauigkeit liegt bei $\pm \SI{0.65}{\newton}$.  
+Detaillierte Angaben sind dem zugehörigen Datenblatt~\autocite{legoreducationLEGOEducationSPIKEe} zu entnehmen.
+
+\paragraph{Farbsensor}
+Es stehen zwei Farbsensoren (offizielle Bezeichnung: Technic\texttrademark{}  Color Sensor) zur Verfügung. Diese ermöglichen die Erfassung von Farben, der Oberflächenreflektivität sowie der Umgebungshelligkeit.  
+Die optimale Messdistanz beträgt etwa $\SI{16}{\milli\metre}$ und ist abhängig von der Objektgröße, der Farbe sowie der Oberflächenbeschaffenheit. Die Farberkennung erfolgt wahlweise über RGB- und HSV-Werte oder über vordefinierte Farbkategorien.  
+Die Reflektivitätsmessung liefert Ausgabewerte im Bereich von $\SI{0}{\percent}$ für nicht reflektierende Oberflächen bis $\SI{100}{\percent}$ für stark reflektierende Oberflächen. Die Umgebungslichtmessung gibt Helligkeitswerte zwischen $\SI{0}{\percent}$ für dunkle und $\SI{100}{\percent}$ für helle Umgebungen aus.  
+Weitere detaillierte Angaben sind dem zugehörigen Datenblatt~\autocite{legoreducationLEGOEducationSPIKEf} zu entnehmen.
 
 \section{Grundlagen robotischer Systeme}
 \label{sec:roboter}
