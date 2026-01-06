@@ -204,3 +204,21 @@
 \def\rvMoveWhiteAux#1#2\relax{\rvMoveWhiteAt{#1}{#2}}
 \def\rvMarkFrameAux#1#2\relax{\rvMarkFrameAt{#1}{#2}}
 \def\rvFlipAux#1#2\relax{\rvFlipSymbol{\rvFileToX{#1}}{\rvRankToY{#2}}}
+
+% Matrix input to display values on board
+\providecommand{\rvValueMatrix}[8]{%
+	\rvValueMatrixRow{#1}{7}%
+	\rvValueMatrixRow{#2}{6}%
+	\rvValueMatrixRow{#3}{5}%
+	\rvValueMatrixRow{#4}{4}%
+	\rvValueMatrixRow{#5}{3}%
+	\rvValueMatrixRow{#6}{2}%
+	\rvValueMatrixRow{#7}{1}%
+	\rvValueMatrixRow{#8}{0}%
+}
+
+\def\rvValueMatrixRow#1#2{%
+	\foreach \v [count=\x from 0] in {#1}{%
+		\rvValueLabel{\x}{#2}{\v}%
+	}%
+}
