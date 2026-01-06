@@ -364,6 +364,27 @@ Nach dem Abschluss des gegnerischen Spielzugs beginnt erneut die Ausführung des
 \label{sec:loesungsansaetze}
 \todo[inline]{Für jede Teilfunktion mehrer Lösungsansätze präsentieren und diese Bewerten. Fokus auf Bestimmung des nächsten SPielzugs und RÜckfahr in die Ruheposition. Nutzweranalyse?}
 
+\todo[inline]{Tabelle mit Daten befüllen, Algorithmen vergleichen, Entscheidung begründen}
+Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sowie die errechneten Züge zwischen allen übereinstimmen und nur von der Suchtiefe sowie der Gewichtung abhängig sind, kann rein anhand des Zeit- und Speicherbedarfs der für diesen Anwendungsfall beste Suchalgorithmus gewählt werden. Für die Zeitkomplexität wird immer vom schlechtesten Fall der Sortierung des Zustandsraums ausgegangen. Der Zeitbedarf wird ebenfalls im schlechtesten Fall angegeben. Dieser war für jeden Algorithmus im mittleren Spielzustand, in dem sich die meiste Zeit aufgehalten wird.
+
+\begin{table}[hbt]
+	\centering
+	\captionabove[Vergleich von Suchalgorithmen]{Vergleich der Suchalgorithmen hinsichtlich Zeitbedarf, Speicherbedarf und Robustheit bei Ressourcenbegrenzung.}
+	\label{tab:algorithmus-vergleich}
+	
+	\renewcommand{\arraystretch}{1.5}
+	\setlength{\tabcolsep}{6pt}
+	
+	\begin{tabular}{p{4.5cm}|p{3.5cm} p{3.5cm} p{3.5cm}}
+		Algorithmus & Zeitkomplexität, Zeitbedarf & Speicherbedarf & Robustheit \\ \hline
+		Alpha-Beta-Pruning & $O(b^{d})$,  &  &   \\
+		Iterative Deepening & $O(b^{d})$ & &   \\
+		Move Ordering & $O(b^{d})$ &  &  \\
+		Negamax & $O(b^{d})$ &  &   \\
+		Negascout & $O(b^{d})$ &  &  \\
+	\end{tabular}
+\end{table}
+
 % Notizen: Einzelne Lösungenauftellen, diese Bewerten (Nutweranalyse), zusammenstellen zu einem GEsamtkonzept
 
 
