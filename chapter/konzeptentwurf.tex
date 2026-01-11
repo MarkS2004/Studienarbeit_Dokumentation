@@ -1,7 +1,7 @@
 \chapter{Systematischer Konzeptentwurf}
 \label{cha:konzeptentwurf}
 
-Der Konzeptentwurf folgt einem strukturierten Vorgehen nach dem Systems-Engineering-Ansatz, wie er in \autocite{schlueterGenericSystemsEngineering2023 } beschrieben ist. Ziel ist es, das technische System schrittweise zu entwickeln und die Komplexität durch eine klare inhaltliche Gliederung zu reduzieren. In diesem Kapitel wird ausgehend von der definierten Aufgabenstellung ein geeignetes Gesamtkonzept für einen autonom Othello spielenden Roboter erarbeitet.
+Der Konzeptentwurf folgt einem strukturierten Vorgehen nach dem Systems-Engineering-Ansatz, wie er in \autocite{schlueterGenericSystemsEngineering2023} beschrieben ist. Ziel ist es, das technische System schrittweise zu entwickeln und die Komplexität durch eine klare inhaltliche Gliederung zu reduzieren. In diesem Kapitel wird ausgehend von der definierten Aufgabenstellung ein geeignetes Gesamtkonzept für einen autonom Othello spielenden Roboter erarbeitet.
 
 Zunächst wird in Abschnitt~\ref{sec:ausgangssituation} die Ausgangssituation beschrieben. Diese umfasst den Spielaufbau, die geltenden Spielregeln sowie die technischen und organisatorischen Rahmenbedingungen. Die Festlegung dieser Randbedingungen erfolgte teamübergreifend, um ein einheitliches und vergleichbares Spiel zwischen den Robotersystemen sicherzustellen.
 Darauf aufbauend werden in Abschnitt~\ref{sec:anforderungen} die Anforderungen an das technische System definiert. Es wird zwischen funktionalen Anforderungen, nicht-funktionalen Anforderungen und Randbedingungen unterschieden. Diese Strukturierung dient der weiteren Konkretisierung der Aufgabenstellung, der Eingrenzung des Lösungsraums sowie als Grundlage für die spätere Verifikation und Bewertung des erarbeiteten Konzepts.
@@ -362,12 +362,30 @@ Nach dem Abschluss des gegnerischen Spielzugs beginnt erneut die Ausführung des
 
 \section{Auswahl und Bewertung geeigneter Lösungsansätze}
 \label{sec:loesungsansaetze}
-\todo[inline]{Für jede Teilfunktion mehrer Lösungsansätze präsentieren und diese Bewerten. Fokus auf Bestimmung des nächsten SPielzugs und RÜckfahr in die Ruheposition. Nutzweranalyse?}
+%\todo[inline]{Für jede Teilfunktion mehrer Lösungsansätze präsentieren und diese Bewerten. Fokus auf Bestimmung des nächsten SPielzugs und RÜckfahr in die Ruheposition. Nutzweranalyse?}
+%
+%\todo[inline]{Tabelle mit Daten befüllen, Algorithmen vergleichen, Entscheidung begründen}
 
-\todo[inline]{Tabelle mit Daten befüllen, Algorithmen vergleichen, Entscheidung begründen}
-Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sowie die errechneten Züge zwischen allen übereinstimmen und nur von der Suchtiefe sowie der Gewichtung abhängig sind, kann rein anhand des Zeit- und Speicherbedarfs der für diesen Anwendungsfall beste Suchalgorithmus gewählt werden. Für die Zeitkomplexität wird immer vom schlechtesten Fall der Sortierung des Zustandsraums ausgegangen. Der Zeitbedarf wird ebenfalls im schlechtesten Fall angegeben. Dieser war für jeden Algorithmus im mittleren Spielzustand, in dem sich die meiste Zeit aufgehalten wird.
+<<<<<<< HEAD
+=======
+Das zur Umsetzung zu wählende Konzept wird anhand der funktionalen Analyse des Systems festgelegt. Dazu werden verschiedene Lösungsansätze für die in~\ref{sec:funktionsanalyse} bestimmten Teilfunktionen aufgezeigt und bewertet. 
 
-\begin{table}[hbt]
+\paragraph{Erkennung des Startbefehls}
+\label{subsec:erkennung-startbefehl}
+
+Wie bereits diskutiert, muss zu Beginn der Partie ein manueller Startbefehl ausgeführt werden. Aufgrund der Hardwareeinschränkung des Hubs in Form von 6 Input/Output Ports \autocite{legoreducationLEGOEducationSPIKEd} ist eine Umsetzung in den Rahmenbedingungen bevorzugt. Gezwungenermaßen sind bereits ein Port für den Farbsensor, ein Port für den Motor zur Aktuation und gegebenenfalls die übrigen vier Ports für die Ansteuerung der Robotermechanik notwendig, weshalb sich ein Startbefehl über den Tastendruck eines externen Taster nicht re. Da die Benutzeroberfläche der digitalen Schachuhr \ref{fig:multi-player-chess-clock} eine Starttaste zur Verfügung stellt, lässt sich die Startbedingung durch das Überwachen des Spielzuges auf eine erstmalige Rotdetektion realisieren. Programmtechnisch sollte der Controller dafür vor einem Spiel zurückgesetzt werden, um das Programm neu zu laden und den Roboter in eine Ausgangsposition zu bringen. Diese Ruheposition soll die Nullposition des Roboters darstellen und sich darin über der Spielerschaltfläche der Schachuhr befinden, um den nächsten Zug zu erwarten. Sie sollte zudem reproduzierbar sein, da sie im Laufe einer Partie sehr oft anzufahren ist. Der gewählte Ansatz dreht sich somit hauptsächlich um die Überwachung der Schaltfläche.
+
+\paragraph{Erkennung der Spielsituation}
+\label{subsec:erkennung-spielsituation}
+
+Theoretisch stehen verschiedene Möglichkeiten zu Verfügung, die aktuelle Spielsituation zu erfassen. Durch eine Netzwerkanbindung könnte der Roboter die Position der Steine von dem verwendeten Tablet übertragen bekommen und in das gewünschte Format wandeln. Hierzu wäre eine Schnittstelle notwendig, um den Controller an das Tablet anzubinden, sowie ein Protokoll zur Datenübertragung. Des weiteren kann der Roboter jede einzelne Position des Spielfeldes abfahren, um jede Steinposition sofort zu erfassen und ohne Rechnung die Spielsituation zu sehen. Dies ist jedoch Zeitintensiv, da das Spielfeld 64 Felder besitzt. Unter der Annahme, der Roboter erkenne ein Feld pro Sekunde, verbringt er bereits über die Hälfte der Zeit des gesamten Spielzugs nur damit, die Situation zu erfassen. Dieser Ansatz kann optimiert werden, indem der digitale Klon des Spiels genutzt wird. Da zu jeder Zeit ohnehin bekannt sein muss, welche eigenen Züge durchgeführt werden können und dessen Folgen, so ist auch bekannt, welche Züge der Gegner durchführen kann. Dadurch muss nicht das gesamte Spielfeld eingelesen werden, sondern nur die Felder, auf denen ein Zug durchgeführt werden konnte. Anhand dessen wird dann der gegnerische Zug und die dadurch umzudrehenden Steine bestimmt.
+
+\paragraph{Bestimmung des nächsten Spielzugs}
+\label{subsec:bestimmung-spielzug}
+
+Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sowie die errechneten Züge zwischen allen übereinstimmen und nur von der Suchtiefe sowie der Gewichtung abhängig sind, kann rein anhand des Zeit- und Speicherbedarfs der für diesen Anwendungsfall beste Suchalgorithmus gewählt werden. Für die Zeitkomplexität wird immer vom schlechtesten Fall der Sortierung des Zustandsraums ausgegangen. Um den Zeit- sowie Speicherbedarf zu vergleichen, muss eine Suchtiefe bestimmt werden. Ab einer Suchtiefe von 3 konnte in den durchgeführten Tests kein Unterschied bei noch höherer Suchtiefe festgestellt werden. Das optimale Ergebnis ist somit bereits eindeutig und eine höhere Tiefe erzielt keinen Vorteil. Es wird der Durchschnitt der drei Spielstellungen aus \ref{cha:stand-der-technik} verglichen.
+
+\begin{table}[H]
 	\centering
 	\captionabove[Vergleich von Suchalgorithmen]{Vergleich der Suchalgorithmen hinsichtlich Zeitbedarf, Speicherbedarf und Robustheit bei Ressourcenbegrenzung.}
 	\label{tab:algorithmus-vergleich}
@@ -376,15 +394,35 @@ Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sow
 	\setlength{\tabcolsep}{6pt}
 	
 	\begin{tabular}{p{4.5cm}|p{3.5cm} p{3.5cm} p{3.5cm}}
-		Algorithmus & Zeitkomplexität, Zeitbedarf & Speicherbedarf & Robustheit \\ \hline
-		Alpha-Beta-Pruning & $O(b^{d})$,  &  &   \\
-		Iterative Deepening & $O(b^{d})$ & &   \\
-		Move Ordering & $O(b^{d})$ &  &  \\
-		Negamax & $O(b^{d})$ &  &   \\
-		Negascout & $O(b^{d})$ &  &  \\
+		Algorithmus & Zeitkomplexität, Zeitbedarf ($\mu$s) & Speicherbedarf (Bytes) & Robustheit \\ \hline
+		Alpha-Beta-Pruning & $O(b^{d})$, 70804 & 9490 & 0,365 \\
+		Iterative Deepening & $O(b^{d})$, 82531 & 10903 & 0,365 \\
+		Move Ordering & $O(b^{d})$, 101495 & 9159 & 0,365 \\
+		Negamax & $O(b^{d})$, 71298 & 9424 & 0,365 \\
+		Negascout & $O(b^{d})$, 76260 & 9608 & 0,365 \\
 	\end{tabular}
 \end{table}
 
+Der Zeitbedarf der einzelnen Algorithmen befindet sich in einem ähnlichen Rahmen von etwa einem Zehntel pro Sekunde, um den optimalen Zug zu berechnen. Im Kontext der Zugdauer ist dies nur ein kleiner Bruchteil, weshalb auf hierauf ein geringerer Fokus und somit eine geringere Gewichtung in der Nutzwertanalyse liegt. Der Speicherbedarf hingegen benötigt bereits eine beträchtliche Menge im Verhältnis zum gesamten Arbeitsspeicher des Controllers von 320 KiloByte \autocite{legoreducationLEGOEducationSPIKEd}. Da der Speicher einen begrenzten Spielraum lässt und der Zeitbedarf durch verschiedene Ansätze variiert und Optimierungspotenzial bietet, erhält der Speicherbedarf eine höhere Gewichtung.
+
+\todo[inline]{"Nutzwertanalyse" mit Gewichtung für Speicher und Zeit, Bezug zu Kapitel 3 herstellen}
+
+\paragraph{Ausführung des Spielzugs}
+\label{subsec:ausfuehrung-spielzug}
+
+\todo[inline]{Verweis auf Robotik Kapitel} 
+
+\paragraph{Rückfahrt in die Ruheposition}
+\label{subsec:rueckfahrt-ruhepos}
+
+\todo[inline]{Wiederholgenauigkeit, Fahrtweg}
+
+\paragraph{Beendigung des Spielzugs}
+\label{subsec:beendigung-spielzug}
+
+\todo[inline]{Betätigung der Schaltfläche mit Stift}
+
+>>>>>>> ae372558d54577306591d75e7064c1f68ab1009f
 % Notizen: Einzelne Lösungenauftellen, diese Bewerten (Nutweranalyse), zusammenstellen zu einem GEsamtkonzept
 
 
