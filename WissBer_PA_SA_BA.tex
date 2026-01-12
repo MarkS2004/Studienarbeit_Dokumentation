@@ -300,31 +300,31 @@ title={Online-Quellen}] % Alle Quellen vom Typ @online{}
 
 %\renewcommand{\acronymname}{Abkürzungsverzeichnis}
 %Achtung: Wenn kein Glossar verwendet wird, erscheint das Abkürzungverzeichnis nur, wenn beim Laden des Pkets glossaries die Option "nomain" verwendet wird.
-\printglossary[
-%nonumberlist,
-title=Abkürzungsverzeichnis,
-nopostdot,
-type=acronym]
-%\addcontentsline{toc}{chapter}{\acronymname}
-\ifthenelse{\boolean{@twoside}}{%
-	\cleardoubleoddpage
-}{%
-	%something false
-}%
-
-\input{pages/formelzeichen}				% Datei mit Einträgen für das Verzeichnis verwendeter Formelzeichen laden.
-\renewcommand{\nomname}{Verzeichnis der Formelzeichen}
-%\addcontentsline{toc}{chapter}{\nomname}
-%-------------
-\setlength{\nomlabelwidth}{.20\hsize}
-\renewcommand{\nomlabel}[1]{#1 \dotfill}
-\setlength{\nomitemsep}{-\parsep}
-\printnomenclature						% Erzeugen des Verzeichnisses der Formelzeichen
-\ifthenelse{\boolean{@twoside}}{%
-	\cleardoubleoddpage
-}{%
-	%something false
-}%
+%\printglossary[
+%%nonumberlist,
+%title=Abkürzungsverzeichnis,
+%nopostdot,
+%type=acronym]
+%%\addcontentsline{toc}{chapter}{\acronymname}
+%\ifthenelse{\boolean{@twoside}}{%
+%	\cleardoubleoddpage
+%}{%
+%	%something false
+%}%
+%
+%\input{pages/formelzeichen}				% Datei mit Einträgen für das Verzeichnis verwendeter Formelzeichen laden.
+%\renewcommand{\nomname}{Verzeichnis der Formelzeichen}
+%%\addcontentsline{toc}{chapter}{\nomname}
+%%-------------
+%\setlength{\nomlabelwidth}{.20\hsize}
+%\renewcommand{\nomlabel}[1]{#1 \dotfill}
+%\setlength{\nomitemsep}{-\parsep}
+%\printnomenclature						% Erzeugen des Verzeichnisses der Formelzeichen
+%\ifthenelse{\boolean{@twoside}}{%
+%	\cleardoubleoddpage
+%}{%
+%	%something false
+%}%
 \listoffigures 							% Erzeugen des Abbildungsverzeichnisses 
 %\ifthenelse{\boolean{@twoside}}{%
 %	\cleardoubleoddpage
