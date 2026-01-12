@@ -3,15 +3,15 @@
 
 % Um das antagonistische Ziel von Othello zu erreichen, versucht jeder Spieler immer den für sich bestmöglichen Spielzug durchzuführen. Da ein einzelner Spielzug kurzfristig belohnend sein kann, da viele gegnerische Steine überflügelt werden, jedoch in einem direkt oder erst später darauffolgenden Zug des Gegenspielers zu Nachteilen führen kann, sollte die Spielweise nicht darauf basieren, mit jedem Zug die maximale Anzahl an Steinen zu überflügeln. Vielmehr muss das Spiel langfristig geplant sein und sich bereits über zukünftige Züge Gedanken gemacht werden. Dies passiert als menschlicher Spieler unterbewusst, jedoch muss ein Roboter hierfür das Prinzip der Suchalgorithmen aus der Informatik anwenden. Diese Suchalgorithmen dienen dazu, einen systematischen Lösungsweg in einem Zustandsraum zu finden. Dieser Zustandsraum setzt sich so aus verschiedenen Zuständen und Übergängen zwischen diesen zusammen. Da der Gegenspieler in Othello mehr oder weniger unvorhersehbare Züge vornimmt, muss bei einem optimalen Suchalgorithmus anhand des aktuellen Spielfortschritts durch den Zustandsraum iteriert werden. Ein Ziel dieser Suchalgorithmen ist es, unnötige Rechnungen zu vermeiden, um den Suchaufwand zu reduzieren oder den kostengünstigsten Lösungsweg zu ermitteln, um an das gewünschte Ziel zu kommen. In diesem Fall ist das gewünschte Ziel, die Partie zu gewinnen, indem man mehr Steine der eigenen Farbe auf dem Spielfeld hat.
 
-Um das antagonistische Zielspiel Othello zu modellieren, strebt jeder Spieler an, in jedem Zug eine Entscheidung zu treffen, die seine Gewinnchancen maximiert. Kurzfristig kann das Überflügeln vieler gegnerischer Steine durch einen einzelnen Zug vorteilhaft erscheinen, jedoch können solche lokalen Maximierungsstrategien in unmittelbar folgenden oder späteren Zügen des Gegenspielers zu Nachteilen führen. Daher sollte die Strategie nicht ausschließlich darauf ausgerichtet sein, in jedem Zug die maximale Anzahl an Steinen zu erfassen, sondern vielmehr langfristig ausgerichtet sein und die Folgen zukünftiger Züge mit in Betracht zu ziehen. Während menschliche Spieler solche Überlegungen häufig intuitiv durchführen, erfordert ein Computergesteuerter Roboter die Anwendung von Suchverfahren aus der Informatik. Diese Suchalgorithmen dienen dazu, in einem Zustandsraum, bestehend aus möglichen Spielpositionen und den Übergängen zwischen ihnen, eine Sequenz von Zügen zu identifizieren, die zur Erreichung eines definierten Ziels führt. Da der Gegenspieler in Othello potenziell unvorhersehbare Züge ausführt, iterieren Suchalgorithmen über den Zustandsraum unter Berücksichtigung möglicher gegnerischer Antworten. Ein zentrales Ziel dieser Verfahren ist es, den Rechenaufwand zu minimieren, indem wenig vielversprechende Suchpfade eliminiert werden, und gleichzeitig den kosteneffizientesten Weg zur Zielerreichung zu ermitteln. In diesem Kontext besteht das Ziel darin, die Partie zu gewinnen, indem am Ende des Spiels eine größere Anzahl eigener Steine auf dem Spielfeld vorhanden ist. \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}
+Um das antagonistische Zielspiel Othello zu modellieren, strebt jeder Spieler an, in jedem Zug eine Entscheidung zu treffen, die seine Gewinnchancen maximiert. Kurzfristig kann das Überflügeln vieler gegnerischer Steine durch einen einzelnen Zug vorteilhaft erscheinen, jedoch können solche lokalen Maximierungsstrategien in unmittelbar folgenden oder späteren Zügen des Gegenspielers zu Nachteilen führen. Daher sollte die Strategie nicht ausschließlich darauf ausgerichtet sein, in jedem Zug die maximale Anzahl an Steinen zu erfassen, sondern vielmehr langfristig ausgerichtet sein und die Folgen zukünftiger Züge mit in Betracht zu ziehen. Während menschliche Spieler solche Überlegungen häufig intuitiv durchführen, erfordert ein Computergesteuerter Roboter die Anwendung von Suchverfahren aus der Informatik. Diese Suchalgorithmen dienen dazu, in einem Zustandsraum, bestehend aus möglichen Spielpositionen und den Übergängen zwischen ihnen, eine Sequenz von Zügen zu identifizieren, die zur Erreichung eines definierten Ziels führt. Da der Gegenspieler in Othello potenziell unvorhersehbare Züge ausführt, iterieren optimale Suchalgorithmen über den Zustandsraum unter Berücksichtigung möglicher gegnerischer Antworten. Ein zentrales Ziel dieser Verfahren ist es, den Rechenaufwand zu minimieren, indem redundante oder wenig vielversprechende Suchpfade eliminiert werden, und gleichzeitig den kosteneffizientesten Weg zur Zielerreichung zu ermitteln. In diesem Kontext besteht das Ziel darin, die Partie zu gewinnen, indem am Ende des Spiels eine größere Anzahl eigener Steine auf dem Spielfeld vorhanden ist. \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}
 
 Als Vergleichsobjekt zwischen verschiedenen Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken, um den zu durchsuchenden Zustandsraum zu reduzieren. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und der nicht der gesamte Zustandsraum mit allen möglichen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}.
 
-Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums zu vernachlässigen und vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
+Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums zu vernachlässigen und vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
 
 Leistungsmessgrößen geben den Suchalgorithmen konkrete Bewertungen anhand ihres Speicherbedarfs, in Form von den benötigten Bytes, ihrer jeweiligen Zeitkomplexität anhand von Landau-Symbolen (englisch big O notation) und durch die Güte der Heuristik anhand von Gütefunktionen, wie effektiv der Suchalgorithmus den Zustandssuchraum einschränkt, indem sie die Zustände bewerten \autocite[Kap.~5.2]{russellArtificialIntelligenceModern2016}.
 
-In der Informatik werden die Landau Symbole benutzt, um Algorithmen anhand des Wachstums ihres Zeitbedarfs in Abhängigkeit des Wachstums der Eingangsgrößen zu klassifizieren. Dabei werden zwei Funktionen $f(n)$ als zu bestimmende Funktion und $g(n)$ als Vergleichsfunktion angenommen. Der Zusammenhang wird dann als $f(n) \in O(g(n))$ dargestellt und sagt aus, dass die Funktion $f$ höchstens genauso schnell wie $g$ wächst. Konstanten werden dabei in der Regel vernachlässigt, da sie das Wachstumsverhalten nicht verändern \autocite[Kap.~3]{bachmannAnalytischeZahlentheorieDargestellt1894}.
+In der Informatik werden die Landau Symbole benutzt, um Algorithmen anhand des Wachstums ihres Zeitbedarfs in Abhängigkeit des Wachstums der Eingangsgrößen zu klassifizieren. Dabei werden zwei Funktionen $f(n)$ als zu bestimmende Funktion und $g(n)$ als Vergleichsfunktion angenommen. Der Zusammenhang wird dann als $f(n) \in O(g(n))$ dargestellt und sagt aus, dass die Funktion $f$ höchstens genauso schnell wie $g$ wächst. Konstanten werden dabei in der Regel vernachlässigt, da sie das Wachstumsverhalten verändern \autocite[Kap.~3]{bachmannAnalytischeZahlentheorieDargestellt1894}.
 
 Als Beispiel wird ein Feld mit $n$ Elementen angenommen, in dem ein bestimmter Wert $x$ gesucht wird, der sich an einer zufälligen Stelle befindet. Das Feld wird linear durchsucht, indem jedes Element nacheinander überprüft wird. Daraus ergeben sich verschiedene Laufzeiten, je nachdem, an welcher Stelle sich $x$ befindet:
 
@@ -102,6 +102,7 @@ Des weiteren spielt die Gütefunktion und die Gewichtung der Faktoren eine trage
 		{-20,-40,-5,-5,-5,-5,-40,-20}
 		{120,-20,20,5,5,20,-20,120}
 	\end{tikzpicture}
+	\vspace{0.5\baselineskip}
 	\caption[Gewichtungsmatrix]{Die Gewichtungsmatrix auf dem Spielbrett dargestellt.}
 	\label{fig:gewichtungsmatrix}
 \end{figure}
@@ -174,12 +175,10 @@ Der Minimax-Algorithmus kann als Übergeordnet angesehen werden, auf dem andere 
 
 Nun wird an jedem Min-Knoten davon ausgegangen, dass immer der geringste Wert gewählt wird. In diesem Fall gilt für den linken Knoten (a) $min(3, 5) = 3$ und für den rechten Knoten (b) $min(2, 9) = 2$. Für den Max-Spieler bleiben somit die Knoten 2 an Stelle (b) und 3 an Stelle (a) übrig. Der Algorithmus entscheidet sich folglich für den linken Pfad, da $max(3, 2) = 3$. In Othello kann für die Zahlenwerte die Heuristik verwendet werden, die jeden Zustand bewertet.
 
-Die exakten Zahlenwerte der Ergebnisse, die auf den folgenden Seiten in Diagrammen dargestellt sind, sind in den Tabellen \ref{tab:all-times-grouped} für die Laufzeiten und \ref{tab:all-memory-grouped} für den Speicherbedarf nachzulesen.
-
 \newpage
 \paragraph{Alpha-Beta-Pruning}
 \label{subsec:alpha-beta-pruning}
- ist eine Optimierung des Minimax‑Algorithmu. Der Algorithmus verwaltet zwei Schranken $\alpha$ und $\beta$, welche die beste bisher gefundene Bewertung für den Max‑ bzw. Min‑Spieler repräsentieren. Diese beiden Schranken bestimmen nun, welcher Pfad nicht weiterverfolgt werden muss. Anhand des Beispiels \ref{fig:minimax-baum} sind die Startwerte $\alpha = -\inf$ und $\beta = \inf$. Zuerst wird am linken Min-Knoten geprüft auf $min(\inf, 3) = 3 = \beta$ und darauf $min(3, 5) = 3 = \beta$. Am oberen Max-Knoten wird $max(-\inf, 3) = 3 = \alpha$ bestimmt. Für den rechten Ast wird dasselbe Verfahren durchgeführt, wodurch sich $\beta = 2$ ergibt. Anhand der Abbruchbedingung $\alpha \geq \beta$ kann nun bestimmt werden, dass die Suche im rechten Ast abgebrochen werden kann, falls dieser weiterführen würde. So kann die Anzahl der auszuwertenden Zustände erheblich reduziert werden \autocite[Kap.~5.3]{russellArtificialIntelligenceModern2016}.
+Alpha‑Beta‑Pruning ist eine Optimierung des Minimax‑Algorithmu. Der Algorithmus verwaltet zwei Schranken $\alpha$ und $\beta$, welche die beste bisher gefundene Bewertung für den Max‑ bzw. Min‑Spieler repräsentieren. Diese beiden Schranken bestimmen nun, welcher Pfad nicht weiterverfolgt werden muss. Anhand des Beispiels \ref{fig:minimax-baum} sind die Startwerte $\alpha = -\inf$ und $\beta = \inf$. Zuerst wird am linken Min-Knoten geprüft auf $min(\inf, 3) = 3 = \beta$ und darauf $min(3, 5) = 3 = \beta$. Am oberen Max-Knoten wird $max(-\inf, 3) = 3 = \alpha$ bestimmt. Für den rechten Ast wird dasselbe Verfahren durchgeführt, wodurch sich $\beta = 2$ ergibt. Anhand der Abbruchbedingung $\alpha \geq \beta$ kann nun bestimmt werden, dass die Suche im rechten Ast abgebrochen werden kann, falls dieser weiterführen würde. So kann die Anzahl der auszuwertenden Zustände erheblich reduziert werden \autocite[Kap.~5.3]{russellArtificialIntelligenceModern2016}.
 
 \begin{figure}[H]
 	\centering
@@ -219,12 +218,12 @@ Die exakten Zahlenwerte der Ergebnisse, die auf den folgenden Seiten in Diagramm
 	\label{fig:alphabeta-performance}
 \end{figure}
 
-Dieser erste Algorithmus setzt eine Grundlinie, an der sich bei den anderen Algorithmen orientiert werden kann, da er die einfache Verbesserung des Minimax-Algorithmus in dieser Untersuchung ist. Bereits hier ist das exponentielle Wachstum des Zeitbedarfs, sowie das lineare Wachstum des Speicherbrauchs festzustellen.
 
 \newpage
+\todo[inline]{Texte anpassen und besser erklären, auf Ergebnis eingehen, Quellen}
 \paragraph{Iterative Deepening}
 \label{subsec:iterative-deepening}
-verwendet den implementierten Alpha-Beta-Algorithmus mit, jedoch sucht er nicht von Anfang an in einer festen Tiefe. Hingegen startet er bei einer Tiefe von 1 und erhöht die Suchtiefe mit jedem Durchlauf. So wird immer der aktuell beste Zug berechnet, ohne auf die gesamte Berechnung der höchsten Tiefe warten zu müssen. Dies ermöglicht es, theoretisch schon früher abzubrechen, falls ab einer gewissen Tiefe kein anderes Ergebnis errechnet wird. Die Anwendung ist stark von der tatsächlich benötigten Tiefe abhängig und ob diese im Laufe des Spiels variiert, wodurch Ressourcen je nach Situation eingespart werden könnten. In dieser Anwendung wird jede Tiefe bis zur Zieltiefe ohne Abbruchbedingung durchgerechnet \autocite[Kap.~3.5]{russellArtificialIntelligenceModern2016}.  
+Iterative Deepening kombiniert Tiefensuche mit schrittweise erhöhter Grenztiefe: Zunächst wird bis Tiefe 1 gesucht, dann bis Tiefe 2 usw., bis ein Zeitlimit erreicht ist. Diese Strategie liefert in begrenzter Zeit stets eine aktuelle beste Lösung und verbessert zugleich die Reihenfolge der Züge für spätere Alpha‑Beta‑Schnitte, da Ergebnisse früherer Suchen als Heuristiken dienen \autocite[Kap.~3.5]{russellArtificialIntelligenceModern2016}.  
 
 \begin{figure}[H]
 	\centering
@@ -264,12 +263,11 @@ verwendet den implementierten Alpha-Beta-Algorithmus mit, jedoch sucht er nicht 
 	\label{fig:iterdeep-performance}
 \end{figure}
 
-Es ergibt sich, dass der Iterative Deepening Algorithmus somit für jede Zieltiefe, zusätzlich zur selben Zeit wie das Alpha-Beta-Pruning, die Zeit wie das Alpha-Beta-Pruning für alle vorherigen Suchtiefen benötigt, also $T_{ID}^d=T_{AB}^d+T_{AB}^{d-1}+\dots+T_{AB}^1$. Im Speicherverbrauch gibt es dieses Verhalten nicht, jedoch benötigt Iterative Deepening dennoch mehr Speicher als Alpha-Beta-Pruning allein.
 
 \newpage
 \paragraph{Move Ordering}
 \label{subsec:move-ordering}
-ist ebenfalls eine Abwandlung des Alpha-Beta-Pruning. Bei Alpha-Beta-Pruning spielt die Suchreihenfolge eine essenzielle Rolle im Zeitbedarf. Wenn die besten Züge zuerst geprüft werden können, können auch viele Äste frühzeitig verworfen werden. Dazu sortiert der Algorithmus zuerst die möglichen Züge grob nach ihrer Qualität beziehungsweise im Sinn von Othello nach ihrer heuristischen Bewertung in der ersten Suchtiefe, also den aktuell möglichen Zügen. Daraufhin wird in den folgenden Suchtiefen Alpha-Beta-Pruning angewendet. \autocite[Kap.~5.3.1]{russellArtificialIntelligenceModern2016}.  
+Move Ordering bezeichnet Strategien zur Sortierung der Züge vor der Bewertung, sodass zuerst vielversprechende Züge untersucht werden. Eine gute Zugreihenfolge erhöht die Wahrscheinlichkeit früher Alpha‑Beta‑Schnitte und reduziert so die Gesamtzahl der expandierten Knoten. Typische Heuristiken berücksichtigen beispielsweise starke heuristische Bewertungen, Killer‑Moves oder Ergebnisse aus vorherigen Suchtiefen \autocite[Kap.~5.3.1]{russellArtificialIntelligenceModern2016}.  
 
 \begin{figure}[H]
 	\centering
@@ -309,12 +307,11 @@ ist ebenfalls eine Abwandlung des Alpha-Beta-Pruning. Bei Alpha-Beta-Pruning spi
 	\label{fig:moveorder-performance}
 \end{figure}
 
-Grundsätzlich ist zu erkennen, dass in dieser Untersuchung erst ab einer Suchtiefe von 5 ein Zeitvorteil festgestellt werden kann. Dieser hingegen ist signifikant gegenüber den anderen Algorithmen, da bereits frühzeitig große Teile verworfen werden können, die erst auf höherer Suchtiefe ausgezahlt machen. Im Speicherbrauch jedoch ist bereits bei geringeren Suchtiefen ein Vorteil zu erkennen, auch wenn dieser nicht dasselbe signifikante Ausmaß annimmt.
 
 \newpage
 \paragraph{Negamax}
 \label{subsec:negamax}
-ist, so wie auch Iteration Deepening und Move Ordering, eine Abwandlung des Alpha-Beta-Pruning. Die formale Funktionsweise entspricht der eines Minimax-Algorithmus, jedoch wird hier nicht von einem Max- und Min-Spieler ausgegangen, sondern einem einheitlichen Max-Spieler. Da nun für beide Spieler immer ein maximales Ergebnis erzielt werden möchte, wird das Vorzeichen für die Bewertungsfunktion umgedreht. So bedeutet ein positiver Wert ein Vorteil und ein negativer Wert ein Nachteil. Dies ermöglicht eine simplere Implementierung \autocite{abdelbarAlphaBetaPruningAlthofers2012}.
+Negamax ist eine Variante des Minimax‑Algorithmus, die die Symmetrie zweier Spieler in Nullsummenspielen ausnutzt. Anstelle separater Max‑ und Min‑Funktionen wird ein einheitlicher Max‑Operator verwendet, wobei die Bewertung des Gegners als negative Bewertung aus Sicht des aktuellen Spielers dargestellt wird. Dies vereinfacht die Implementierung und entspricht formal Minimax unter der Nullsummenbedingung.
 
 \begin{figure}[H]
 	\centering
@@ -354,12 +351,11 @@ ist, so wie auch Iteration Deepening und Move Ordering, eine Abwandlung des Alph
 	\label{fig:negamax-performance}
 \end{figure}
 
-Dieser Zusammenhang lässt sich an den Messungen erkennen, da die Werte annähernd exakt mit denen des Alpha-Beta-Pruning übereinstimmen. In dieser Implementierung bedeutet dies, dass zwischen diesen beiden Algorithmen nur anhand der persönlichen Präferenz in Form von Kompaktheit des Codes oder der klaren Trennung der beiden Spieler entschieden werden könnte.
 
 \newpage
 \paragraph{Negascout}
 \label{subsec:negascout}
-ist eine Weiterentwicklung von Negamax. Um die Anzahl der zu untersuchenden Knoten weiter zu reduzieren, wir die Annahme getroffen, dass der erste untersuchte Zug der beste ist. Das bedeutet, dass nur der erste Ast in der Liste an Zügen komplett nach dem Verfahren des Negamax untersucht wird. Die anderen Züge in der obersten Ebene werden nur mit einem Nullfenster überprüft, das aussagt, ob einer dieser Züge besser wäre, als der exakte Wert des ersten Asts, jedoch liefert dies noch keinen exakten Wert für den gesamten darauffolgenden Ast. Falls der Zug nicht besser ist, wird der Zug verworfen und die Unterknoten nicht weiter untersucht. Wenn der Zug jedoch besser ist, wird nochmals der komplette Ast auf den genauen Wert geprüft \autocite{plaatBestfirstFixeddepthMinimax1996}.
+Negascout ist eine Alpha‑Beta‑Variante innerhalb des Negamax‑Frameworks, die durch den Einsatz schmaler „Nullfenster“ Suchintervalle versucht, zusätzliche Schnittpunkte zu erzeugen. Der erste Zug wird mit vollem Fenster untersucht, während nachfolgende Züge zunächst mit einem minimalen Fenster geprüft werden. Nur wenn diese Prüfung scheitert, werden vollständige Suchen ausgeführt. Dies kann im besten Fall die Effizienz gegenüber klassischem Alpha‑Beta steigern, wenn die Zugreihenfolge gut ist.  
 
 \begin{figure}[H]
 	\centering
@@ -399,96 +395,48 @@ ist eine Weiterentwicklung von Negamax. Um die Anzahl der zu untersuchenden Knot
 	\label{fig:negascout-performance}
 \end{figure}
 
-Anhand des Zeitbedarfs ist erkennbar, dass eine Zeitersparnis stark von Spielzustand, und somit der Menge der Verzweigungen, und der Suchtiefe abhängt. Bei niedrigen Suchtiefen wird sogar mehr Zeit benötigt, da der Algorithmus durch die sehr ausführliche Suche am Anfang mehr prüfen muss im Vergleich zu den anderen Algorithmen. Bei größerer Suchtiefe kann zudem auch mehr verworfen werden, wenn einer der oberen Züge schon ein geringeres Ergebnis liefert.
-
-\begin{table}[H]
-	\centering
-	\small
-	\caption{Laufzeiten in $\mu$s pro Suchtiefe für alle Algorithmen}
-	\label{tab:all-times-grouped}
-	\renewcommand{\arraystretch}{1.3}
-	\setlength{\tabcolsep}{4pt}
-	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
-		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
-		\multirow{3}{*}{AlphaBeta}
-		& Anfang & 2.179 & 8.412 & 62.315 & 310.785 & 2.111.972 \\
-		& Mitte  & 2.975 & 10.354 & 117.572 & 425.988 & 4.989.373 \\
-		& Ende   & 1.949 & 5.047 & 32.526 & 78.932 & 338.372 \\ \hline
-		\multirow{3}{*}{IterDeep}
-		& Anfang & 2.279 & 10.617 & 74.994 & 390.209 & 2.521.484 \\
-		& Mitte  & 2.965 & 13.457 & 132.964 & 567.151 & 5.639.908 \\
-		& Ende   & 2.105 & 7.221 & 39.634 & 118.971 & 463.935 \\ \hline
-		\multirow{3}{*}{MoveOrder}
-		& Anfang & 4.436 & 28.899 & 97.354 & 405.391 & 1.178.975 \\
-		& Mitte  & 5.568 & 43.298 & 150.109 & 656.074 & 2.292.903 \\
-		& Ende   & 3.543 & 15.955 & 57.021 & 154.632 & 408.477 \\ \hline
-		\multirow{3}{*}{Negamax}
-		& Anfang & 2.207 & 8.354 & 63.469 & 316.436 & 2.124.191 \\
-		& Mitte  & 2.873 & 10.285 & 118.282 & 432.783 & 5.011.795 \\
-		& Ende   & 1.936 & 5.070 & 32.142 & 78.696 & 339.006 \\ \hline
-		\multirow{3}{*}{Negascout}
-		& Anfang & 2.362 & 8.919 & 52.686 & 268.206 & 1.235.961 \\
-		& Mitte  & 3.010 & 14.207 & 140.836 & 507.567 & 3.910.554 \\
-		& Ende   & 2.196 & 5.838 & 35.259 & 101.064 & 384.424 \\
-	\end{tabular}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\small
-	\caption{Speicherverbrauch in Bytes pro Suchtiefe für alle Algorithmen}
-	\label{tab:all-memory-grouped}
-	\renewcommand{\arraystretch}{1.3}
-	\setlength{\tabcolsep}{4pt}
-	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
-		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
-		\multirow{3}{*}{AlphaBeta}
-		& Anfang & 5.609 & 8.443 & 9.585 & 11.389 & 13.701 \\
-		& Mitte  & 5.336 & 6.961 & 9.550 & 11.502 & 13.468 \\
-		& Ende   & 5.304 & 6.913 & 9.336 & 11.251 & 13.030 \\ \hline
-		\multirow{3}{*}{IterDeep}
-		& Anfang & 5.840 & 8.091 & 10.909 & 12.820 & 15.078 \\
-		& Mitte  & 6.448 & 8.803 & 10.998 & 12.894 & 14.850 \\
-		& Ende   & 6.080 & 8.400 & 10.803 & 12.718 & 14.366 \\ \hline
-		\multirow{3}{*}{MoveOrder}
-		& Anfang & 5.632 & 7.337 & 9.136 & 10.673 & 12.712 \\
-		& Mitte  & 5.738 & 7.417 & 9.235 & 10.802 & 12.413 \\
-		& Ende   & 5.649 & 7.247 & 9.106 & 10.592 & 12.274 \\ \hline
-		\multirow{3}{*}{Negamax}
-		& Anfang & 5.064 & 6.896 & 9.399 & 11.316 & 13.626 \\
-		& Mitte  & 5.336 & 6.961 & 9.551 & 11.502 & 13.454 \\
-		& Ende   & 5.304 & 6.913 & 9.321 & 11.275 & 13.029 \\ \hline
-		\multirow{3}{*}{Negascout}
-		& Anfang & 5.248 & 7.032 & 9.489 & 11.621 & 13.704 \\
-		& Mitte  & 5.408 & 7.330 & 9.786 & 11.783 & 13.796 \\
-		& Ende   & 5.376 & 7.083 & 9.549 & 11.477 & 13.404 \\
-	\end{tabular}
-\end{table}
-
 \section{Nicht betrachtete Algorithmen}
 \label{sec:nicht-betrachtete-algorithmen}
 
-Abgesehen von den untersuchten Algorithmen, die auf dem simplen Minimax-Algorithmus aufbauen, gibt es weitere fortgeschrittene Algorithmen, die den Rahmen dieser Arbeit überschreiten, aufgrund von Ressourcenbegrenzungen der geplanten Hardware, sowie der Umsetzungskomplexität. Aus Gründen der Vollständigkeit werden diese trotz dessen erwähnt, da diese unter anderen Rahmenbedingungen Nützlichkeit erweisen können.
-
-\paragraph{MTDF}
+\paragraph{MTD(F) (Alpha-Beta-Suche)}
 \label{subsec:mtdf-alpha-beta}
 
- steht für Memory-enhanced Test Driver und ist eine Variante der Alpha-Beta-Suche, die durch wiederholte, eng begrenzte Suchvorgänge den Zustandsraum durchsucht. Anstatt sofort einen genauen Wert zu berechnen, wird eine Schätzung als Startpunkt genommen, wovon aus die obere und untere Schranke so lange angepasst wird, bis die exakte Bewertung erreicht ist. Der Algorithmus nutzt dafür Transpositionstabellen, um bereits berechnete Knoten zwischenzuspeichern \autocite{plaatBestfirstFixeddepthMinimax1996}. Dafür wird kontinuierlich Speicher benötigt, welcher auf dem verwendeten eingebetteten System nur begrenzt zur Verfügung steht. Wenn nicht alle nötigen Knoten gespeichert werden können wird die Suche ineffizient.
+\todo[inline]{Texte anpassen und besser erklären, Quellen}
+MTD(F) ist eine Variante der Alpha-Beta-Suche, die durch wiederholte, eng begrenzte Suchvorgänge den Suchbaum effizienter durchsucht. Die Methode zielt darauf ab, die exakten Bewertungswerte von Knoten schneller zu bestimmen.  
+Für Anwendungen mit stark eingeschränkten Speicher- und Zeitressourcen kann die wiederholte Suche und die Notwendigkeit, Zwischenergebnisse zwischenzuspeichern, den Rechenaufwand erhöhen, was die Einsatzfähigkeit einschränkt.
 
 \paragraph{Q-Learning}
 \label{subsec:q-learning}
- ist ein lernbasierter Ansatz auf Basis von bestärkendem Lernen. Bei bestärkendem Lernen führt eine künstliche Intelligenz selbstständig Aktionen durch und wird darauf für die Entscheidungen belohnt oder bestraft. Dieser Ansatz basiert auf der heuristischen Methode des Versuch und Irrtum, bei dem so lange Lösungswege getestet werden, bis ein geeigneter gefunden wurde \autocite{sutton2018reinforcement}. Q-Learning trifft dabei Entscheidungen, ohne explizit Spielregeln oder Strategien vorzugeben. In einer Q-Tabelle werden alle möglichen Kombinationen an Zuständen und Entscheidungen mit der erhaltenen Belohnung gespeichert \autocite{TechnicalNoteQLearning1992}. Eine Solche Q-Tabelle benötigt enorme Speicherkapazität und schnelle Speicherzugriffe, die in gewählten System nicht zur Verfügung stehen. Das initiale Lernen der KI könnte auf einem anderen Rechner erfolgen, jedoch würde dies dennoch enorme Zeit in Anspruch nehmen. Für die Anwendung in Othello wäre hier der Nutzen nicht genug gegeben.
+Q-Learning ist ein modellfreies Reinforcement-Learning-Verfahren, das Aktionen auf Basis von Zuständen bewertet und durch Belohnungssignale eine Politik erlernt.  
+In Szenarien mit begrenzten Ressourcen kann die Notwendigkeit, große Q-Tabellen oder neuronale Approximatoren für alle möglichen Spielzustände zu verwalten, schnell zu Speicher- und Rechenproblemen führen.
 
-\paragraph{Multi Prob Cut}
+\paragraph{Multi Prob Cut (MPC)}
 \label{subsec:multi-prob-cut}
- ist eine Technik zur Reduzierung der Anzahl von Knoten in Spielbäumen, indem statistische Wahrscheinlichkeiten genutzt werden, um Knoten frühzeitig zu verwerfen. Dazu werden Daten von Knoten gleicher Tiefe und ähnlicher Struktur gesammelt. Anhand dieser gesammelten Daten schätzt der Algorithmus, ob ein Verwerfen des aktuellen Knoten wahrscheinlich ist. In Abhängigkeit dieser Wahrscheinlichkeit wird dies durchgeführt \autocite{jiang2003first}. Dies führt dazu, dass der Algorithmus weniger zuverlässig wird, wenn das Wahrscheinlichkeitsmodell ungenau ist. Auch hier wird wieder viel Speicher benötigt, um die historischen Daten zu hinterlegen, zusätzlich ist noch ein umfangreiches Feintunen der Wahrscheinlichkeiten nötig, um den Algorithmus zuverlässig zu machen.
+Multi Prob Cut ist eine Technik zur Reduzierung der Anzahl von Knoten in Spielbäumen, indem statistische Wahrscheinlichkeiten genutzt werden, um Knoten frühzeitig zu verwerfen.  
+Die Methode setzt umfangreiche statistische Berechnungen voraus, die bei limitierten Rechenkapazitäten den Vorteil der Schnittmethode teilweise neutralisieren.
 
-\paragraph{A*-Suche}
+\paragraph{A*-Search-Algorithm}
 \label{subsec:a-star-search}
- ist ein Suchalgorithmus mit primärem Fokus auf Pfadfindung und Graphen und weniger in der Spieltheorie aufzufinden. Er basiert auf dem Dijkstra-Algorithmus. Dieser dient dazu, den kürzesten Weg von einem Startknoten zu allen anderen Knoten in einem Graphen zu finden. Stark vereinfacht findet dieser durch das Besuchen aller Knoten und der Betrachtung dessen Nachbarknoten statt \autocite[S.~269-271]{dijkstra1959note}. Anwendungen hierfür sind häufig in Netzwerken oder Navigation. Da es in Othello hingegen keine Überschneidungen der Pfade gibt und ein theoretischer kürzester Weg zu einem Ende des Spiels nur von sehr geringer Relevanz ist, ist auch die Anwendung der A*-Suche mithilfe von Heuristiken, welche die Suche effizienter machen, nicht sinnvoll \autocite{4082128}.
+A*-Suche verwendet heuristische Bewertung, um den Weg von einem Startzustand zu einem Zielzustand effizient zu finden, wobei sowohl Kosten als auch geschätzte Restkosten berücksichtigt werden.  
+Für komplexe Spielbäume wie Othello wächst die Zahl der zu bewertenden Zustände exponentiell, sodass der Speicherbedarf für die offene und geschlossene Liste schnell die verfügbaren Ressourcen überschreiten kann.
 
-\paragraph{Monte-Carlo-Tree-Search}
+\paragraph{Min-Max}
+\label{subsec:min-max}
+Min-Max ist ein deterministischer Entscheidungsalgorithmus für Zwei-Personen-Spiele, der alle möglichen Züge und Gegenreaktionen simuliert, um den optimalen Zug zu bestimmen.  
+Ohne Optimierungen wie Alpha-Beta-Schnitt führt die vollständige Exploration des Spielbaums bei Othello zu einer exponentiell steigenden Anzahl von Zuständen, was die Anwendung auf begrenzter Hardware erschwert.
+
+\paragraph{Monte-Carlo-Tree-Search (MCTS)}
 \label{subsec:mcts}
- bewertet Züge durch wiederholte, zufällige Simulationen des Spiels und aktualisiert die Knotenwerte entsprechend der erzielten Ergebnisse. Dazu wird zu Beginn ein Wurzelknoten ausgewählt, der vielversprechend erscheint. Darauf wird an jedem Knoten ein Kindknoten gewählt, der einen Zug repräsentiert. Ausgehend hiervor werden zufällig oder heuristisch Knoten bis zum Ende des Spiels ausgewählt. Das Ergebnis des Spiels ist im Falle von Othello ein Sieg, eine Niederlage oder ein Remis. Ausgehend von dem Ergebnis wird die Qualität des Zuges geschätzt. Für zukünftige Iterationen werden die Entscheidungen dann auf dieser Grundlage gewichtet. Ein Kernbestandteil der Monte-Carlo-Tree-Search ist das Prinzip von Upper Confidence Bounds applied to Tree Search. Das Prinzip dient dazu, anhand von der Balance zwischen Ausbeutung und Erkundung den besten Kindknoten zu ermitteln. Ausbeutung steht hierbei für bisher als positiv angesehene Knoten und Erkundung für wenig besuchte Knoten. Anhand der Formel \linebreak $\text{UCT}_i = \frac{w_i}{n_i} + c \sqrt{\frac{\ln N}{n_i}}$ wird die Attraktivität eines bestimmten Kindknotens errechnet. Dazu werden dessen bisheriger Erfolg $w_i$, die Anzahl der Besuche $n_i$, die Anzahl der Besuche des Elternknotens $N$ und die Gewichtung der Erkundung $c$ verwendet  \autocite{browne2012survey}. Ähnlich wie bei Multi Prob Cut wird hierfür viel Zeit benötigt, um eine optimale Simulationsstrategie zu erzielen, sowie viele Simulationen selbst, um stabile Ergebnisse zu erhalten.
+MCTS bewertet Züge durch wiederholte, zufällige Simulationen des Spiels und aktualisiert die Knotenwerte entsprechend der erzielten Ergebnisse.  
+Die Zahl der erforderlichen Simulationen für eine zuverlässige Bewertung kann bei ressourcenbeschränkten Systemen zu langen Wartezeiten oder unvollständigen Bewertungen führen.
+
+\paragraph{Upper Confidence Bounds (applied to Tree Search)}
+\label{subsec:uct-tree-search}
+Die Upper-Confidence-Bounds-Methode wählt Knoten in einem Suchbaum basierend auf dem Upper-Confidence-Bound-Prinzip, das Exploration und Exploitation balanciert.  
+Die Berechnung und Aktualisierung der statistischen Werte für jeden Knoten beansprucht Speicher und Rechenleistung, was die praktische Anwendbarkeit in Umgebungen mit begrenzten Ressourcen einschränkt.
+
+
+
+
 
 % Referenzsatz: Auf Basis der spieltheoretischen Einordnung als deterministisches Zwei-Personen-Nullsummenspiel mit vollständiger Information kann Othello als adversarielles Suchproblem modelliert werden. Aufgrund der hohen Zustandsraumkomplexität sind klassische Minimax-basierte Verfahren nur in Verbindung mit Suchbaumreduktion, Tiefenbegrenzung und heuristischen Bewertungsfunktionen praktisch einsetzbar.
