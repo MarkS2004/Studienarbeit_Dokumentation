@@ -5,9 +5,9 @@
 
 Um das antagonistische Zielspiel Othello zu modellieren, strebt jeder Spieler an, in jedem Zug eine Entscheidung zu treffen, die seine Gewinnchancen maximiert. Kurzfristig kann das Überflügeln vieler gegnerischer Steine durch einen einzelnen Zug vorteilhaft erscheinen, jedoch können solche lokalen Maximierungsstrategien in unmittelbar folgenden oder späteren Zügen des Gegenspielers zu Nachteilen führen. Daher sollte die Strategie nicht ausschließlich darauf ausgerichtet sein, in jedem Zug die maximale Anzahl an Steinen zu erfassen, sondern vielmehr langfristig ausgerichtet sein und die Folgen zukünftiger Züge mit in Betracht zu ziehen. Während menschliche Spieler solche Überlegungen häufig intuitiv durchführen, erfordert ein Computergesteuerter Roboter die Anwendung von Suchverfahren aus der Informatik. Diese Suchalgorithmen dienen dazu, in einem Zustandsraum, bestehend aus möglichen Spielpositionen und den Übergängen zwischen ihnen, eine Sequenz von Zügen zu identifizieren, die zur Erreichung eines definierten Ziels führt. Da der Gegenspieler in Othello potenziell unvorhersehbare Züge ausführt, iterieren Suchalgorithmen über den Zustandsraum unter Berücksichtigung möglicher gegnerischer Antworten. Ein zentrales Ziel dieser Verfahren ist es, den Rechenaufwand zu minimieren, indem wenig vielversprechende Suchpfade eliminiert werden, und gleichzeitig den kosteneffizientesten Weg zur Zielerreichung zu ermitteln. In diesem Kontext besteht das Ziel darin, die Partie zu gewinnen, indem am Ende des Spiels eine größere Anzahl eigener Steine auf dem Spielfeld vorhanden ist. \autocite[Kap.~5.1]{russellArtificialIntelligenceModern2016}
 
-Als Vergleichsobjekt zwischen verschiedenen Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken, um den zu durchsuchenden Zustandsraum zu reduzieren. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und der nicht der gesamte Zustandsraum mit allen möglichen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}.
+Als Vergleichsobjekt verschiedener Suchalgorithmen wird zwischen Suchstrategien, Leistungsmessgrößen oder auch subjektiven Vergleichskriterien unterschieden. Die Algorithmen können für die Suchstrategie als uninformiert (Blind) und informiert (Heuristisch) unterschieden werden. Die uninformierte Suche beschränkt sich hierbei auf eine Durchsuchung in der Breite, beispielsweise aller möglichen Spielzüge zu einem bestimmten Spielstand, oder in der Tiefe, durch das Verfolgen eines bestimmten Ablaufs an Zügen. Die informierte Suche nutzt dagegen Heuristiken zur Reduzierung des Zustandsraums. Dies ist in dieser Arbeit geeigneter, da es sich bei Othello um ein komplexes Spiel im Sinne der Spielkomplexität handelt und nicht der gesamte Zustandsraum mit allen Lösungswegen modelliert werden kann \autocite[Kap.~3]{russellArtificialIntelligenceModern2016}.
 
-Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen oder Probleme zu lösen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums zu vernachlässigen und vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
+Heuristiken sind Regeln oder Strategien, um Entscheidungen zu treffen, ohne alle verfügbaren Informationen zu analysieren. Dies wird eingesetzt, da systematische Fehler in Kauf genommen werden, um den nötigen Aufwand zu verringern. In der Informatik werden dafür heuristische Funktionen genutzt, um unwirtschaftliche Teile des Zustandssuchraums zu vernachlässigen und vielversprechendere Lösungswege zu bevorzugen \autocite{toddSimpleHeuristicsThat1999}.
 
 Leistungsmessgrößen geben den Suchalgorithmen konkrete Bewertungen anhand ihres Speicherbedarfs, in Form von den benötigten Bytes, ihrer jeweiligen Zeitkomplexität anhand von Landau-Symbolen (englisch big O notation) und durch die Güte der Heuristik anhand von Gütefunktionen, wie effektiv der Suchalgorithmus den Zustandssuchraum einschränkt, indem sie die Zustände bewerten \autocite[Kap.~5.2]{russellArtificialIntelligenceModern2016}.
 
@@ -44,6 +44,8 @@ Als Beispiel wird die Zustandsbewertung bei einer Zahlensuche verwendet. Ziel is
 Die Zahlensuche wird beendet sobald $n = z$, wodurch Zustand $n = 21$ nicht erreichbar wäre, jedoch zur Veranschaulichung trotzdem dargestellt ist. Der Suchalgorithmus geht nun immer in den Zustand $n$ über, der das kleinste $f(n)$ besitzt bei dem $n$ näher an $z$ liegt, als im aktuellen Zustand. Um eine Vergleichbarkeit zwischen Suchalgorithmen herzustellen, müssen alle betrachteten Algorithmen dasselbe Problem behandeln, sowie denselben Zustandsraum und dieselbe Gütefunktion verwenden.
 
 Des weiteren können subjektiven Vergleichskriterien dabei die Anwendbarkeit auf den jeweiligen Zweck oder die Robustheit unter Zeit bzw. Ressourcenbegrenzung sein \autocite{balogunComparativeAnalysisAIbased2024}.
+
+\clearpage
 
 \section{Geeignete Algorithmen für Othello unter begrenzten Ressourcen}
 \label{sec:geeignete-algorithmen}
@@ -175,6 +177,8 @@ Der Minimax-Algorithmus kann als Übergeordnet angesehen werden, auf dem andere 
 Nun wird an jedem Min-Knoten davon ausgegangen, dass immer der geringste Wert gewählt wird. In diesem Fall gilt für den linken Knoten (a) $min(3, 5) = 3$ und für den rechten Knoten (b) $min(2, 9) = 2$. Für den Max-Spieler bleiben somit die Knoten 2 an Stelle (b) und 3 an Stelle (a) übrig. Der Algorithmus entscheidet sich folglich für den linken Pfad, da $max(3, 2) = 3$. In Othello kann für die Zahlenwerte die Heuristik verwendet werden, die jeden Zustand bewertet.
 
 Die exakten Zahlenwerte der Ergebnisse, die auf den folgenden Seiten in Diagrammen dargestellt sind, sind in den Tabellen \ref{tab:all-times-grouped} für die Laufzeiten und \ref{tab:all-memory-grouped} für den Speicherbedarf nachzulesen.
+
+Die folgenden Diagramme \ref{fig:alphabeta-performance}, \ref{fig:iterdeep-performance}, \ref{fig:moveorder-performance}, \ref{fig:negamax-performance} und \ref{fig:negascout-performance} zeigen die Leistung des jeweiligen Algorithmus in Abhängigkeit von der Suchtiefe. Auf der x-Achse ist die Tiefe des Suchbaums aufgetragen, die y-Achse zeigt je nach Diagramm die durchschnittliche Ausführungszeit oder den Speicherverbrauch. In beiden Diagrammen werden die unterschiedlichen Aufstellungen durch separate Kurven dargestellt. Die Darstellung visualisiert das Wachstum der beiden Kenngrößen.
 
 \newpage
 \paragraph{Alpha-Beta-Pruning}
@@ -402,69 +406,69 @@ ist eine Weiterentwicklung von Negamax. Um die Anzahl der zu untersuchenden Knot
 
 Anhand des Zeitbedarfs ist erkennbar, dass eine Zeitersparnis stark von Spielzustand, und somit der Menge der Verzweigungen, und der Suchtiefe abhängt. Bei niedrigen Suchtiefen wird sogar mehr Zeit benötigt, da der Algorithmus durch die sehr ausführliche Suche am Anfang mehr prüfen muss im Vergleich zu den anderen Algorithmen. Bei größerer Suchtiefe kann zudem auch mehr verworfen werden, wenn einer der oberen Züge schon ein geringeres Ergebnis liefert.
 
-\begin{table}[H]
-	\centering
-	\small
-	\caption{Laufzeiten in $\mu$s pro Suchtiefe für alle Algorithmen}
-	\label{tab:all-times-grouped}
-	\renewcommand{\arraystretch}{1.3}
-	\setlength{\tabcolsep}{4pt}
-	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
-		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
-		\multirow{3}{*}{AlphaBeta}
-		& Anfang & 2.179 & 8.412 & 62.315 & 310.785 & 2.111.972 \\
-		& Mitte  & 2.975 & 10.354 & 117.572 & 425.988 & 4.989.373 \\
-		& Ende   & 1.949 & 5.047 & 32.526 & 78.932 & 338.372 \\ \hline
-		\multirow{3}{*}{IterDeep}
-		& Anfang & 2.279 & 10.617 & 74.994 & 390.209 & 2.521.484 \\
-		& Mitte  & 2.965 & 13.457 & 132.964 & 567.151 & 5.639.908 \\
-		& Ende   & 2.105 & 7.221 & 39.634 & 118.971 & 463.935 \\ \hline
-		\multirow{3}{*}{MoveOrder}
-		& Anfang & 4.436 & 28.899 & 97.354 & 405.391 & 1.178.975 \\
-		& Mitte  & 5.568 & 43.298 & 150.109 & 656.074 & 2.292.903 \\
-		& Ende   & 3.543 & 15.955 & 57.021 & 154.632 & 408.477 \\ \hline
-		\multirow{3}{*}{Negamax}
-		& Anfang & 2.207 & 8.354 & 63.469 & 316.436 & 2.124.191 \\
-		& Mitte  & 2.873 & 10.285 & 118.282 & 432.783 & 5.011.795 \\
-		& Ende   & 1.936 & 5.070 & 32.142 & 78.696 & 339.006 \\ \hline
-		\multirow{3}{*}{Negascout}
-		& Anfang & 2.362 & 8.919 & 52.686 & 268.206 & 1.235.961 \\
-		& Mitte  & 3.010 & 14.207 & 140.836 & 507.567 & 3.910.554 \\
-		& Ende   & 2.196 & 5.838 & 35.259 & 101.064 & 384.424 \\
-	\end{tabular}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\small
-	\caption{Speicherverbrauch in Bytes pro Suchtiefe für alle Algorithmen}
-	\label{tab:all-memory-grouped}
-	\renewcommand{\arraystretch}{1.3}
-	\setlength{\tabcolsep}{4pt}
-	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
-		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
-		\multirow{3}{*}{AlphaBeta}
-		& Anfang & 5.609 & 8.443 & 9.585 & 11.389 & 13.701 \\
-		& Mitte  & 5.336 & 6.961 & 9.550 & 11.502 & 13.468 \\
-		& Ende   & 5.304 & 6.913 & 9.336 & 11.251 & 13.030 \\ \hline
-		\multirow{3}{*}{IterDeep}
-		& Anfang & 5.840 & 8.091 & 10.909 & 12.820 & 15.078 \\
-		& Mitte  & 6.448 & 8.803 & 10.998 & 12.894 & 14.850 \\
-		& Ende   & 6.080 & 8.400 & 10.803 & 12.718 & 14.366 \\ \hline
-		\multirow{3}{*}{MoveOrder}
-		& Anfang & 5.632 & 7.337 & 9.136 & 10.673 & 12.712 \\
-		& Mitte  & 5.738 & 7.417 & 9.235 & 10.802 & 12.413 \\
-		& Ende   & 5.649 & 7.247 & 9.106 & 10.592 & 12.274 \\ \hline
-		\multirow{3}{*}{Negamax}
-		& Anfang & 5.064 & 6.896 & 9.399 & 11.316 & 13.626 \\
-		& Mitte  & 5.336 & 6.961 & 9.551 & 11.502 & 13.454 \\
-		& Ende   & 5.304 & 6.913 & 9.321 & 11.275 & 13.029 \\ \hline
-		\multirow{3}{*}{Negascout}
-		& Anfang & 5.248 & 7.032 & 9.489 & 11.621 & 13.704 \\
-		& Mitte  & 5.408 & 7.330 & 9.786 & 11.783 & 13.796 \\
-		& Ende   & 5.376 & 7.083 & 9.549 & 11.477 & 13.404 \\
-	\end{tabular}
-\end{table}
+%\begin{table}[H]
+%	\centering
+%	\small
+%	\caption{Laufzeiten in $\mu$s pro Suchtiefe für alle Algorithmen}
+%	\label{tab:all-times-grouped}
+%	\renewcommand{\arraystretch}{1.3}
+%	\setlength{\tabcolsep}{4pt}
+%	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+%		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
+%		\multirow{3}{*}{AlphaBeta}
+%		& Anfang & 2.179 & 8.412 & 62.315 & 310.785 & 2.111.972 \\
+%		& Mitte  & 2.975 & 10.354 & 117.572 & 425.988 & 4.989.373 \\
+%		& Ende   & 1.949 & 5.047 & 32.526 & 78.932 & 338.372 \\ \hline
+%		\multirow{3}{*}{IterDeep}
+%		& Anfang & 2.279 & 10.617 & 74.994 & 390.209 & 2.521.484 \\
+%		& Mitte  & 2.965 & 13.457 & 132.964 & 567.151 & 5.639.908 \\
+%		& Ende   & 2.105 & 7.221 & 39.634 & 118.971 & 463.935 \\ \hline
+%		\multirow{3}{*}{MoveOrder}
+%		& Anfang & 4.436 & 28.899 & 97.354 & 405.391 & 1.178.975 \\
+%		& Mitte  & 5.568 & 43.298 & 150.109 & 656.074 & 2.292.903 \\
+%		& Ende   & 3.543 & 15.955 & 57.021 & 154.632 & 408.477 \\ \hline
+%		\multirow{3}{*}{Negamax}
+%		& Anfang & 2.207 & 8.354 & 63.469 & 316.436 & 2.124.191 \\
+%		& Mitte  & 2.873 & 10.285 & 118.282 & 432.783 & 5.011.795 \\
+%		& Ende   & 1.936 & 5.070 & 32.142 & 78.696 & 339.006 \\ \hline
+%		\multirow{3}{*}{Negascout}
+%		& Anfang & 2.362 & 8.919 & 52.686 & 268.206 & 1.235.961 \\
+%		& Mitte  & 3.010 & 14.207 & 140.836 & 507.567 & 3.910.554 \\
+%		& Ende   & 2.196 & 5.838 & 35.259 & 101.064 & 384.424 \\
+%	\end{tabular}
+%\end{table}
+%
+%\begin{table}[H]
+%	\centering
+%	\small
+%	\caption{Speicherverbrauch in Bytes pro Suchtiefe für alle Algorithmen}
+%	\label{tab:all-memory-grouped}
+%	\renewcommand{\arraystretch}{1.3}
+%	\setlength{\tabcolsep}{4pt}
+%	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+%		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
+%		\multirow{3}{*}{AlphaBeta}
+%		& Anfang & 5.609 & 8.443 & 9.585 & 11.389 & 13.701 \\
+%		& Mitte  & 5.336 & 6.961 & 9.550 & 11.502 & 13.468 \\
+%		& Ende   & 5.304 & 6.913 & 9.336 & 11.251 & 13.030 \\ \hline
+%		\multirow{3}{*}{IterDeep}
+%		& Anfang & 5.840 & 8.091 & 10.909 & 12.820 & 15.078 \\
+%		& Mitte  & 6.448 & 8.803 & 10.998 & 12.894 & 14.850 \\
+%		& Ende   & 6.080 & 8.400 & 10.803 & 12.718 & 14.366 \\ \hline
+%		\multirow{3}{*}{MoveOrder}
+%		& Anfang & 5.632 & 7.337 & 9.136 & 10.673 & 12.712 \\
+%		& Mitte  & 5.738 & 7.417 & 9.235 & 10.802 & 12.413 \\
+%		& Ende   & 5.649 & 7.247 & 9.106 & 10.592 & 12.274 \\ \hline
+%		\multirow{3}{*}{Negamax}
+%		& Anfang & 5.064 & 6.896 & 9.399 & 11.316 & 13.626 \\
+%		& Mitte  & 5.336 & 6.961 & 9.551 & 11.502 & 13.454 \\
+%		& Ende   & 5.304 & 6.913 & 9.321 & 11.275 & 13.029 \\ \hline
+%		\multirow{3}{*}{Negascout}
+%		& Anfang & 5.248 & 7.032 & 9.489 & 11.621 & 13.704 \\
+%		& Mitte  & 5.408 & 7.330 & 9.786 & 11.783 & 13.796 \\
+%		& Ende   & 5.376 & 7.083 & 9.549 & 11.477 & 13.404 \\
+%	\end{tabular}
+%\end{table}
 
 \section{Nicht betrachtete Algorithmen}
 \label{sec:nicht-betrachtete-algorithmen}

@@ -1,8 +1,31 @@
-\chapter{Diskussion und Bewertung des entwickelten Konzepts}
-\label{cha:diskussion}
+\chapter{Finales Konzept und Diskussion}
+\label{cha:konzept_diskussion}
 
-Je nach Art der Arbeit kann diese Kapitelüberschrift auch \glqq Ergebnisse\grqq~lauten, z.~B. bei rein messtechnischen Aufgaben.
+Das entwickelte Konzept für den autonom Othello spielenden Roboter basiert auf der Analyse der Ausgangssituation \ref{sec:ausgangssituation}, der Festlegung funktionaler und nicht-funktionaler Anforderungen sowie der funktionalen Zerlegung des Spielzugs \ref{sec:funktionsanalyse}. Der Spielablauf beginnt mit der Erkennung des Startbefehls durch die Überwachung der Schaltfläche der digitalen Schachuhr. Alternativen wie externe Taster oder Netzwerkanbindungen wurden aufgrund der Hardwareeinschränkungen verworfen, sodass diese Lösung eine reproduzierbare Ruheposition und einen geringen Implementierungsaufwand bietet. Anschließend wird die Spielsituation durch Beobachtung der nach dem gegnerischen Zug veränderten Felder erfasst. Eine Vollständige Abtastung des Spielfelds wäre theoretisch möglich, ist jedoch nicht nötig, da die Zeit hierfür durch die logische Umsetzung eingespart werden kann. Der nächste Spielzug wird durch den Negamax-Algorithmus berechnet, der ein optimales Verhältnis von Rechenzeit und Speicherbedarf bei einer ausreichender Suchtiefe von 3 liefert. Für die physische Ausführung wird ein SCARA-ähnlicher Roboter eingesetzt, der schnelle und präzise Bewegungen bei geringem Bauraum erlaubt. Die Rückfahrt in die Ruheposition erfolgt direkt von der aktuellen Position aus, während der Touchstift angehoben bleibt, um Beschädigungen am Tablet zu vermeiden. Den Abschluss des Spielzugs bildet die gezielte Betätigung der Schaltfläche der digitalen Schachuhr aus der Ruheposition heraus, womit der Zyklus wiederholt wird.
 
-Beschreibung der Umsetzung des zuvor gewählten Vorgehens (theoretische Untersuchung, Erhebungen, Durchführung von Experimenten, Prototypenaufbau, Implementierung eines Prozesses, etc.).
+In diesem Rahmen können verschiedene Probleme auftreten, die den Spielablauf oder die Bewegungspräzision beeinträchtigen. Die systematische Identifikation potenzieller Fehlerquellen ist dabei entscheidend, um frühzeitig geeignete Maßnahmen zur Fehlervermeidung oder -korrektur einzuplanen. Durch die strukturierte Analyse dieser Risiken lassen sich die Robustheit, Zuverlässigkeit und Sicherheit des Gesamtsystems erhöhen, was insbesondere bei der Interaktion mit der Hardware des Tablets und der physischen Roboterbewegungen von zentraler Bedeutung ist.
 
-Verifikation anhand der zuvor erarbeiteten Anforderungen und Validierung in Bezug auf das zuvor gestellte Ziel. Diskussion der Ergebnisse. Spätestens hier auch auf die Zuverlässigkeit der gewonnenen Erkenntnisse eingehen (z.~B. anhand der Genauigkeit von Messergebnissen).
+\newpage
+
+\begin{itemize}
+	\item Bei der Startbefehlserkennung über die Schaltfläche der digitalen Schachuhr kann es zu Verzögerungen oder falschen Auslösungen kommen, wenn die Farbdarstellung fehlerhaft ist. Daher muss auf eine zuverlässige Farberkennung und eine Prüfroutine geachtet werden.
+	
+	\item Bei der Erfassung der Spielsituation durch Beobachtung der Felder nach dem gegnerischen Zug kann eine unvollständige Positionsverfolgung oder fehlerhafte Erkennung einzelner Felder die Berechnung des nächsten Spielzugs beeinträchtigen. Deshalb ist eine Plausibilitätsprüfung, gegebenenfalls redundante Messungen und eine stabile Sensorik notwendig.
+	
+	\item Der Negamax-Algorithmus könnte suboptimale Züge liefern, wenn die Suchtiefe zu gering ist oder die Heuristiken nicht optimal eingestellt sind. Daher müssen ausreichende Suchtiefen festgelegt und die exakten Bewertungsfunktionen vorab validiert werden.
+	
+	\item Bei der physischen Ausführung durch den SCARA-Roboter können Positionierungsungenauigkeiten, mechanische Abnutzung oder Spiel in den LEGO\textsuperscript{\textregistered} Bauteilen die Bewegungspräzision beeinträchtigen. Dies erfordert eventuell eine regelmäßige Kalibrierung und die Überwachung der mechanischen Teile.
+	
+	\item Während der Rückfahrt in die Ruheposition können angehäufte Positionsabweichungen oder Kollisionen auftreten. Auch hier ist eine regelmäßige Kalibrierung oder eine Endlagenerkennung notwendig.
+	
+	\item Bei der Betätigung der Schaltfläche der digitalen Schachuhr besteht das Risiko, dass diese nicht korrekt erkannt oder aktiviert wird, was den Spielablauf verzögern würde. Daher ist eine Wiederholung der Erkennung vor der Betätigung, visuelle oder sensorische Bestätigung und eine Fehlerbehandlung bei Fehlschlägen erforderlich.
+\end{itemize}
+
+Das Konzept bietet somit eine geeignete Grundlage, um eine erfolgreiche praktische Umsetzung des Roboters innerhalb der Rahmenbedingungen unter Berücksichtigung der möglichen Probleme zu gewährleisten.
+
+
+%Je nach Art der Arbeit kann diese Kapitelüberschrift auch \glqq Ergebnisse\grqq~lauten, z.~B. bei rein messtechnischen Aufgaben.
+%
+%Beschreibung der Umsetzung des zuvor gewählten Vorgehens (theoretische Untersuchung, Erhebungen, Durchführung von Experimenten, Prototypenaufbau, Implementierung eines Prozesses, etc.).
+%
+%Verifikation anhand der zuvor erarbeiteten Anforderungen und Validierung in Bezug auf das zuvor gestellte Ziel. Diskussion der Ergebnisse. Spätestens hier auch auf die Zuverlässigkeit der gewonnenen Erkenntnisse eingehen (z.~B. anhand der Genauigkeit von Messergebnissen).

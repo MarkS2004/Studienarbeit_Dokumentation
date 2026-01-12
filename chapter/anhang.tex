@@ -18,6 +18,9 @@ Im Rahmen dieser Arbeit wurden Künstliche Intelligenz (\acrshort{acr:KI})\index
 						\item Zur Unterstützung bei der Implementierung und Überprüfung von Spielealgorithmen zur Simulation in Python.
 						\item Zur Klärung grundlegender Begriffe und Konzepte im Sinne einer unterstützenden Recherchehilfe.
 					\end{itemize} \\
+		DeepL & \begin{itemize}
+			\item Übersetzung der Kurzfassung.
+		\end{itemize} \\
 		\hline 
 	\end{tabular} 
 \end{table}
@@ -29,11 +32,76 @@ Im Rahmen dieser Arbeit wurden Künstliche Intelligenz (\acrshort{acr:KI})\index
 %
 %\section{Weitere Details, welche im Hauptteil den Lesefluss behindern}
 %
-%\addchap{C Details zu Laboraufbauten und Messergebnissen}
-%\setcounter{chapter}{3}
-%\setcounter{section}{0}
-%\setcounter{table}{0}
-%\setcounter{figure}{0}
+\addchap{B Details zu Laboraufbauten und Messergebnissen}
+\setcounter{chapter}{2}
+\setcounter{section}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+\section{Simulationsergebnisse}
+\begin{table}[H]
+	\centering
+	\small
+	\caption{Laufzeiten in $\mu$s pro Suchtiefe für alle Algorithmen}
+	\label{tab:all-times-grouped}
+	\renewcommand{\arraystretch}{1.3}
+	\setlength{\tabcolsep}{4pt}
+	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
+		\multirow{3}{*}{AlphaBeta}
+		& Anfang & 2.179 & 8.412 & 62.315 & 310.785 & 2.111.972 \\
+		& Mitte  & 2.975 & 10.354 & 117.572 & 425.988 & 4.989.373 \\
+		& Ende   & 1.949 & 5.047 & 32.526 & 78.932 & 338.372 \\ \hline
+		\multirow{3}{*}{IterDeep}
+		& Anfang & 2.279 & 10.617 & 74.994 & 390.209 & 2.521.484 \\
+		& Mitte  & 2.965 & 13.457 & 132.964 & 567.151 & 5.639.908 \\
+		& Ende   & 2.105 & 7.221 & 39.634 & 118.971 & 463.935 \\ \hline
+		\multirow{3}{*}{MoveOrder}
+		& Anfang & 4.436 & 28.899 & 97.354 & 405.391 & 1.178.975 \\
+		& Mitte  & 5.568 & 43.298 & 150.109 & 656.074 & 2.292.903 \\
+		& Ende   & 3.543 & 15.955 & 57.021 & 154.632 & 408.477 \\ \hline
+		\multirow{3}{*}{Negamax}
+		& Anfang & 2.207 & 8.354 & 63.469 & 316.436 & 2.124.191 \\
+		& Mitte  & 2.873 & 10.285 & 118.282 & 432.783 & 5.011.795 \\
+		& Ende   & 1.936 & 5.070 & 32.142 & 78.696 & 339.006 \\ \hline
+		\multirow{3}{*}{Negascout}
+		& Anfang & 2.362 & 8.919 & 52.686 & 268.206 & 1.235.961 \\
+		& Mitte  & 3.010 & 14.207 & 140.836 & 507.567 & 3.910.554 \\
+		& Ende   & 2.196 & 5.838 & 35.259 & 101.064 & 384.424 \\
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\caption{Speicherverbrauch in Bytes pro Suchtiefe für alle Algorithmen}
+	\label{tab:all-memory-grouped}
+	\renewcommand{\arraystretch}{1.3}
+	\setlength{\tabcolsep}{4pt}
+	\begin{tabular}{c c|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+		Algorithmus & Stellung & 1 & 2 & 3 & 4 & 5 \\ \hline
+		\multirow{3}{*}{AlphaBeta}
+		& Anfang & 5.609 & 8.443 & 9.585 & 11.389 & 13.701 \\
+		& Mitte  & 5.336 & 6.961 & 9.550 & 11.502 & 13.468 \\
+		& Ende   & 5.304 & 6.913 & 9.336 & 11.251 & 13.030 \\ \hline
+		\multirow{3}{*}{IterDeep}
+		& Anfang & 5.840 & 8.091 & 10.909 & 12.820 & 15.078 \\
+		& Mitte  & 6.448 & 8.803 & 10.998 & 12.894 & 14.850 \\
+		& Ende   & 6.080 & 8.400 & 10.803 & 12.718 & 14.366 \\ \hline
+		\multirow{3}{*}{MoveOrder}
+		& Anfang & 5.632 & 7.337 & 9.136 & 10.673 & 12.712 \\
+		& Mitte  & 5.738 & 7.417 & 9.235 & 10.802 & 12.413 \\
+		& Ende   & 5.649 & 7.247 & 9.106 & 10.592 & 12.274 \\ \hline
+		\multirow{3}{*}{Negamax}
+		& Anfang & 5.064 & 6.896 & 9.399 & 11.316 & 13.626 \\
+		& Mitte  & 5.336 & 6.961 & 9.551 & 11.502 & 13.454 \\
+		& Ende   & 5.304 & 6.913 & 9.321 & 11.275 & 13.029 \\ \hline
+		\multirow{3}{*}{Negascout}
+		& Anfang & 5.248 & 7.032 & 9.489 & 11.621 & 13.704 \\
+		& Mitte  & 5.408 & 7.330 & 9.786 & 11.783 & 13.796 \\
+		& Ende   & 5.376 & 7.083 & 9.549 & 11.477 & 13.404 \\
+	\end{tabular}
+\end{table}
 %
 %\section{Versuchsanordnung}
 %

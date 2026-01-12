@@ -401,24 +401,88 @@ Durch das Ergebnis, dass alle Algorithmen dieselbe Robustheit erzielt haben, sow
 	\end{tabular}
 \end{table}
 
-Der Zeitbedarf der einzelnen Algorithmen befindet sich in einem ähnlichen Rahmen von etwa einem Zehntel pro Sekunde, um den optimalen Zug zu berechnen. Im Kontext der Zugdauer ist dies nur ein kleiner Bruchteil, weshalb auf hierauf ein geringerer Fokus und somit eine geringere Gewichtung in der Nutzwertanalyse liegt. Der Speicherbedarf hingegen benötigt bereits eine beträchtliche Menge im Verhältnis zum gesamten Arbeitsspeicher des Controllers von 320 KiloByte \autocite{legoreducationLEGOEducationSPIKEd}. Da der Speicher einen begrenzten Spielraum lässt und der Zeitbedarf durch verschiedene Ansätze variiert und Optimierungspotenzial bietet, erhält der Speicherbedarf eine höhere Gewichtung.
+Der Zeitbedarf der einzelnen Algorithmen befindet sich in einem ähnlichen Rahmen von etwa einem Zehntel pro Sekunde, um den optimalen Zug zu berechnen. Im Kontext der Zugdauer ist dies nur ein kleiner Bruchteil, weshalb auf hierauf ein geringerer Fokus und somit eine geringere Gewichtung in der Nutzwertanalyse liegt. Der Speicherbedarf hingegen benötigt bereits eine beträchtliche Menge im Verhältnis zum gesamten Arbeitsspeicher des Controllers von 320 KiloByte \autocite{legoreducationLEGOEducationSPIKEd}. Da der Speicher einen begrenzten Spielraum lässt und er zudem noch für die Bewegungsplanung, Sensorverarbeitung und die Spielzustandsverwaltung benötigt wird, sowie der Zeitbedarf durch verschiedene Ansätze variiert und Optimierungspotenzial bietet, erhält der Speicherbedarf eine höhere Gewichtung. Die exakte Gewichtung wurde in Abstimmung durch beide Bearbeiter festgelegt und beläuft sich auf $70\%$ für den Speicher und $30\%$ für den Zeitbedarf. Die jeweiligen Werte des Zeit- und Speicherbedarfs werden auf den größten Wert normiert von 0 bis 10 und anschließend mit der Gewichtung zu einer Endbewertung verrechnet. Das geringste Endergebnis ist hierbei am besten, da für beide Kriterien ein geringerer Wert bevorzugt ist.
 
-\todo[inline]{"Nutzwertanalyse" mit Gewichtung für Speicher und Zeit, Bezug zu Kapitel 3 herstellen}
+\begin{table}[H]
+	\centering
+	\captionabove[Normierter Vergleich von Suchalgorithmen]{Normierter Vergleich der Suchalgorithmen hinsichtlich Zeit- und Speicherbedarf mit gewichteter Gesamtbewertung.}
+	\label{tab:algorithmus-normiert}
+	
+	\renewcommand{\arraystretch}{1.5}
+	\setlength{\tabcolsep}{6pt}
+	
+	\begin{tabular}{p{4.0cm}|p{2.75cm} p{2.75cm} p{2.75cm}}
+		Algorithmus 
+		& Zeitbedarf normiert
+		& Speicherbedarf normiert
+		& Endergebnis \\ \hline
+		
+		Alpha-Beta-Pruning 
+		& 6,98 
+		& 8,71 
+		& 8,19 \\
+		
+		Iterative Deepening 
+		& 8,13 
+		& 10,00 
+		& 9,44 \\
+		
+		Move Ordering 
+		& 10,00 
+		& 8,40 
+		& 8,88 \\
+		
+		Negamax 
+		& 7,02 
+		& 8,64 
+		& 8,15 \\
+		
+		Negascout 
+		& 7,51 
+		& 8,81 
+		& 8,42 \\
+	\end{tabular}
+\end{table}
+
+Anhand der Nutzwertanalyse mit den beiden Kriterien ergibt sich, dass der Negamax-Algorithmus gewählt wird, da er das beste Verhältnis liefert.
 
 \paragraph{Ausführung des Spielzugs}
 \label{subsec:ausfuehrung-spielzug}
 
-\todo[inline]{Verweis auf Robotik Kapitel} 
+Nach der Bestimmung des nächsten Spielzugs wird dieser physisch durch den Roboter ausgeführt. Die Umsetzung erfolgt auf Grundlage der in Kapitel~\ref{sec:roboter} beschriebenen Grundlagen robotischer Systeme. Für die Realisierung der Bewegungsaufgabe kommen grundsätzlich unterschiedliche robotische Aufbauformen in Betracht, insbesondere Gantry-, PUMA- sowie SCARA-Roboter. Diese werden im Folgenden hinsichtlich ihrer Eignung für den vorliegenden Anwendungsfall diskutiert.
+
+Gantry-Roboter bieten durch ihre kartesische Kinematik eine direkte und rechnerisch einfache Umsetzung von Bewegungen im dreidimensionalen Raum. Sie zeichnen sich durch eine hohe Positioniergenauigkeit aus, benötigen jedoch aufgrund der linearen Achsen einen vergleichsweise großen Bauraum und würden zudem die Begrenzung der Sicherheitszone verletzen. Zudem ist der mechanische Aufwand für die Realisierung mehrerer linearer Freiheitsgrade hoch, was einem kompakten und leicht integrierbaren System entgegensteht.
+
+PUMA-Roboter verfügen über eine hohe Bewegungsfreiheit und ermöglichen komplexe räumliche Bewegungen. Diese Flexibilität ist für die Ausführung eines einzelnen, ebenen Betätigungsvorgangs jedoch nicht erforderlich. Der erhöhte algorithmische Aufwand zur Berechnung der Rückwärtskinematik sowie die größere mechanische Komplexität führen zu einem ungünstigen Verhältnis von Nutzen zu Aufwand, um Othello zu spielen.
+
+Aus diesen Gründen wird ein SCARA-ähnlicher Roboteraufbau gewählt. SCARA-Roboter sind insbesondere für schnelle, präzise Bewegungen in der Horizontalebene geeignet und weisen eine hohe Wiederholgenauigkeit auf. Diese Eigenschaften sind für die positionsgenaue Betätigung einzelner Felder auf dem Tablet von zentraler Bedeutung. Im vorliegenden System wird die vertikale Bewegung nicht über eine linear geführte Achse realisiert, sondern ebenfalls rotatorisch umgesetzt. Die Abwärtsbewegung des Endeffektors erfolgt somit über eine definierte Rotation eines zusätzlichen Gelenks, wodurch eine kompakte mechanische Struktur mit reduziertem Bauraum ermöglicht wird.
+
+Zur Ausführung eines Spielzugs verlässt der Roboter seine definierte Ruheposition und fährt entlang eines vorgegebenen, kollisionsfreien Bewegungspfads in die Zielposition über dem Spielfeld. Die Zielkoordinaten ergeben sich direkt aus dem zuvor berechneten Spielzug und werden in entsprechende Gelenkwinkel überführt. Anschließend wird der Touchstift durch die rotatorisch realisierte Vertikalbewegung kontrolliert auf das Tablet abgesenkt, um den Spielzug auszuführen.
+
+Die Bewegung muss mit hoher Positionsgenauigkeit erfolgen, um eine zuverlässige Interaktion mit der Tabletoberfläche sicherzustellen und ein Verschieben des Spielfeldes zu vermeiden. Gleichzeitig ist eine möglichst kurze Bewegungsdauer anzustreben, da die Ausführung des Spielzugs einen bisher unbekannten Anteil der gesamten Zugzeit einnimmt. Darüber hinaus darf der Bewegungsraum des gegnerischen Roboters nicht durchquert werden, um gegenseitige Beeinflussungen auszuschließen.
 
 \paragraph{Rückfahrt in die Ruheposition}
 \label{subsec:rueckfahrt-ruhepos}
 
-\todo[inline]{Wiederholgenauigkeit, Fahrtweg}
+Nach der Ausführung des Spielzugs fährt der Roboter zurück in seine definierte Ruheposition, die als eindeutiger Referenzpunkt für den nächsten Spielzug dient. Da sich der Roboter abhängig vom zuvor ausgeführten Zug an unterschiedlichen Positionen über dem Spielfeld befinden kann, variiert die Länge des Rückfahrwegs entsprechend.  
+
+Für die Rückfahrt kommen grundsätzlich mehrere Lösungsansätze in Betracht:
+
+\begin{itemize}
+	\item \textbf{Direkte Rückfahrt entlang des kürzesten Pfads:} Der Roboter fährt von seiner aktuellen Position direkt in die Ruheposition. Vorteilhaft ist die minimale Rückfahrzeit, jedoch muss die Kollisionsfreiheit zuverlässig gewährleistet sein.  
+	\item \textbf{Rückfahrt über eine definierte Zwischenposition:} Der Roboter fährt zunächst eine sichere Zwischenposition an und anschließend zur Ruheposition. Dies vereinfacht die Bewegungsplanung und erhöht die Kollisionssicherheit, verlängert aber die Rückfahrzeit.  
+	\item \textbf{Sensorbasierte Korrektur während der Rückfahrt:} Die Position wird kontinuierlich über Sensoren überprüft und angepasst, um Positionsabweichungen auszugleichen. Dies erhöht die Genauigkeit, erfordert jedoch zusätzliche Sensorik, die aufgrund des Controllers nicht realisiert werden kann. 
+%	\item \textbf{Relative Bewegung ohne feste Ruheposition:} Jede Bewegung wird nur relativ zur aktuellen Position berechnet. Dies spart Rückfahrzeit, führt aber zu einer Akkumulation von Positionsfehlern und reduziert die Reproduzierbarkeit.
+\end{itemize}
+
+Zusätzlich wird der Endeffektor des Roboters stets angehoben, bevor eine horizontale Bewegung erfolgt, um Beschädigungen am Tablet zu vermeiden.  
+
+Auf Grundlage dieser Überlegungen wird die Rückfahrt als direkte Bewegung von der aktuellen Position in die Ruheposition umgesetzt, kombiniert mit dem Anheben des Endeffektors. Dieser Ansatz bietet die optimale Balance aus Geschwindigkeit, einfacher Planung und Sicherheit. Die Wiederholgenauigkeit der Ruheposition wird durch die präzise Gelenksteuerung des SCARA-ähnlichen Roboters sichergestellt, und Kollisionsrisiken mit dem Ruhebereich des gegnerischen Roboters werden durch die Bewegungsplanung ausgeschlossen.
 
 \paragraph{Beendigung des Spielzugs}
 \label{subsec:beendigung-spielzug}
 
-\todo[inline]{Betätigung der Schaltfläche mit Stift}
+Die Beendigung des Spielzugs erfolgt durch die Betätigung der Schaltfläche der digitalen Schachuhr aus der Ruheposition heraus. Der Roboter fährt den Touchstift gezielt auf die Schaltfläche ab und aktiviert diese, um die Kontrolle an den gegnerischen Spieler zu übergeben. Danach wird der Stift wieder angehoben und auf den nächsten Zug gewartet, nachdem der Gegner seinen ausgeführt und übergeben hat.
 
 % Notizen: Einzelne Lösungenauftellen, diese Bewerten (Nutweranalyse), zusammenstellen zu einem GEsamtkonzept
 
